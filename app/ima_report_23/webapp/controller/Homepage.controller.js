@@ -433,6 +433,16 @@ function (Controller, CustomData, JSONModel, Table, RowSettings, Column, Text, I
                                 dataFiltered.refresh();
                             } else {
                                 console.error("The response contains no data.")
+                                sap.m.MessageBox.warning(
+                                    "Non ci sono dati con i filtri selezionati.",
+                                    {
+                                        title: "Nessun risultato",
+                                        actions: [sap.m.MessageBox.Action.OK],
+                                        onClose: function(oAction) {
+                                            // Optional: Add any action to be performed when the message box is closed
+                                        }
+                                    }
+                                );
                             }
                             
                         }
@@ -471,7 +481,7 @@ function (Controller, CustomData, JSONModel, Table, RowSettings, Column, Text, I
          },
  
          
-         onDownloadExcelPress: function () {
+        onDownloadExcelPress: function () {
             var oTable = this.byId("tableContainer");  // Reference to the table control
             // var oModel = oTable.getModel();  // Access the model of the table
             var aData = oTable.getBinding('rows').oList;  // Get the data from the model
