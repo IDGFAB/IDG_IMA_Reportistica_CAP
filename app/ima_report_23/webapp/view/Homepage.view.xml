@@ -36,7 +36,7 @@
                             <!-- Entity Filter -->
                             <fb:FilterGroupItem name="Entity" label="Entity" groupName="Group1" visibleInFilterBar="true">
                                 <fb:control>
-                                    <MultiComboBox  name="Entity" showSelectAll="true" selectionChange=".onSelectionChange" items="{ path: 'oFiltersModel>/Entity', sorter: { path: 'description' }
+                                    <MultiComboBox name="Entity" showSelectAll="true" selectionChange=".onSelectionChange" items="{ path: 'oFiltersModel>/Entity', sorter: { path: 'description' }
  }" selectedKeys="{selectedFiltersModel>/entity}" required="true" showClearIcon="true">
                                         <core:Item key="{oFiltersModel>ID}" text="{oFiltersModel>description}" />
                                     </MultiComboBox>
@@ -45,11 +45,9 @@
                             <!-- TipoContratto Filter -->
                             <fb:FilterGroupItem name="TipoContratto" label="Contract type" groupName="Group1" visibleInFilterBar="true">
                                 <fb:control>
-                                    <MultiComboBox name="TipoContratto" showSelectAll="true" selectionChange=".onSelectionChange"  
-                                        items="{ 
+                                    <MultiComboBox name="TipoContratto" showSelectAll="true" selectionChange=".onSelectionChange" items="{ 
                                             path: 'oFiltersModel>/TipoContratto'
-                                        }" 
-                                        selectedKeys="{selectedFiltersModel>/tipoContratto}" required="true" showClearIcon="true">
+                                        }" selectedKeys="{selectedFiltersModel>/tipoContratto}" required="true" showClearIcon="true">
                                         <core:Item key="{oFiltersModel>}" text="{oFiltersModel>}" />
                                     </MultiComboBox>
                                 </fb:control>
