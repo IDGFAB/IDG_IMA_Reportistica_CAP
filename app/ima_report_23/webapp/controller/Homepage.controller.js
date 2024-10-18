@@ -471,33 +471,63 @@ function (Controller, CustomData, JSONModel, Table, RowSettings, Column, Text, I
          },
  
          
-         onDownloadExcel: function () {
-             var oTable = this.getView().byId("tableContainer").getItems()[0]; // Get the table
-             var oModel = oTable.getModel(); // Get the table's model data
-             var aTableRows = oModel.getProperty("/tableRows"); // Fetch the rows of the table
- 
-             // Convert data to a worksheet format using SheetJS
-             var aoa = [["Journal Type", "Account", "Debit", "Credit"]]; // Header
- 
-             aTableRows.forEach(function (row) {
-                 aoa.push([
-                     row.journalType || "",
-                     row.account || "",
-                     row.debit || "",
-                     row.credit || ""
-                 ]);
-             });
- 
-             // Create a new Workbook
-             var wb = XLSX.utils.book_new();
-             var ws = XLSX.utils.aoa_to_sheet(aoa); // Convert array to worksheet
- 
-             // Append the worksheet to the workbook
-             XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
- 
-             // Export the workbook
-             XLSX.writeFile(wb, "tableData.xlsx");
-         },
+         onDownloadExcelPress: function () {
+            var oTable = this.byId("tableContainer");  // Reference to the table control
+            // var oModel = oTable.getModel();  // Access the model of the table
+            var aData = oTable.getBinding('rows').oList;  // Get the data from the model
+            var aCols = this._createColumnConfig();  // Create dynamic column configuration
+
+            // Excel Export settings
+            var oSettings = {
+                workbook: {
+                    columns: aCols,  // Dynamic columns based on data
+                    context: {
+                        sheetName: 'Exported Data'  // Name of the Excel sheet
+                    },
+                    // Define custom styles for the Excel export
+                    styles: [
+                        {
+                            id: "header",  // Style ID for headers
+                            fontSize: 12,  // Font size
+                            fontColor: "#ffffff",  // Font color (white)
+                            backgroundColor: "#808080",  // Background color (grey)
+                            bold: true,  // Bold font
+                            hAlign: "Center",  // Center alignment
+                            border: {
+                                top: { style: "thin", color: "#000000" },  // Top border
+                                bottom: { style: "thin", color: "#000000" },  // Bottom border
+                                left: { style: "thin", color: "#000000" },  // Left border
+                                right: { style: "thin", color: "#000000" }  // Right border
+                            }
+                        },
+                        {
+                            id: "content",  // Style ID for content cells
+                            fontSize: 10,  // Font size
+                            hAlign: "Left",  // Left alignment
+                            border: {
+                                top: { style: "thin", color: "#000000" },  // Top border
+                                bottom: { style: "thin", color: "#000000" },  // Bottom border
+                                left: { style: "thin", color: "#000000" },  // Left border
+                                right: { style: "thin", color: "#000000" }  // Right border
+                            }
+                        }
+                    ]
+                },
+                dataSource: aData,  // Data source for the export
+                fileName: 'ExportedData_Reportistica_23.xlsx',  // File name for the exported file
+                worker: false  // Disable worker threads for simplicity
+            };
+
+            // Create a new instance of the Spreadsheet export utility
+            var oSheet = new Spreadsheet(oSettings);
+            oSheet.build()  // Build the Excel file
+                .then(function () {
+                    sap.m.MessageToast.show('Excel export successful!');  // Show success message
+                })
+                .finally(function () {
+                    oSheet.destroy();  // Clean up the export utility
+                });
+        },
  
          onDownloadPdfPress: function () {
              var oTableContainer = this.getView().byId("tableContainer");

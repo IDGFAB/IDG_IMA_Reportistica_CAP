@@ -97,7 +97,7 @@
                         </fb:filterGroupItems>
                     </fb:FilterBar>
                     <VBox alignItems="End" wrap="Wrap" justifyContent="End" alignContent="Stretch" class="sapUiMediumMarginTop flex-row gap1">
-                        <Button icon="sap-icon://excel-attachment" id="excelBtn" text="Download Excel" press=".onDownloadExcel" enabled="false" />
+                        <Button icon="sap-icon://excel-attachment" id="excelBtn" text="Download Excel" press=".onDownloadExcelPress" enabled="false" />
                         <Button icon="sap-icon://pdf-attachment" id="pdfBtn" text="Download PDF" press=".onDownloadPdfPress" enabled="false" />
                         <Button id="clearFiltersBtn" text="Clear Filters" press=".onClearFilters" visible="false" />
                     </VBox>
