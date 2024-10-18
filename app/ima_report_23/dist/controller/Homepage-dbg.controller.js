@@ -32,10 +32,8 @@ function (Controller, CustomData, JSONModel, Table, RowSettings, Column, Text, I
             this._createFiltersModel()
             
              // Set the data to the model
-             oModel.setData(jsonData);
              this.getView().setModel(oModel, "repo23Model");
  
-             this.fillFiltersData();
          },
 
          // TODO: adapt the datas to be filtered for the report 23
@@ -109,42 +107,7 @@ function (Controller, CustomData, JSONModel, Table, RowSettings, Column, Text, I
          onAfterRendering: function () {
              this.addEmptyToSelect();
              this.makeTitleObjAttrBold();
-             this.checkFilterFieldsAllFilled();
-             this.disableFilterStart();
          },
- 
-         // TODO: Substitute with the "/allSelected" model source
-
-         /* checkFilterFieldsAllFilled: function () {
-             // Works dynamically
- 
-             const oFilterBar = this.getView().byId("filterbar");
-             const aFilterItems = oFilterBar.getFilterGroupItems();
-             let allValid = true;
- 
-             this.filterArray = []
- 
-             aFilterItems.forEach(oFilterGroupItem => {
-                 // Getting the selected filter parent `name=""` and the filter selected key 
-                 // SO IS IMPORTANT THE NAME OF THE FILTERS
-                 let filterParentName = oFilterGroupItem.getControl().getParent().getLabel();
-                 let filterNameKey = oFilterGroupItem.getControl().getSelectedKey();
-                 this.filterArray.push({ [filterParentName]: filterNameKey })
- 
-                 const oControl = oFilterGroupItem.getControl();
- 
-                 if (oControl instanceof sap.m.Select) {
-                     const sSelectedKey = oControl.getSelectedKey();
- 
-                     if (!sSelectedKey) {
-                         allValid = false;
-                     }
-                 }
-             });
- 
- 
-             return allValid;  // Return true if all values are valid, false if any are empty
-         }, */
  
          // TODO: Probably uneuseful
          addEmptyToSelect: function () {
@@ -364,17 +327,17 @@ function (Controller, CustomData, JSONModel, Table, RowSettings, Column, Text, I
          // TOBEupdated: with the new data
          onSearch: function () {
               
-     var sSelectedEntity = this.byId("entitySelection").getSelectedKey();
-     var sSelectedPeriod = this.byId("periodSelection").getSelectedKey();
-     var sSelectedYear = this.byId("yearSelection").getSelectedKey();
-     var sSelectedScenario = this.byId("scenarioSelection").getSelectedKey();
-     var sSelectedIcp = this.byId("icpSelection").getSelectedKey();
-     var sSelectedLease_n = this.byId("lease_nSelection").getSelectedKey();
-     var sSelectedCostCenter= this.byId("costCenterSelection").getSelectedKey();
-     var oTable = this.byId("tableContainer");
-     var AllIma = this.getView().getModel('repo23Model').getData();
- 
-     var aFilteredData = AllIma.filter(function(item) {
+        var sSelectedEntity = this.byId("entitySelection").getSelectedKey();
+        var sSelectedPeriod = this.byId("periodSelection").getSelectedKey();
+        var sSelectedYear = this.byId("yearSelection").getSelectedKey();
+        var sSelectedScenario = this.byId("scenarioSelection").getSelectedKey();
+        var sSelectedIcp = this.byId("icpSelection").getSelectedKey();
+        var sSelectedLease_n = this.byId("lease_nSelection").getSelectedKey();
+        var sSelectedCostCenter= this.byId("costCenterSelection").getSelectedKey();
+        var oTable = this.byId("tableContainer");
+        var AllIma = this.getView().getModel('repo23Model').getData();
+    
+        var aFilteredData = AllIma.filter(function(item) {
          console.log(item.Lease_N);
          return (item.Entity == sSelectedEntity) &&
                 (item.Period == sSelectedPeriod) &&
@@ -411,46 +374,6 @@ function (Controller, CustomData, JSONModel, Table, RowSettings, Column, Text, I
          oSelectedFiltersModel.setProperty("/allSelected", false);
      }
  
-             // if (this.checkFilterFieldsAllFilled()) {
-             //     const tableContainer = this.getView().byId("tableContainer");
-             //     // Check if the container already contains a table with ID 'reportTable'
-             //     const existingTable = tableContainer.getItems().find(function (oItem) {
-             //         return oItem.getId() === "reportTable";
-             //     });
- 
-             //     // Make the table if it's not existing
-             //     if (!existingTable && this.checkFilterFieldsAllFilled()) {
-             //         this._initializeTables(this.jsonData);
-             //         this.getView().byId("emptyTableText").setVisible(false);
-             //         this.enableDownloadButtons(null, true)
-             //         this.applyFilters()
-             //     } else if (!existingTable && !this.checkFilterFieldsAllFilled()) {
-             //         this.getView().byId("emptyTableText").setVisible(true);
-             //         existingTable.destroy();
-             //         this.enableDownloadButtons(null, false)
-             //     } else {
-             //         // this.applyFilters();
-             //         return;
-             //     }
-             // }
- 
-             // const oView = this.getView();
-             // const idsToLog = [
-             //     "scenarioSelection",
-             //     "entitySelection",
-             //     "yearSelection",
-             //     "periodSelection",
-             //     "icpSelection",
-             //     "lease_nSelection",
-             //     "costCenterSelection",
-             // ]
- 
-             // // Logging them
-             // idsToLog.forEach(id => {
-             //     const oscenarioSelection = oView.byId(id);
-             //     const aSelectedScenarios = oscenarioSelection.getSelectedItem().getText();
- 
-             // })
  
          },
  

@@ -181,16 +181,21 @@ sap.ui.define([
                 if (obj.hasOwnProperty(key)) {
                     // Check if the value is a string representing a number in exponential form
                     if (typeof obj[key] === 'string' && obj[key].match(/^-?\d+\.?\d*e[+\-]?\d+$/i)) {
-                        // Convert the string to a number and then to a fixed decimal format
+                        // Convert the string to a number
                         let numberValue = parseFloat(obj[key]);
                         if (!isNaN(numberValue)) {
-                            obj[key] = numberValue.toFixed(2); // Adjust the number of decimals as needed
+                            // Format the number to Italian style with 2 decimal places
+                            obj[key] = numberValue.toLocaleString('it-IT', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            });
                         }
                     }
                 }
             }
             return obj;
         },
+        
 
 
 

@@ -30,13 +30,17 @@ function (Controller, CustomData, JSONModel, Table, RowSettings, Column, Text, I
  
             // Creating the filters model
             this._createFiltersModel()
+            this._getDataFilters();
             
              // Set the data to the model
-             oModel.setData(jsonData);
              this.getView().setModel(oModel, "repo23Model");
  
-             this.fillFiltersData();
          },
+
+         onAfterRendering: function () {
+            // this.addEmptyToSelect();
+            this.makeTitleObjAttrBold();
+        },
 
          // TODO: adapt the datas to be filtered for the report 23
          _createFiltersModel: function () {
@@ -67,6 +71,7 @@ function (Controller, CustomData, JSONModel, Table, RowSettings, Column, Text, I
 
         // TODO: Adapt the report 23 data values from the incoming Hana table action
         _getDataFilters: function () {
+            this.osUrl = this.getOwnerComponent().getModel().sServiceUrl;
             const servicePath = `${this.osUrl}Filters`;  // Append the action name with a trailing slash
 
             axios.post(servicePath)
@@ -105,47 +110,6 @@ function (Controller, CustomData, JSONModel, Table, RowSettings, Column, Text, I
              // this._createDynamicTable(aTableData); // Temporary disabled
          },
 
- 
-         onAfterRendering: function () {
-             this.addEmptyToSelect();
-             this.makeTitleObjAttrBold();
-             this.checkFilterFieldsAllFilled();
-             this.disableFilterStart();
-         },
- 
-         // TODO: Substitute with the "/allSelected" model source
-
-         /* checkFilterFieldsAllFilled: function () {
-             // Works dynamically
- 
-             const oFilterBar = this.getView().byId("filterbar");
-             const aFilterItems = oFilterBar.getFilterGroupItems();
-             let allValid = true;
- 
-             this.filterArray = []
- 
-             aFilterItems.forEach(oFilterGroupItem => {
-                 // Getting the selected filter parent `name=""` and the filter selected key 
-                 // SO IS IMPORTANT THE NAME OF THE FILTERS
-                 let filterParentName = oFilterGroupItem.getControl().getParent().getLabel();
-                 let filterNameKey = oFilterGroupItem.getControl().getSelectedKey();
-                 this.filterArray.push({ [filterParentName]: filterNameKey })
- 
-                 const oControl = oFilterGroupItem.getControl();
- 
-                 if (oControl instanceof sap.m.Select) {
-                     const sSelectedKey = oControl.getSelectedKey();
- 
-                     if (!sSelectedKey) {
-                         allValid = false;
-                     }
-                 }
-             });
- 
- 
-             return allValid;  // Return true if all values are valid, false if any are empty
-         }, */
- 
          // TODO: Probably uneuseful
          addEmptyToSelect: function () {
              const oView = this.getView();
@@ -248,34 +212,47 @@ function (Controller, CustomData, JSONModel, Table, RowSettings, Column, Text, I
          },
  
          assignReportResume: function (oEvent) {
-             // TODO: is not setting every value
- 
-             const selectedSelectObj = oEvent.getSource();
-             const selectedNameString = selectedSelectObj ? selectedSelectObj.getName() : "";
-             const selectedItemText = selectedSelectObj.getSelectedItem().getText();
- 
-             // Entering in the elements of the resume in the header of the DynamicPage 
-             const resumeAttributesWrapperElements = this.getView().byId("hLayout");
-             const attributesContent = resumeAttributesWrapperElements.getContent();
- 
-             attributesContent.forEach(content => {
-                 const objectAttributes = content.getContent();
- 
-                 objectAttributes.forEach(objAttr => {
-                     if (objAttr instanceof ObjectAttribute) {
- 
-                         // Checks between the name of the ObjectAttribute {text:""} and the <Select name="">
-                         if (objAttr.getTitle().toLowerCase() === selectedNameString.toLowerCase()) {
-                             objAttr.setText(selectedItemText);
- 
-                             // This .rerender() forces the element to be rendered right away (try removing it)
-                             objAttr.rerender();
-                         }
- 
-                     }
-                 })
- 
-             })
+            const selectedSelectObj = oEvent.getSource();
+            const selectedNameString = selectedSelectObj ? selectedSelectObj.getLabels()[0].getText() : "";
+            let selectedItemsText = "";
+
+            if (selectedSelectObj.getMetadata().getName() === "sap.m.MultiComboBox") {
+                // Handle MultiComboBox
+                selectedItemsText = selectedSelectObj.getSelectedItems()
+                    .map(item => item.getText())
+                    .join(", ");
+            } else if (selectedSelectObj.getMetadata().getName() === "sap.m.Select") {
+                // Handle Select
+                const selectedItem = selectedSelectObj.getSelectedItem();
+                selectedItemsText = selectedItem ? selectedItem.getText() : "";
+            } else if (selectedSelectObj.getMetadata().getName() === "sap.m.ComboBox") {
+                // Handle ComboBox
+                const selectedItem = selectedSelectObj.getSelectedItem();
+                selectedItemsText = selectedItem ? selectedItem.getText() : "";
+            }
+
+            // Entering in the elements of the resume in the header of the DynamicPage 
+            const resumeAttributesWrapperElements = this.getView().byId("hLayout");
+            const attributesContent = resumeAttributesWrapperElements.getContent();
+
+            attributesContent.forEach(content => {
+                const objectAttributes = content.getContent();
+
+                objectAttributes.forEach(objAttr => {
+                    if (objAttr instanceof ObjectAttribute) {
+
+                        // Checks between the name of the ObjectAttribute {text:""} and the <Select label="">
+                        if (objAttr.getTitle().toLowerCase() === selectedNameString.toLowerCase()) {
+                            objAttr.setText(selectedItemsText);
+
+                            // This .rerender() forces the element to be rendered right away (try removing it)
+                            objAttr.rerender();
+                        }
+
+                    }
+                })
+
+            })
  
          },
  
@@ -364,95 +341,118 @@ function (Controller, CustomData, JSONModel, Table, RowSettings, Column, Text, I
          // TOBEupdated: with the new data
          onSearch: function () {
               
-     var sSelectedEntity = this.byId("entitySelection").getSelectedKey();
-     var sSelectedPeriod = this.byId("periodSelection").getSelectedKey();
-     var sSelectedYear = this.byId("yearSelection").getSelectedKey();
-     var sSelectedScenario = this.byId("scenarioSelection").getSelectedKey();
-     var sSelectedIcp = this.byId("icpSelection").getSelectedKey();
-     var sSelectedLease_n = this.byId("lease_nSelection").getSelectedKey();
-     var sSelectedCostCenter= this.byId("costCenterSelection").getSelectedKey();
-     var oTable = this.byId("tableContainer");
-     var AllIma = this.getView().getModel('repo23Model').getData();
- 
-     var aFilteredData = AllIma.filter(function(item) {
-         console.log(item.Lease_N);
-         return (item.Entity == sSelectedEntity) &&
-                (item.Period == sSelectedPeriod) &&
-                (item.Year == sSelectedYear) &&
-                (item.Scenario == sSelectedScenario)&&
-                (item.Icp == sSelectedIcp)&&
-                (item.Lease_N == sSelectedLease_n)&&
-                (item.Cost_Center == sSelectedCostCenter)
-     });
- 
-     
- 
-     if (aFilteredData.length > 0) {
-         var aData = this.transformJsonData(aFilteredData[0]);
- 
-         this._createDynamicTable(aData);
-         // oTable.setModel(oTableModel);
-         // oTable.bindRows("/rows");
-          this.enableDownloadButtons(null, true);
- 
- 
-         
-     } else{
-         
-         // var oEmptyModel = new JSONModel({ rows: [] });
-         // this._createDynamicTable(oEmptyModel);
-         var oTable=this.getView().byId("reportTable")
-             oTable.removeAllColumns();
- 
-         // oTable.setModel(oEmptyModel);
-         // oTable.bindRows("/rows");
- 
-         
-         oSelectedFiltersModel.setProperty("/allSelected", false);
-     }
- 
-             // if (this.checkFilterFieldsAllFilled()) {
-             //     const tableContainer = this.getView().byId("tableContainer");
-             //     // Check if the container already contains a table with ID 'reportTable'
-             //     const existingTable = tableContainer.getItems().find(function (oItem) {
-             //         return oItem.getId() === "reportTable";
-             //     });
- 
-             //     // Make the table if it's not existing
-             //     if (!existingTable && this.checkFilterFieldsAllFilled()) {
-             //         this._initializeTables(this.jsonData);
-             //         this.getView().byId("emptyTableText").setVisible(false);
-             //         this.enableDownloadButtons(null, true)
-             //         this.applyFilters()
-             //     } else if (!existingTable && !this.checkFilterFieldsAllFilled()) {
-             //         this.getView().byId("emptyTableText").setVisible(true);
-             //         existingTable.destroy();
-             //         this.enableDownloadButtons(null, false)
-             //     } else {
-             //         // this.applyFilters();
-             //         return;
-             //     }
-             // }
- 
-             // const oView = this.getView();
-             // const idsToLog = [
-             //     "scenarioSelection",
-             //     "entitySelection",
-             //     "yearSelection",
-             //     "periodSelection",
-             //     "icpSelection",
-             //     "lease_nSelection",
-             //     "costCenterSelection",
-             // ]
- 
-             // // Logging them
-             // idsToLog.forEach(id => {
-             //     const oscenarioSelection = oView.byId(id);
-             //     const aSelectedScenarios = oscenarioSelection.getSelectedItem().getText();
- 
-             // })
+            this.getTableData()
+            
+            // Old way to be deleted
+            
+            /* var sSelectedEntity = this.byId("entitySelection").getSelectedKey();
+            var sSelectedPeriod = this.byId("periodSelection").getSelectedKey();
+            var sSelectedYear = this.byId("yearSelection").getSelectedKey();
+            var sSelectedScenario = this.byId("scenarioSelection").getSelectedKey();
+            var sSelectedIcp = this.byId("icpSelection").getSelectedKey();
+            var sSelectedLease_n = this.byId("lease_nSelection").getSelectedKey();
+            var sSelectedCostCenter= this.byId("costCenterSelection").getSelectedKey();
+            var oTable = this.byId("tableContainer");
+            var AllIma = this.getView().getModel('repo23Model').getData();
+        
+            var aFilteredData = AllIma.filter(function(item) {
+            console.log(item.Lease_N);
+            return (item.Entity == sSelectedEntity) &&
+                    (item.Period == sSelectedPeriod) &&
+                    (item.Year == sSelectedYear) &&
+                    (item.Scenario == sSelectedScenario)&&
+                    (item.Icp == sSelectedIcp)&&
+                    (item.Lease_N == sSelectedLease_n)&&
+                    (item.Cost_Center == sSelectedCostCenter)
+            });
+        
+            
+        
+            if (aFilteredData.length > 0) {
+                var aData = this.transformJsonData(aFilteredData[0]);
+        
+                this._createDynamicTable(aData);
+                // oTable.setModel(oTableModel);
+                // oTable.bindRows("/rows");
+                this.enableDownloadButtons(null, true);
+        
+        
+                
+            } else{
+                
+                // var oEmptyModel = new JSONModel({ rows: [] });
+                // this._createDynamicTable(oEmptyModel);
+                var oTable=this.getView().byId("reportTable")
+                    oTable.removeAllColumns();
+        
+                // oTable.setModel(oEmptyModel);
+                // oTable.bindRows("/rows");
+        
+                
+                oSelectedFiltersModel.setProperty("/allSelected", false);
+            } */
+        
  
          },
+
+
+         getTableData: function () {
+
+            this.getView().byId("tableContainer").setBusy(true)
+
+            // Initialize filter models
+            let oSelectedFilters = this.getView().getModel('selectedFiltersModel').getData();
+            let oSelectedFiltersModel = this.getView().getModel('selectedFiltersModel');
+
+            const requestData = {
+                entity: Object.values(oSelectedFilters.entity),
+                tipoContratto: Object.values(oSelectedFilters.tipoContratto),
+                contratto: oSelectedFilters.contratto ? Object.values(oSelectedFilters.contratto) : null, // Campo opzionale
+                year: oSelectedFilters.year,
+                period: oSelectedFilters.period,
+                costCenter: oSelectedFilters.costCenter ? Object.values(oSelectedFilters.costCenter) : null, // Campo opzionale
+                Id_storico: oSelectedFilters.ID_STORICO,
+            }
+
+            const servicePath = `${this.osUrl}GetTabellaFiltrata`;  // Append the action name with a trailing slash
+            axios.post(servicePath,  requestData)
+                .then((response) => {
+                    this.getView().byId("tableContainer").setBusy(false)
+                    oSelectedFiltersModel.setProperty("/matchData", true);
+                    console.log(response.data);  // Handle the response array
+                    let dataFiltered = this.getView().getModel('DataIMA22');
+                    if(typeof response.data === 'object'){
+                        let dataArray = []
+                        dataArray.push(response.data)
+                        
+                        if (dataArray && Array.isArray(dataArray)) {
+                            // Convert each object in the array
+                            if (dataArray[0].value.length > 0) {
+                                let processedData = dataArray[0].value.map(this.convertExponentialValues);
+                                dataFiltered.setData(processedData);
+                                dataFiltered.refresh();
+                            } else {
+                                console.error("The response contains no data.")
+                            }
+                            
+                        }
+                    } else {
+                        dataFiltered.setData(response.data)
+                        dataFiltered.refresh()
+                    }     
+                    return
+                })
+                .catch((error) => {
+                    console.error(error)
+                    if (error.response) {
+                        console.error("Server responded with error: ", error.response.status, error.response.data);
+                    } else if (error.request) {
+                        console.error("No response received from server: ", error.request);
+                    } else {
+                        console.error("Axios error: ", error.message);
+                    }
+                });
+        },
  
          setTableHeight: function(oEvent, oTable) {
              let iScreenHeight = window.innerHeight;
