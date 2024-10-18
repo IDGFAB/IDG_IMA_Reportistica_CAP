@@ -1,0 +1,38 @@
+{
+    "upsImaTEST": {
+        "object_owner": {
+            "roles": [],
+            "container_roles": [],
+            "object_privileges": [
+                {
+                    "type": "VIEW",
+                    "name": "View_All_Data",
+                    "privileges_with_grant_option": [
+                        "SELECT"
+                    ]
+                },
+                {
+                    "type": "VIEW",
+                    "name": "GV_FILTRI_ID22",
+                    "privileges_with_grant_option": [
+                        "SELECT"
+                    ]
+                },
+                {
+                    "type": "VIEW",
+                    "name": "View_All_Data_v2",
+                    "privileges_with_grant_option": [
+                        "SELECT"
+                    ]
+                },
+                {
+                    "type": "VIEW",
+                    "name": "View_IMA_Lettura",
+                    "privileges_with_grant_option": [
+                        "SELECT"
+                    ]
+                }
+            ]
+        }
+    }
+}

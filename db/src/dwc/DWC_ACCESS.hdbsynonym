@@ -1,0 +1,27 @@
+{
+    "IMA_REPORT_VIEW_ALL_DATA": {
+        "target": {
+            "schema": "IMA_TEST_SPACE",
+            "object": "View_All_Data"
+        }
+    },
+    "IMA_REPORT_GV_FILTRI_ID22": {
+        "target": {
+            "schema": "IMA_TEST_SPACE",
+            "object": "GV_FILTRI_ID22"
+        }
+    },
+    "IMA_REPORT_VIEW_ALL_DATA_V2": {
+        "target": {
+            "schema": "IMA_TEST_SPACE",
+            "object": "View_All_Data_v2"
+        }
+    },
+    "IMA_REPORT_VIEW_IMA_LETTURA": {
+        "target": {
+            "schema": "IMA_TEST_SPACE",
+            "object": "View_IMA_Lettura"
+        }
+    }
+
+}

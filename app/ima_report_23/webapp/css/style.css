@@ -1,0 +1,39 @@
+.highlightEnd {
+    background-color: #0009;
+}
+
+.flex-row {
+    flex-direction: row;
+}
+
+.gap1 {
+    gap: 1rem;
+}
+
+.highlightRow {
+    background-color: #b7b5b5 !important; /* Light grey background */
+}
+
+.customLegendPanel .sapMPanelHeadingDiv .sapMPanelWrappingDivTb, div#__toolbar1, div#__toolbar0 {
+    background-color: #eaf4fc;  /* Informative blue background */
+    border-radius: 8px;         /* Optional: Rounded corners */
+    padding: 10px;              /* Optional: Add some padding */
+}
+
+.icon {
+    margin-right: 5px;
+}
+
+/* .legendGreen {
+    color: green;
+}
+
+.legendAmber {
+    color: orange;
+}
+
+.legendRed {
+    color: red;
+} */
+
+

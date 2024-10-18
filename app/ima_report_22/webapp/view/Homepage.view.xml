@@ -1,0 +1,259 @@
+<mvc:View controllerName="imareport22.controller.Homepage"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:table="sap.ui.table"
+    xmlns:u="sap.ui.unified"
+    xmlns:f="sap.f"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:core="sap.ui.core"
+    xmlns:layout="sap.ui.layout">
+    <f:DynamicPage id="page">
+        <f:title>
+            <f:DynamicPageTitle id="pageTitleWrapper">
+                <f:heading>
+                    <Title id="pageTitle" text="Reportistica 22" />
+                </f:heading>
+            </f:DynamicPageTitle>
+        </f:title>
+
+        <!-- Filter Bar -->
+        <f:header>
+            <f:DynamicPageHeader pinnable="false" blocked="false">
+                <layout:HorizontalLayout id="hLayout" allowWrapping="true">
+                    <layout:VerticalLayout id="vLayout" class="sapUiMediumMarginEnd">
+                        <ObjectAttribute title="Entity" text="" />
+                        <ObjectAttribute title="Tipo di contratto" text="" />
+                        <ObjectAttribute title="Contratto" text="" />
+                    </layout:VerticalLayout>
+                    <layout:VerticalLayout id="vLayout2">
+                        <ObjectAttribute title="Periodo" text="" />
+                        <ObjectAttribute title="Anno" text="" />
+                        <ObjectAttribute title="Cost Center" text="" />
+                        <ObjectAttribute title="ID Storico" text="" />
+                    </layout:VerticalLayout>
+                </layout:HorizontalLayout>
+                <f:content>
+
+                    <fb:FilterBar id="filterbar" persistencyKey="myPersKey" useToolbar="false" search=".onSearch" afterVariantLoad=".onAfterVariantLoad" searchEnabled="{selectedFiltersModel>/allSelected}">
+                        <fb:filterGroupItems>
+                            <!-- Entity Filter -->
+                            <fb:FilterGroupItem name="Entity" label="Entity" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <MultiComboBox  name="Entity" selectionChange=".onSelectionChange" items="{ path: 'oFiltersModel>/Entity', sorter: { path: 'description' }
+ }" selectedKeys="{selectedFiltersModel>/entity}" required="true" showClearIcon="true">
+                                        <core:Item key="{oFiltersModel>ID}" text="{oFiltersModel>description}" />
+                                    </MultiComboBox>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <!-- TipoContratto Filter -->
+                            <fb:FilterGroupItem name="TipoContratto" label="Tipo di contratto" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <MultiComboBox name="TipoContratto" selectionChange=".onSelectionChange"  
+                                        items="{ 
+                                            path: 'oFiltersModel>/TipoContratto'
+                                        }" 
+                                        selectedKeys="{selectedFiltersModel>/tipoContratto}" required="true" showClearIcon="true">
+                                        <core:Item key="{oFiltersModel>}" text="{oFiltersModel>}" />
+                                    </MultiComboBox>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <!-- Contratto Filter -->
+                            <fb:FilterGroupItem name="Contratto" label="Contratto" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <MultiComboBox name="Contratto" selectionChange=".onSelectionChange" items="{ path: 'oFiltersModel>/Contratto' }" selectedKeys="{selectedFiltersModel>/contratto}" showClearIcon="true">
+                                        <core:Item key="{oFiltersModel>}" text="{oFiltersModel>}" />
+                                    </MultiComboBox>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <!-- Periodo Filter -->
+                            <fb:FilterGroupItem name="Periodo" label="Periodo" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <Select name="Periodo" change=".onSelectionChange" selectedKey="{selectedFiltersModel>/period}" forceSelection="false" items="{ path: 'oFiltersModel>/Periodo' }" required="true">
+                                        <core:Item key="{oFiltersModel>ID}" text="{oFiltersModel>description}" />
+                                    </Select>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <!-- Anno Filter -->
+                            <fb:FilterGroupItem name="Anno" label="Anno" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <Select name="Anno" change=".onSelectionChange" forceSelection="false" items="{ path: 'oFiltersModel>/Anno' }" selectedKey="{selectedFiltersModel>/year}" required="true">
+                                        <core:Item key="{oFiltersModel>}" text="{oFiltersModel>}" />
+                                    </Select>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <!-- CostCenter Filter -->
+                            <fb:FilterGroupItem name="CostCenter" label="Cost Center" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <MultiComboBox name="CostCenter" selectionChange=".onSelectionChange" items="{ path: 'oFiltersModel>/CostCenter' }" selectedKeys="{selectedFiltersModel>/costCenter}" showClearIcon="true">
+                                        <core:Item key="{oFiltersModel>}" text="{oFiltersModel>}" />
+                                    </MultiComboBox>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <!-- ID Storico Filter -->
+                            <fb:FilterGroupItem name="ID_STORICO" label="ID Storico" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <Select name="ID_STORICO" forceSelection="false" change=".onSelectionChange" items="{ path: 'oFiltersModel>/Id_storico' }" required="true">
+                                        <core:Item key="{oFiltersModel>}" text="{oFiltersModel>}" />
+                                    </Select>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                        </fb:filterGroupItems>
+                    </fb:FilterBar>
+                    <VBox alignItems="End" wrap="Wrap" justifyContent="End" alignContent="Stretch" class="sapUiMediumMarginTop flex-row gap1">
+                        <Button icon="sap-icon://excel-attachment" id="excelBtn" text="Download Excel" press=".onDownloadExcelPress" enabled="{selectedFiltersModel>/matchData}" />
+                        <Button icon="sap-icon://pdf-attachment" id="pdfBtn" text="Download PDF" press=".onDownloadPdfPress" enabled="{selectedFiltersModel>/matchData}" />
+                        <Button id="clearFiltersBtn" text="Clear Filters" press=".onClearFilters" visible="false" />
+                    </VBox>
+                    <Panel id="legendPanel" width="100%" backgroundDesign="Solid" headerText="Informazioni" expandable="true" expanded="false" class="sapUiSmallMarginTop customLegendPanel">
+                        <headerToolbar>
+                            <Toolbar>
+                                <Title text="Informazioni" />
+                                <ToolbarSpacer />
+                                <Button icon="sap-icon://decline" type="Ghost" press=".onCloseLegend" />
+                            </Toolbar>
+                        </headerToolbar>
+                        <content>
+                            <List>
+                                <CustomListItem>
+                                    <HBox>
+                                        <core:Icon src="sap-icon://circle-task" class="legendGreen icon"></core:Icon>
+                                        <Label class="icon" text="Cliccare sul titolo delle colonne per bloccarle." wrapping="true"/>
+                                    </HBox>
+                                </CustomListItem>
+                                <CustomListItem>
+                                    <HBox>
+                                        <core:Icon src="sap-icon://circle-task" class="legendAmber icon"></core:Icon>
+                                        <Label class="icon" text="Selezionare i filtri ed avviare la ricerca per mostrare la tabella." wrapping="true"/>
+                                    </HBox>
+                                </CustomListItem>
+                                <CustomListItem>
+                                    <HBox>
+                                        <core:Icon src="sap-icon://circle-task" class="legendAmber icon"></core:Icon>
+                                        <Label class="icon" text="I bottoni di download sono disponibili dopo la ricerca." wrapping="true"/>
+                                    </HBox>
+                                </CustomListItem>
+                            </List>
+                        </content>
+                    </Panel>
+                </f:content>
+            </f:DynamicPageHeader>
+        </f:header>
+
+        <!-- Table Content -->
+        <f:content>
+            <!-- ScrollContainer to allow horizontal scrolling -->
+            <ScrollContainer horizontal="true" width="100%">
+                <!-- Table Definition -->
+                <table:Table id="table" selectionMode="None" visibleRowCountMode="Interactive" minAutoRowCount="8" enableBusyIndicator="true" enableColumnFreeze="true" width="100%" rows="{DataIMA22>/0/value}">
+                    <table:columns>
+                        <table:Column width="11rem">
+                            <Label text="ACC_SECTOR" />
+                            <table:template>
+                                <Text text="{DataIMA22>ACC_SECTOR}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="ACCUMULATED_DEPRECIATION" />
+                            <table:template>
+                                <Text text="{DataIMA22>ACCUMULATED_DEPRECIATION}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="RIGHT_OF_USE" />
+                            <table:template>
+                                <Text text="{DataIMA22>RIGHT_OF_USE}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="ASSET_CLASS" />
+                            <table:template>
+                                <Text text="{DataIMA22>ASSET_CLASS}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="BUKRS" />
+                            <table:template>
+                                <Text text="{DataIMA22>BUKRS}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="CONTRACT_CODE" />
+                            <table:template>
+                                <Text text="{DataIMA22>CONTRACT_CODE}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="CONTRACT_DESCRIPTION" />
+                            <table:template>
+                                <Text text="{DataIMA22>CONTRACT_DESCRIPTION}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="DEPRECIATION" />
+                            <table:template>
+                                <Text text="{DataIMA22>DEPRECIATION}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="CLOSING_LEASES_LIABILITIES" />
+                            <table:template>
+                                <Text text="{DataIMA22>CLOSING_LEASES_LIABILITIES}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="INTERCOMPANY" />
+                            <table:template>
+                                <Text text="{DataIMA22>INTERCOMPANY}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="LEASE_COST" />
+                            <table:template>
+                                <Text text="{DataIMA22>LEASE_COST}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="NET_RIGHT_OF_USE" />
+                            <table:template>
+                                <Text text="{DataIMA22>NET_RIGHT_OF_USE}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="CDC" />
+                            <table:template>
+                                <Text text="{DataIMA22>CDC}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="CDC_CODE" />
+                            <table:template>
+                                <Text text="{DataIMA22>CDC_CODE}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="YTD_INTEREST" />
+                            <table:template>
+                                <Text text="{DataIMA22>YTD_INTEREST}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="GAIN_FX_RATES" />
+                            <table:template>
+                                <Text text="{DataIMA22>GAIN_FX_RATES}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="LOSS_FX_RATES" />
+                            <table:template>
+                                <Text text="{DataIMA22>LOSS_FX_RATES}" />
+                            </table:template>
+                        </table:Column>
+                        <!-- Puoi aggiungere ulteriori colonne seguendo lo stesso pattern per ogni chiave dell'oggetto -->
+                    </table:columns>
+                </table:Table>
+
+            </ScrollContainer>
+        </f:content>
+
+    </f:DynamicPage>
+</mvc:View>

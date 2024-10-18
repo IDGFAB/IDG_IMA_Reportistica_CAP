@@ -1,0 +1,143 @@
+namespace ima_report;
+
+
+using {cuid} from '@sap/cds/common';
+
+entity primoDeploy : cuid {
+    nome : String;
+}
+
+@cds.persistence.exists
+entity View_All_Data {
+    key YEARDUEDATE                : String(4);
+    key PERIODDUEDATE              : String(3);
+        RECNNR                     : String(13);
+    key INTRENO                    : String(13);
+        CERULE                     : String(10);
+        RECNTYPE                   : String(4);
+        IDENTOBJNR                 : String(10);
+        ZZPARTNER                  : String(6);
+        UDATE                      : String(8);
+        UTIME                      : String(6);
+        IDENTASSET                 : String(12);
+        GSBER                      : String(4);
+        RECNTXT                    : String(80);
+        ZZSOCIETA                  : String(4);
+        PRICE_SROU                 : Decimal(19, 6);
+        BBWHR_ACQUISITION          : Decimal(23, 2);
+        RECNBEG                    : String(8);
+        RECNDPO                    : String(8);
+        FONDO_AMM_CUM              : Decimal(23, 2);
+        BBWHR_DEPRECIATION_SUM_END : Decimal(23, 2);
+        BBWHR_LIABILITY_SUM_END    : Decimal(23, 2);
+        BBWHR_INTEREST             : Decimal(23, 2);
+        BBWHR_PAYMENT              : Decimal(23, 2);
+        BBWHR_DEPRECIATION         : Decimal(23, 2);
+    key SPRAS                      : String(1);
+        KTEXT                      : String(20);
+    key KOSTL                      : String(10);
+        DEBITO_MTERM               : Decimal(23, 2);
+        DEBITO_BTERM               : Decimal(23, 2);
+        DEBITO_LTERM               : Decimal(23, 2);
+        SWHRKOND                   : String(5);
+        RECNCNCURR                 : String(5);
+        TXK20                      : String(20);
+    key ANLN1                      : String(12);
+    key BUKRS                      : String(4);
+    key ANLKL                      : String(8);
+        RECNTXTOLD                 : String(20);
+    key ID_STORICO                 : String(20);
+        BUTXT                      : String(28);
+}
+
+@cds.persistence.exists
+entity View_All_Data_v2 {
+        XMBEZ                      : String(30);
+    key YEARDUEDATE                : String(4);
+    key PERIODDUEDATE              : String(3);
+        RECNNR                     : String(13);
+        CERULE                     : String(10);
+        RECNTYPE                   : String(4);
+        IDENTOBJNR                 : String(10);
+        ZZPARTNER                  : String(6);
+        UDATE                      : String(8);
+        UTIME                      : String(6);
+        GSBER                      : String(4);
+        RECNTXT                    : String(80);
+        ZZSOCIETA                  : String(4);
+        PRICE_SROU                 : Decimal(19, 6);
+        BBWHR_ACQUISITION          : Decimal(23, 2);
+        RECNDPO                    : String(8);
+        RECNBEG                    : String(8);
+        FONDO_AMM_CUM              : Decimal(23, 2);
+        BBWHR_DEPRECIATION_SUM_END : Decimal(23, 2);
+        BBWHR_LIABILITY_SUM_END    : Decimal(23, 2);
+        BBWHR_INTEREST             : Decimal(23, 2);
+        BBWHR_PAYMENT              : Decimal(23, 2);
+        BBWHR_DEPRECIATION         : Decimal(23, 2);
+    key SPRAS                      : String(1);
+        KTEXT                      : String(20);
+    key KOSTL                      : String(10);
+        DEBITO_MTERM               : Decimal(23, 2);
+        DEBITO_BTERM               : Decimal(23, 2);
+        DEBITO_LTERM               : Decimal(23, 2);
+        SWHRKOND                   : String(5);
+        RECNCNCURR                 : String(5);
+        RECNTXTOLD                 : String(20);
+    key INTRENO                    : String(13);
+    key ID_STORICO                 : String(20);
+    key BUKRS                      : String(4);
+        BUTXT                      : String(25);
+        IDENTASSET                 : String(12);
+}
+
+@cds.persistence.exists
+entity GV_FILTRI_ID22 {
+    key YEARDUEDATE   : String(4);
+    key PERIODDUEDATE : String(3);
+    key BUKRS         : String(4);
+    key ID_STORICO    : String(20);
+        BUTXT         : String(25);
+        IDENTOBJNR    : String(10);
+        RECNTYPE      : String(4);
+        RECNNR        : String(13);
+}
+
+@cds.persistence.exists
+entity View_IMA_Lettura {
+    key YEARDUEDATE                : String(4);
+        BUKRS                      : String(4);
+    key PERIODDUEDATE              : String(3);
+        RECNNR                     : String(13);
+    key INTRENO                    : String(13);
+        CERULE                     : String(10);
+        RECNTYPE                   : String(4);
+        IDENTOBJNR                 : String(10);
+        ZZPARTNER                  : String(6);
+        UDATE                      : String(8);
+        UTIME                      : String(6);
+        IDENTASSET                 : String(12);
+        GSBER                      : String(4);
+        RECNTXT                    : String(80);
+        ZZSOCIETA                  : String(4);
+        PRICE_SROU                 : Decimal(19, 6);
+        BBWHR_ACQUISITION          : Decimal(23, 2);
+        RECNDPO                    : String(8);
+        RECNBEG                    : String(8);
+        FONDO_AMM_CUM              : Decimal(23, 2);
+        BBWHR_DEPRECIATION_SUM_END : Decimal(23, 2);
+        BBWHR_LIABILITY_SUM_END    : Decimal(23, 2);
+        BBWHR_INTEREST             : Decimal(23, 2);
+        BBWHR_PAYMENT              : Decimal(23, 2);
+        BBWHR_DEPRECIATION         : Decimal(23, 2);
+    key SPRAS                      : String(1);
+        KTEXT                      : String(20);
+    key KOSTL                      : String(10);
+        DEBITO_MTERM               : Decimal(23, 2);
+        DEBITO_BTERM               : Decimal(23, 2);
+        DEBITO_LTERM               : Decimal(23, 2);
+        SWHRKOND                   : String(5);
+        RECNCNCURR                 : String(5);
+        RECNTXTOLD                 : String(20);
+    key ID_STORICO                 : String(20);
+}
