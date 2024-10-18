@@ -10,9 +10,9 @@ sap.ui.define([
     "sap/m/ObjectAttribute",
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator", 
-    "sap/ui/core/util/ExportTypeCSV",
+    "sap/m/MessageBox",
 ],
-function (Controller, CustomData, JSONModel, Table, RowSettings, Column, Text, Item, ObjectAttribute, Filter, FilterOperator) {
+function (Controller, CustomData, JSONModel, Table, RowSettings, Column, Text, Item, ObjectAttribute, Filter, FilterOperator, MessageBox) {
     "use strict";
 
     return Controller.extend("imareport23.controller.Homepage", {
@@ -433,11 +433,11 @@ function (Controller, CustomData, JSONModel, Table, RowSettings, Column, Text, I
                                 dataFiltered.refresh();
                             } else {
                                 console.error("The response contains no data.")
-                                sap.m.MessageBox.warning(
+                                MessageBox.warning(
                                     "Non ci sono dati con i filtri selezionati.",
                                     {
                                         title: "Nessun risultato",
-                                        actions: [sap.m.MessageBox.Action.OK],
+                                        actions: [MessageBox.Action.OK],
                                         onClose: function(oAction) {
                                             // Optional: Add any action to be performed when the message box is closed
                                         }
