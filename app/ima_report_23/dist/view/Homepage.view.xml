@@ -1,0 +1,262 @@
+<mvc:View controllerName="imareport23.controller.Homepage"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m"
+    xmlns:f="sap.f"
+    xmlns:layout="sap.ui.layout"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:table="sap.ui.table"
+    xmlns:core="sap.ui.core">
+    <f:DynamicPage id="page" title="{i18n>title}">
+        <f:title>
+            <f:DynamicPageTitle id="pageTitleWrapper">
+                <f:heading>
+                    <Title id="pageTitle" text="Reportistica 23" />
+                </f:heading>
+            </f:DynamicPageTitle>
+        </f:title>
+        <f:header>
+            <f:DynamicPageHeader id="dynamicHeader">
+                <layout:HorizontalLayout id="hLayout" allowWrapping="true">
+                    <layout:VerticalLayout id="vLayout" class="sapUiMediumMarginEnd">
+                        <ObjectAttribute title="Scenario" text="" />
+                        <ObjectAttribute title="Entity" text="" />
+                        <ObjectAttribute title="Year" text="" />
+                        <ObjectAttribute title="Lease N" text="" />
+                    </layout:VerticalLayout>
+
+                    <layout:VerticalLayout id="vLayout2">
+                        <ObjectAttribute title="Period" text="" />
+                        <ObjectAttribute title="Icp" text="" />
+                        <ObjectAttribute title="Cost Center" text="" />
+                    </layout:VerticalLayout>
+                </layout:HorizontalLayout>
+
+                <f:content>
+                    <fb:FilterBar id="filterbar" useToolbar="false" search=".onSearch" filterChange=".onFilterChange" afterVariantLoad=".onAfterVariantLoad">
+                        <fb:filterGroupItems>
+                            <fb:FilterGroupItem name="scenario" label="Scenario" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <Select forceSelection="false" name="Scenario" change=".onSelectionChange" items="{ path: 'ScenarioModel>/Scenarios' }" id="scenarioSelection">
+                                        <core:Item key="{ScenarioModel>}" text="{ScenarioModel>}" />
+                                    </Select>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <fb:FilterGroupItem name="entity" label="Entity" groupName="Group1" visibleInFilterBar="true" id="groupFilter">
+                                <fb:control>
+                                    <Select forceSelection="false" name="Entity" change=".onSelectionChange" items="{ path: 'EntityModel>/Entities' }" id="entitySelection">
+                                        <core:Item key="{EntityModel>}" text="{EntityModel>}" />
+                                    </Select>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <fb:FilterGroupItem name="year" label="Year" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <Select forceSelection="false" name="year" change=".onSelectionChange" items="{ path: 'YearModel>/Years' }" id="yearSelection">
+                                        <core:Item key="{YearModel>}" text="{YearModel>}" />
+                                    </Select>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <fb:FilterGroupItem name="period" label="Period" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <Select forceSelection="false" name="period" change=".onSelectionChange" items="{ path: 'PeriodModel>/Periods' }" id="periodSelection">
+                                        <core:Item key="{PeriodModel>}" text="{PeriodModel>}" />
+                                    </Select>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <fb:FilterGroupItem name="icp" label="Icp" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <Select forceSelection="false" name="icp" change=".onSelectionChange" items="{ path: 'IcpModel>/Icps' }" id="icpSelection">
+                                        <core:Item key="{IcpModel>}" text="{IcpModel>}" />
+                                    </Select>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <fb:FilterGroupItem name="lease n" label="Lease N" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <Select forceSelection="false" name="lease n" change=".onSelectionChange" items="{ path: 'LeaseNModel>/LeaseNs' }" id="lease_nSelection">
+                                        <core:Item key="{LeaseNModel>}" text="{LeaseNModel>}" />
+                                    </Select>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <fb:FilterGroupItem name="cost center" label="Cost Center" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <Select forceSelection="false" name="Cost Center" change=".onSelectionChange" items="{ path: 'CostCenterModel>/CostCenters' }" id="costCenterSelection">
+                                        <core:Item key="{CostCenterModel>}" text="{CostCenterModel>}" />
+                                    </Select>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                        </fb:filterGroupItems>
+                    </fb:FilterBar>
+                    <VBox alignItems="End" wrap="Wrap" justifyContent="End" alignContent="Stretch" class="sapUiMediumMarginTop flex-row gap1">
+                        <Button icon="sap-icon://excel-attachment" id="excelBtn" text="Download Excel" press=".onDownloadExcel" enabled="false" />
+                        <Button icon="sap-icon://pdf-attachment" id="pdfBtn" text="Download PDF" press=".onDownloadPdfPress" enabled="false" />
+                        <Button id="clearFiltersBtn" text="Clear Filters" press=".onClearFilters" visible="false" />
+                    </VBox>
+                    <Panel id="legendPanel" width="100%" backgroundDesign="Solid" headerText="Informazioni" expandable="true" expanded="false" class="sapUiSmallMarginTop customLegendPanel">
+                        <headerToolbar>
+                            <Toolbar>
+                                <Title text="Informazioni" />
+                                <ToolbarSpacer />
+                                <Button icon="sap-icon://decline" type="Ghost" press=".onCloseLegend" />
+                            </Toolbar>
+                        </headerToolbar>
+
+                        <content>
+                            <List>
+                                <CustomListItem>
+                                    <HBox>
+                                        <core:Icon src="sap-icon://circle-task" class="legendGreen icon"></core:Icon>
+                                        <Label class="icon" text="Cliccare sul titolo delle colonne per bloccarle." wrapping="true"/>
+                                    </HBox>
+                                </CustomListItem>
+
+                                <CustomListItem>
+                                    <HBox>
+                                        <core:Icon src="sap-icon://circle-task" class="legendAmber icon"></core:Icon>
+                                        <Label class="icon" text="Selezionare i filtri ed avviare la ricerca per mostrare la tabella." wrapping="true"/>
+                                    </HBox>
+                                </CustomListItem>
+
+                                <CustomListItem>
+                                    <HBox>
+                                        <core:Icon src="sap-icon://circle-task" class="legendAmber icon"></core:Icon>
+                                        <Label class="icon" text="I bottoni di download sono disponibili dopo la ricerca." wrapping="true"/>
+                                    </HBox>
+                                </CustomListItem>
+                            </List>
+
+                        </content>
+                    </Panel>
+                </f:content>
+            </f:DynamicPageHeader>
+        </f:header>
+
+        <f:content>
+            <VBox id="tableContainer" alignItems="Center" height="100%">
+                <table:Table id="reportTable" selectionMode="None" visibleRowCountMode="Interactive" minAutoRowCount="8" enableBusyIndicator="true" enableColumnFreeze="true" width="100%" rows="{DataIMA22>/}">
+    <table:columns>
+        <table:Column width="11rem">
+            <Label text="ASSET_CLASS" />
+            <table:template>
+                <Text text="{DataIMA22>ASSET_CLASS}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="INTERCOMPANY" />
+            <table:template>
+                <Text text="{DataIMA22>INTERCOMPANY}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="CDC" />
+            <table:template>
+                <Text text="{DataIMA22>CDC}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="CDC_CODE" />
+            <table:template>
+                <Text text="{DataIMA22>CDC_CODE}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="LEASE_NUMBER" />
+            <table:template>
+                <Text text="{DataIMA22>LEASE_NUMBER}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="CONTRACT_CODE" />
+            <table:template>
+                <Text text="{DataIMA22>CONTRACT_CODE}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="ACC_SECTOR" />
+            <table:template>
+                <Text text="{DataIMA22>ACC_SECTOR}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="CONTRACT_DESCRIPTION" />
+            <table:template>
+                <Text text="{DataIMA22>CONTRACT_DESCRIPTION}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="MERGED_ENTITY" />
+            <table:template>
+                <Text text="{DataIMA22>MERGED_ENTITY}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="RIGHT_OF_USE" />
+            <table:template>
+                <Text text="{DataIMA22>RIGHT_OF_USE}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="ACCUMULATED_DEPRECIATION" />
+            <table:template>
+                <Text text="{DataIMA22>ACCUMULATED_DEPRECIATION}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="NET_RIGHT_OF_USE" />
+            <table:template>
+                <Text text="{DataIMA22>NET_RIGHT_OF_USE}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="CLOSING_LEASES_LIABILITIES" />
+            <table:template>
+                <Text text="{DataIMA22>CLOSING_LEASES_LIABILITIES}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="LEASE_LIABILITIES_SHORT_TERM" />
+            <table:template>
+                <Text text="{DataIMA22>LEASE_LIABILITIES_SHORT_TERM}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="LEASE_LIABILITIES_LONG_TERM" />
+            <table:template>
+                <Text text="{DataIMA22>LEASE_LIABILITIES_LONG_TERM}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="YTD_INTEREST" />
+            <table:template>
+                <Text text="{DataIMA22>YTD_INTEREST}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="LEASE_COST" />
+            <table:template>
+                <Text text="{DataIMA22>LEASE_COST}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="DEPRECIATION" />
+            <table:template>
+                <Text text="{DataIMA22>DEPRECIATION}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="GAIN_FX_RATES" />
+            <table:template>
+                <Text text="{DataIMA22>GAIN_FX_RATES}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="LOSS_FX_RATES" />
+            <table:template>
+                <Text text="{DataIMA22>LOSS_FX_RATES}" />
+            </table:template>
+        </table:Column>
+    </table:columns>
+</table:Table>
+            </VBox>
+        </f:content>
+
+    </f:DynamicPage>
+</mvc:View>

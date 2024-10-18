@@ -131,9 +131,130 @@
 
         <f:content>
             <VBox id="tableContainer" alignItems="Center" height="100%">
-                <table:Table id="reportTable" visibleRowCount="18" selectionMode="None">
-                    <!-- Le colonne possono essere aggiunte qui -->
-                </table:Table>
+                <table:Table id="reportTable" selectionMode="None" visibleRowCountMode="Interactive" minAutoRowCount="8" enableBusyIndicator="true" enableColumnFreeze="true" width="100%" rows="{DataIMA22>/}">
+    <table:columns>
+        <table:Column width="11rem">
+            <Label text="ASSET_CLASS" />
+            <table:template>
+                <Text text="{DataIMA22>ASSET_CLASS}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="INTERCOMPANY" />
+            <table:template>
+                <Text text="{DataIMA22>INTERCOMPANY}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="CDC" />
+            <table:template>
+                <Text text="{DataIMA22>CDC}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="CDC_CODE" />
+            <table:template>
+                <Text text="{DataIMA22>CDC_CODE}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="LEASE_NUMBER" />
+            <table:template>
+                <Text text="{DataIMA22>LEASE_NUMBER}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="CONTRACT_CODE" />
+            <table:template>
+                <Text text="{DataIMA22>CONTRACT_CODE}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="ACC_SECTOR" />
+            <table:template>
+                <Text text="{DataIMA22>ACC_SECTOR}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="CONTRACT_DESCRIPTION" />
+            <table:template>
+                <Text text="{DataIMA22>CONTRACT_DESCRIPTION}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="MERGED_ENTITY" />
+            <table:template>
+                <Text text="{DataIMA22>MERGED_ENTITY}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="RIGHT_OF_USE" />
+            <table:template>
+                <Text text="{DataIMA22>RIGHT_OF_USE}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="ACCUMULATED_DEPRECIATION" />
+            <table:template>
+                <Text text="{DataIMA22>ACCUMULATED_DEPRECIATION}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="NET_RIGHT_OF_USE" />
+            <table:template>
+                <Text text="{DataIMA22>NET_RIGHT_OF_USE}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="CLOSING_LEASES_LIABILITIES" />
+            <table:template>
+                <Text text="{DataIMA22>CLOSING_LEASES_LIABILITIES}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="LEASE_LIABILITIES_SHORT_TERM" />
+            <table:template>
+                <Text text="{DataIMA22>LEASE_LIABILITIES_SHORT_TERM}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="LEASE_LIABILITIES_LONG_TERM" />
+            <table:template>
+                <Text text="{DataIMA22>LEASE_LIABILITIES_LONG_TERM}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="YTD_INTEREST" />
+            <table:template>
+                <Text text="{DataIMA22>YTD_INTEREST}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="LEASE_COST" />
+            <table:template>
+                <Text text="{DataIMA22>LEASE_COST}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="DEPRECIATION" />
+            <table:template>
+                <Text text="{DataIMA22>DEPRECIATION}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="GAIN_FX_RATES" />
+            <table:template>
+                <Text text="{DataIMA22>GAIN_FX_RATES}" />
+            </table:template>
+        </table:Column>
+        <table:Column width="11rem">
+            <Label text="LOSS_FX_RATES" />
+            <table:template>
+                <Text text="{DataIMA22>LOSS_FX_RATES}" />
+            </table:template>
+        </table:Column>
+    </table:columns>
+</table:Table>
             </VBox>
         </f:content>
 

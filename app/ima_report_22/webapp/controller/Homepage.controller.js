@@ -144,8 +144,13 @@ sap.ui.define([
                     if(typeof response.data === 'object'){
                         let dataArray = []
                         dataArray.push(response.data)
-                        dataFiltered.setData(dataArray)
-                        dataFiltered.refresh()
+                        
+                        if (dataArray && Array.isArray(dataArray)) {
+                            // Convert each object in the array
+                            let processedData = dataArray[0].value.map(this.convertExponentialValues);
+                            dataFiltered.setData(processedData);
+                            dataFiltered.refresh();
+                        }
                     } else {
                         dataFiltered.setData(response.data)
                         dataFiltered.refresh()
@@ -168,6 +173,23 @@ sap.ui.define([
 
                 
 
+        },
+
+        convertExponentialValues: function (obj) {
+            // Iterate through all properties of the object
+            for (let key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    // Check if the value is a string representing a number in exponential form
+                    if (typeof obj[key] === 'string' && obj[key].match(/^-?\d+\.?\d*e[+\-]?\d+$/i)) {
+                        // Convert the string to a number and then to a fixed decimal format
+                        let numberValue = parseFloat(obj[key]);
+                        if (!isNaN(numberValue)) {
+                            obj[key] = numberValue.toFixed(2); // Adjust the number of decimals as needed
+                        }
+                    }
+                }
+            }
+            return obj;
         },
 
 

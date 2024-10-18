@@ -17,1231 +17,94 @@ function (Controller, CustomData, JSONModel, Table, RowSettings, Column, Text, I
 
     return Controller.extend("imareport23.controller.Homepage", {
         onInit: function () {
-            var jsonData = [
-             {
-                 "Scenario": "Actual",
-                   "Entity": "ILAPAK INTERNATIONAL SA",
-                   "Year": 2023,
-                   "Period": "December",
-                   "Icp": "ICP Top",
-                   "Lease_N": "Totale Custom2",
-                   "Cost_Center": "Totale Custom5",
-                   "Data": {
-                      "Land": null,
-                     "Building": {
-                       "FX Effect on Opening": {
-                         "Lease Liabilities Long Term": {
-                           "Debit": null,
-                           "Credit": 99999999999999
-                         },
-                         "Loss FX Rates": {
-                           "Debit": 913643,
-                           "Credit": null
-                         }
-                       },
-                       "Depreciation RoU": {
-                         "Depreciation": {
-                           "Debit": 1767562,
-                           "Credit": null
-                         },
-                         "Accumulated Depreciation": {
-                           "Debit": null,
-                           "Credit": 1524283
-                         },
-                         "Gain FX Rates": {
-                           "Debit": null,
-                           "Credit": 243280
-                         }
-                       },
-                       "Reclass Liab. Current Portion": {
-                         "Lease Liabilities Long Term": {
-                           "Debit": 1819554,
-                           "Credit": null
-                         },
-                         "Lease Liabilities Short Term": {
-                           "Debit": null,
-                           "Credit": 1819554
-                         }
-                       },
-                       "Interest Accrued": {
-                         "YTD Interest": {
-                           "Debit": 470162,
-                           "Credit": null
-                         },
-                         "Interest Accrued": {
-                           "Debit": null,
-                           "Credit": 493414
-                         },
-                         "Loss FX Rates": {
-                           "Debit": 23252,
-                           "Credit": null
-                         }
-                       },
-                       "Reverse Lease Cost": {
-                         "Lease Cost": {
-                           "Debit": null,
-                           "Credit": 2146149
-                         },
-                         "Other Liabilities": {
-                           "Debit": 2252287,
-                           "Credit": null
-                         }
-                       },
-                       "Payment Interest": {
-                         "Lease Liabilities Long Term": {
-                           "Debit": null,
-                           "Credit": 493414
-                         },
-                         "Interest Accrued": {
-                           "Debit": 493414,
-                           "Credit": null
-                         }
-                       },
-                       "Payment & Liab. Amortization": {
-                         "Lease Liabilities Long Term": {
-                           "Debit": 2252287,
-                           "Credit": null
-                         },
-                         "Other Liabilities": {
-                           "Debit": null,
-                           "Credit": 2252287
-                         }
-                       },
-                       "Guest quarters in pool": null,
-                       "Guest quarters in benefit": null,
-                       "Garage in pool": null,
-                       "Garage in benefit": null
-                     },
-                     "Cars in pool":{
-                         "FX Effect on Opening":{
-                             "Lease Liabilities Long Term":{
-                                 "Debit": null,
-                                 "Credit": 3724
-                             },
-                             "Loss FX Rates":{
-                                 "Debit": 3724,
-                                 "Credit": null
-                             }
-                         },
-                         "R.o.U Remeasurement":{
-                             "Right of Use":{
-                                 "Debit": 42711,
-                                 "Credit": null
-                             },
-                             "Lease Liabilities Long Term":{
-                                 "Debit": null,
-                                 "Credit": 42711
-                             }
-                         },
-                         "R.o.U Remeasurement Inflaction":{
-                             "Right of Use":{
-                                 "Debit": null,
-                                 "Credit": 3664
-                             },
-                             "Lease Liabilities Long Term":{
-                                 "Debit": 3664,
-                                 "Credit": null
-                             }
-                         },
-                         "RoU & Accumulated Depreciation DeRecognition":{
-                             "Right of Use":{
-                                 "Debit": null,
-                                 "Credit": 14984
-                             },
-                             "Accumulated Depreciation":{
-                                 "Debit": 14984,
-                                 "Credit": null
-                             }
-                         },
-                         "Depreciation RoU":{
-                             "Depreciation":{
-                                 "Debit": 62657,
-                                 "Credit": null
-                             },
-                             "Accumulated Depreciation":{
-                                 "Debit": null,
-                                 "Credit": 64381
-                             },
-                             "Gain FX Rates":{
-                                 "Debit": null,
-                                 "Credit": 276
-                             },
-                             "Loss FX Rates":{
-                                 "Debit": 2000,
-                                 "Credit": null
-                             }
-                         },
-                         "Reclass Liab. Current Portion":{
-                             "Lease Liabilities Long Term":{
-                                 "Debit": 40070,
-                                 "Credit": null
-                             },
-                             "Lease Liabilities Short Term":{
-                                 "Debit": null,
-                                 "Credit": 40070
-                             }
-                         },
-                         "Interest Accrued":{
-                             "YTD Interest":{
-                                 "Debit": 904,
-                                 "Credit": null
-                             },
-                             "Interest Accrued":{
-                                 "Debit": null,
-                                 "Credit": 948
-                             },
-                             "Loss FX Rates":{
-                                 "Debit": 43,
-                                 "Credit": null
-                             }
-                         },
-                         "Reverse Lease Cost":{
-                             "Lease Cost":{
-                                 "Debit": null,
-                                 "Credit": 63652
-                             },
-                             "Other Liabilities":{
-                                 "Debit": 66688,
-                                 "Credit": null
-                             },
-                             "Gain FX Rates":{
-                                 "Debit": null,
-                                 "Credit": 3036
-                             }
-                         },
-                         "Payment Interest":{
-                             "Lease Liabilities Long Term":{
-                                 "Debit": null,
-                                 "Credit": 948
-                             },
-                             "Interest Accrued":{
-                                 "Debit": 948,
-                                 "Credit": null
-                             }
-                         },
-                         "Payment & Liab. Amortization":{
-                             "Lease Liabilities Long Term":{
-                                 "Debit": 66688,
-                                 "Credit": null
-                             },
-                             "Other Liabilities":{
-                                 "Debit": null,
-                                 "Credit": 66688
-                             }
-                         },
-                     },
-                     "Cars in benefit":{
-                         "RoU initial Recognition":{
-                             "Right of Use": {
-                                 "Debit": 28901,
-                                 "Credit": null
-                             },
-                             "Lease Liabilities Long Term": {
-                                 "Debit": null,
-                                 "Credit": 28901
-                             }
-                         },
-                         "FX Effect on Opening":{
-                             "Lease Liabilities Long Term": {
-                                 "Debit": null,
-                                 "Credit": 6338
-                             },
-                             "Loss FX Rates": {
-                                 "Debit": 6338,
-                                 "Credit": null
-                             }
-                         },
-                         "R.o.U Remeasurement":{
-                             "Right of Use": {
-                                 "Debit": 9435,
-                                 "Credit": 8924
-                             },
-                             "Lease Liabilities Long Term": {
-                                 "Debit": 8924,
-                                 "Credit": 9435
-                             }
-                         },
-                         "R.o.U Remeasurement Inflaction":{
-                             "Right of Use": {
-                                 "Debit": null,
-                                 "Credit": 305
-                             },
-                             "Lease Liabilities Long Term": {
-                                 "Debit": 305,
-                                 "Credit": null
-                             }
-                         },
-                         "RoU & Accumulated Depreciation DeRecognition":{
-                             "Right of Use": {
-                                 "Debit": null,
-                                 "Credit": 26278
-                             },
-                             "Accumulated Depreciation": {
-                                 "Debit": 26278,
-                                 "Credit": null
-                             }
-                         },
-                         "Depreciation RoU":{
-                             "Depreciation": {
-                                 "Debit": 107380,
-                                 "Credit": null
-                             },
-                             "Accumulated Depreciation": {
-                                 "Debit": null,
-                                 "Credit": 106626
-                             },
-                             "Gain FX Rates": {
-                                 "Debit": null,
-                                 "Credit": 1012
-                             },
-                             "Loss FX Rates": {
-                                 "Debit": 258,
-                                 "Credit": null
-                             }
-                         },
-                         "Reclass Liab. Current Portion":{
-                             "Lease Liabilities Long Term": {
-                                 "Debit": 79680,
-                                 "Credit": null
-                             },
-                             "Lease Liabilities Short Term": {
-                                 "Debit": null,
-                                 "Credit": 79680
-                             }
-                         },
-                         "Interest Accrued":{
-                             "YTD Interest": {
-                                 "Debit": 2703,
-                                 "Credit": null
-                             },
-                             "Interest Accrued": {
-                                 "Debit": null,
-                                 "Credit": 2790
-                             },
-                             "Loss FX Rates": {
-                                 "Debit": 87,
-                                 "Credit": null
-                             }
-                         },
-                         "Reverse Lease Cost":{
-                             "Lease Cost": {
-                                 "Debit": null,
-                                 "Credit": 110076
-                             },
-                             "Other Liabilities": {
-                                 "Debit": 112192,
-                                 "Credit": null
-                             },
-                             "Gain FX Rates": {
-                                 "Debit": null,
-                                 "Credit": 2116
-                             }
-                         },
-                         "Earlier Termination":{
-                             "Right of Use": {
-                                 "Debit": null,
-                                 "Credit": 17687
-                             },
-                             "Accumulated Depreciation": {
-                                 "Debit": 17687,
-                                 "Credit": null
-                             }
-                         },
-                         "Payment Interest":{
-                             "Lease Liabilities Long Term": {
-                                 "Debit": null,
-                                 "Credit": 2790
-                             },
-                             "Interest Accrued": {
-                                 "Debit": 2790,
-                                 "Credit": null
-                             }
-                         },
-                         "Payment & Liab. Amortization":{
-                             "Lease Liabilities Long Term":{
-                                 "Debit": 112192,
-                                 "Credit": null
-                             },
-                             "Other Liabilities":{
-                                 "Debit": null,
-                                 "Credit": 112192
-                             }
-                         },
-                         "Other motor vehicles": null,
-                         "In house handling equipment": null,
-                         "Productive machinery": null,
-                         "Other productive equipment": null,
-                         "Hardware": null,
-                         "Other Asset": null
-                         },
-                         "Total Asset Category": {
-                             "RoU initial Recognition":{
-                                 "Right of Use":{
-                                     "Debit": 28901,
-                                     "Credit": null
-                                 },
-                                 "Lease Liabilities Long Term":{
-                                     "Debit": null,
-                                     "Credit": 28901
-                                 },
-                                 "Initial maxi rent-quota":{
-                                     "Debit": null,
-                                     "Credit": null
-                                 },
-                                 "Initial direct costs or takeover costs":{
-                                     "Debit": null,
-                                     "Credit": null
-                                 },
-                                 "Incentives received -":{
-                                     "Debit": null,
-                                     "Credit": null
-                                 },
-                                 "Other Initial Costs not included in Liabilities":{
-                                     "Debit": null,
-                                     "Credit": null
-                                 },
-                                 "Removal / dismantling Cost":{
-                                     "Debit": null,
-                                     "Credit": null
-                                 },
-                                 "Gain FX Rates":{
-                                     "Debit": null,
-                                     "Credit": null
-                                 },
-                                 "Loss FX Rates":{
-                                     "Debit": null,
-                                     "Credit": null
-                                 },
-                                 "Equity Account for Asset Retrospective":{
-                                     "Debit": null,
-                                     "Credit": null
-                                 }
-                             },
-                             "FX Effect on Opening":{
-                                 "Lease Liabilities Long Term":{
-                                     "Debit": null,
-                                     "Credit": 923705
-                                 },
-                                 "Loss FX Rates":{
-                                     "Debit": 923705,
-                                     "Credit": null
-                                 }
-                             },
-                             "R.o.U Remeasurement":{
-                                 "Right of Use":{
-                                     "Debit": 52146,
-                                     "Credit": 8924
-                                 },
-                                 "Lease Liabilities Long Term":{
-                                     "Debit": 8924,
-                                     "Credit": 52146
-                                 }
-                             },
-                             "R.o.U Remeasurement Inflaction":{
-                                 "Right of Use":{
-                                     "Debit": null,
-                                     "Credit": 3969
-                                 },
-                                 "Lease Liabilities Long Term":{
-                                     "Debit": 3969,
-                                     "Credit": null
-                                 }
-                             },
-                             "RoU & Accumulated Depreciation DeRecognition":{
-                                 "Right of Use":{
-                                     "Debit": null,
-                                     "Credit": 41262
-                                 },
-                                 "Accumulated Depreciation":{
-                                     "Debit": 41262,
-                                     "Credit": null
-                                 }
-                             },
-                             "Depreciation RoU":{
-                                 "Depreciation":{
-                                     "Debit": 1937599,
-                                     "Credit": null
-                                 },
-                                 "Accumulated Depreciation":{
-                                     "Debit": null,
-                                     "Credit": 1695290
-                                 },
-                                 "Gain FX Rates":{
-                                     "Debit": null,
-                                     "Credit": 244568
-                                 },
-                                 "Loss FX Rates":{
-                                     "Debit": 2259,
-                                     "Credit": null
-                                 },
-                                 "Difference for Mergers":{
-                                     "Debit": null,
-                                     "Credit": null
-                                 }
-                             },
-                             "Reclass Liab. Current Portion":{
-                                 "Lease Liabilities Long Term":{
-                                     "Debit": 1939304,
-                                     "Credit": null
-                                 },
-                                 "Lease Liabilities Short Term":{
-                                     "Debit": null,
-                                     "Credit": 1939304
-                                 }
-                             },
-                             "Interest Accrued":{
-                                 "YTD Interest":{
-                                     "Debit": 473769,
-                                     "Credit": null
-                                 },
-                                 "Interest Accrued":{
-                                     "Debit": null,
-                                     "Credit": 497151
-                                 },
-                                 "Gain FX Rates":{
-                                     "Debit": null,
-                                     "Credit": null
-                                 },
-                                 "Loss FX Rates":{
-                                     "Debit": 23382,
-                                     "Credit": null
-                                 },
-                                 "Difference for Mergers":{
-                                     "Debit": null,
-                                     "Credit": null
-                                 }
-                             },
-                             "Reverse Lease Cost":{
-                                 "Lease Cost":{
-                                     "Debit": null,
-                                     "Credit": 2319877
-                                 },
-                                 "Other Liabilities":{
-                                     "Debit": 2431166,
-                                     "Credit": null
-                                 },
-                                 "Gain FX Rates":{
-                                     "Debit": null,
-                                     "Credit": 111290
-                                 },
-                                 "Loss FX Rates":{
-                                     "Debit": null,
-                                     "Credit": null
-                                 }
-                             },
-                             "Payment & Liab. Amortization":{
-                                 "Lease Liabilities Long Term":{
-                                     "Debit": 2431166,
-                                     "Credit": null
-                                 },
-                                 "Other Liabilities":{
-                                     "Debit": null,
-                                     "Credit": 2431166
-                                 }
-                             },
-                             "Payment Interest":{
-                                 "Lease Liabilities Long Term":{
-                                     "Debit": null,
-                                     "Credit": 497151
-                                 },
-                                 "Interest Accrued":{
-                                     "Debit": 497151,
-                                     "Credit": null
-                                 }
-                             },
-                             "Earlier Termination":{
-                                 "Right of Use":{
-                                     "Debit": null,
-                                     "Credit": 17687
-                                 },
-                                 "Accumulated Depreciation":{
-                                     "Debit": 17687,
-                                     "Credit": null
-                                 },
-                                 "Lease Liabilities Long Term":{
-                                     "Debit": null,
-                                     "Credit": null
-                                 },
-                                 "Lease Liabilities Short Term":{
-                                     "Debit": null,
-                                     "Credit": null
-                                 },
-                                 "Gain/Loss for Earlier Termination":{
-                                     "Debit": null,
-                                     "Credit": null
-                                 }
-                             }
-                         }
-                   }
-             },
-             {
-                 "Scenario": "Actual",
-                   "Entity": "ILAPAK INTERNATIONAL SA",
-                   "Year": 2021,
-                   "Period": "Febrary",
-                   "Icp": "ICP Top",
-                   "Lease_N": "Totale Custom2",
-                   "Cost_Center": "Totale Custom5",
-                   "Data": {
-                      "Land": null,
-                     "Building": {
-                       "FX Effect on Opening": {
-                         "Lease Liabilities Long Term": {
-                           "Debit": null,
-                           "Credit": 1111111111111111
-                         },
-                         "Loss FX Rates": {
-                           "Debit": 913643,
-                           "Credit": null
-                         }
-                       },
-                       "Depreciation RoU": {
-                         "Depreciation": {
-                           "Debit": 1767562,
-                           "Credit": null
-                         },
-                         "Accumulated Depreciation": {
-                           "Debit": null,
-                           "Credit": 1524283
-                         },
-                         "Gain FX Rates": {
-                           "Debit": null,
-                           "Credit": 243280
-                         }
-                       },
-                       "Reclass Liab. Current Portion": {
-                         "Lease Liabilities Long Term": {
-                           "Debit": 1819554,
-                           "Credit": null
-                         },
-                         "Lease Liabilities Short Term": {
-                           "Debit": null,
-                           "Credit": 1819554
-                         }
-                       },
-                       "Interest Accrued": {
-                         "YTD Interest": {
-                           "Debit": 470162,
-                           "Credit": null
-                         },
-                         "Interest Accrued": {
-                           "Debit": null,
-                           "Credit": 493414
-                         },
-                         "Loss FX Rates": {
-                           "Debit": 23252,
-                           "Credit": null
-                         }
-                       },
-                       "Reverse Lease Cost": {
-                         "Lease Cost": {
-                           "Debit": null,
-                           "Credit": 2146149
-                         },
-                         "Other Liabilities": {
-                           "Debit": 2252287,
-                           "Credit": null
-                         }
-                       },
-                       "Payment Interest": {
-                         "Lease Liabilities Long Term": {
-                           "Debit": null,
-                           "Credit": 493414
-                         },
-                         "Interest Accrued": {
-                           "Debit": 493414,
-                           "Credit": null
-                         }
-                       },
-                       "Payment & Liab. Amortization": {
-                         "Lease Liabilities Long Term": {
-                           "Debit": 2252287,
-                           "Credit": null
-                         },
-                         "Other Liabilities": {
-                           "Debit": null,
-                           "Credit": 2252287
-                         }
-                       },
-                       "Guest quarters in pool": null,
-                       "Guest quarters in benefit": null,
-                       "Garage in pool": null,
-                       "Garage in benefit": null
-                     },
-                     "Cars in pool":{
-                         "FX Effect on Opening":{
-                             "Lease Liabilities Long Term":{
-                                 "Debit": null,
-                                 "Credit": 3724
-                             },
-                             "Loss FX Rates":{
-                                 "Debit": 3724,
-                                 "Credit": null
-                             }
-                         },
-                         "R.o.U Remeasurement":{
-                             "Right of Use":{
-                                 "Debit": 42711,
-                                 "Credit": null
-                             },
-                             "Lease Liabilities Long Term":{
-                                 "Debit": null,
-                                 "Credit": 42711
-                             }
-                         },
-                         "R.o.U Remeasurement Inflaction":{
-                             "Right of Use":{
-                                 "Debit": null,
-                                 "Credit": 3664
-                             },
-                             "Lease Liabilities Long Term":{
-                                 "Debit": 3664,
-                                 "Credit": null
-                             }
-                         },
-                         "RoU & Accumulated Depreciation DeRecognition":{
-                             "Right of Use":{
-                                 "Debit": null,
-                                 "Credit": 14984
-                             },
-                             "Accumulated Depreciation":{
-                                 "Debit": 14984,
-                                 "Credit": null
-                             }
-                         },
-                         "Depreciation RoU":{
-                             "Depreciation":{
-                                 "Debit": 62657,
-                                 "Credit": null
-                             },
-                             "Accumulated Depreciation":{
-                                 "Debit": null,
-                                 "Credit": 64381
-                             },
-                             "Gain FX Rates":{
-                                 "Debit": null,
-                                 "Credit": 276
-                             },
-                             "Loss FX Rates":{
-                                 "Debit": 2000,
-                                 "Credit": null
-                             }
-                         },
-                         "Reclass Liab. Current Portion":{
-                             "Lease Liabilities Long Term":{
-                                 "Debit": 40070,
-                                 "Credit": null
-                             },
-                             "Lease Liabilities Short Term":{
-                                 "Debit": null,
-                                 "Credit": 40070
-                             }
-                         },
-                         "Interest Accrued":{
-                             "YTD Interest":{
-                                 "Debit": 904,
-                                 "Credit": null
-                             },
-                             "Interest Accrued":{
-                                 "Debit": null,
-                                 "Credit": 948
-                             },
-                             "Loss FX Rates":{
-                                 "Debit": 43,
-                                 "Credit": null
-                             }
-                         },
-                         "Reverse Lease Cost":{
-                             "Lease Cost":{
-                                 "Debit": null,
-                                 "Credit": 63652
-                             },
-                             "Other Liabilities":{
-                                 "Debit": 66688,
-                                 "Credit": null
-                             },
-                             "Gain FX Rates":{
-                                 "Debit": null,
-                                 "Credit": 3036
-                             }
-                         },
-                         "Payment Interest":{
-                             "Lease Liabilities Long Term":{
-                                 "Debit": null,
-                                 "Credit": 948
-                             },
-                             "Interest Accrued":{
-                                 "Debit": 948,
-                                 "Credit": null
-                             }
-                         },
-                         "Payment & Liab. Amortization":{
-                             "Lease Liabilities Long Term":{
-                                 "Debit": 66688,
-                                 "Credit": null
-                             },
-                             "Other Liabilities":{
-                                 "Debit": null,
-                                 "Credit": 66688
-                             }
-                         },
-                     },
-                     "Cars in benefit":{
-                         "RoU initial Recognition":{
-                             "Right of Use": {
-                                 "Debit": 28901,
-                                 "Credit": null
-                             },
-                             "Lease Liabilities Long Term": {
-                                 "Debit": null,
-                                 "Credit": 28901
-                             }
-                         },
-                         "FX Effect on Opening":{
-                             "Lease Liabilities Long Term": {
-                                 "Debit": null,
-                                 "Credit": 6338
-                             },
-                             "Loss FX Rates": {
-                                 "Debit": 6338,
-                                 "Credit": null
-                             }
-                         },
-                         "R.o.U Remeasurement":{
-                             "Right of Use": {
-                                 "Debit": 9435,
-                                 "Credit": 8924
-                             },
-                             "Lease Liabilities Long Term": {
-                                 "Debit": 8924,
-                                 "Credit": 9435
-                             }
-                         },
-                         "R.o.U Remeasurement Inflaction":{
-                             "Right of Use": {
-                                 "Debit": null,
-                                 "Credit": 305
-                             },
-                             "Lease Liabilities Long Term": {
-                                 "Debit": 305,
-                                 "Credit": null
-                             }
-                         },
-                         "RoU & Accumulated Depreciation DeRecognition":{
-                             "Right of Use": {
-                                 "Debit": null,
-                                 "Credit": 26278
-                             },
-                             "Accumulated Depreciation": {
-                                 "Debit": 26278,
-                                 "Credit": null
-                             }
-                         },
-                         "Depreciation RoU":{
-                             "Depreciation": {
-                                 "Debit": 107380,
-                                 "Credit": null
-                             },
-                             "Accumulated Depreciation": {
-                                 "Debit": null,
-                                 "Credit": 106626
-                             },
-                             "Gain FX Rates": {
-                                 "Debit": null,
-                                 "Credit": 1012
-                             },
-                             "Loss FX Rates": {
-                                 "Debit": 258,
-                                 "Credit": null
-                             }
-                         },
-                         "Reclass Liab. Current Portion":{
-                             "Lease Liabilities Long Term": {
-                                 "Debit": 79680,
-                                 "Credit": null
-                             },
-                             "Lease Liabilities Short Term": {
-                                 "Debit": null,
-                                 "Credit": 79680
-                             }
-                         },
-                         "Interest Accrued":{
-                             "YTD Interest": {
-                                 "Debit": 2703,
-                                 "Credit": null
-                             },
-                             "Interest Accrued": {
-                                 "Debit": null,
-                                 "Credit": 2790
-                             },
-                             "Loss FX Rates": {
-                                 "Debit": 87,
-                                 "Credit": null
-                             }
-                         },
-                         "Reverse Lease Cost":{
-                             "Lease Cost": {
-                                 "Debit": null,
-                                 "Credit": 110076
-                             },
-                             "Other Liabilities": {
-                                 "Debit": 112192,
-                                 "Credit": null
-                             },
-                             "Gain FX Rates": {
-                                 "Debit": null,
-                                 "Credit": 2116
-                             }
-                         },
-                         "Earlier Termination":{
-                             "Right of Use": {
-                                 "Debit": null,
-                                 "Credit": 17687
-                             },
-                             "Accumulated Depreciation": {
-                                 "Debit": 17687,
-                                 "Credit": null
-                             }
-                         },
-                         "Payment Interest":{
-                             "Lease Liabilities Long Term": {
-                                 "Debit": null,
-                                 "Credit": 2790
-                             },
-                             "Interest Accrued": {
-                                 "Debit": 2790,
-                                 "Credit": null
-                             }
-                         },
-                         "Payment & Liab. Amortization":{
-                             "Lease Liabilities Long Term":{
-                                 "Debit": 112192,
-                                 "Credit": null
-                             },
-                             "Other Liabilities":{
-                                 "Debit": null,
-                                 "Credit": 112192
-                             }
-                         },
-                         "Other motor vehicles": null,
-                         "In house handling equipment": null,
-                         "Productive machinery": null,
-                         "Other productive equipment": null,
-                         "Hardware": null,
-                         "Other Asset": null
-                         },
-                         "Total Asset Category": {
-                             "RoU initial Recognition":{
-                                 "Right of Use":{
-                                     "Debit": 28901,
-                                     "Credit": null
-                                 },
-                                 "Lease Liabilities Long Term":{
-                                     "Debit": null,
-                                     "Credit": 28901
-                                 },
-                                 "Initial maxi rent-quota":{
-                                     "Debit": null,
-                                     "Credit": null
-                                 },
-                                 "Initial direct costs or takeover costs":{
-                                     "Debit": null,
-                                     "Credit": null
-                                 },
-                                 "Incentives received -":{
-                                     "Debit": null,
-                                     "Credit": null
-                                 },
-                                 "Other Initial Costs not included in Liabilities":{
-                                     "Debit": null,
-                                     "Credit": null
-                                 },
-                                 "Removal / dismantling Cost":{
-                                     "Debit": null,
-                                     "Credit": null
-                                 },
-                                 "Gain FX Rates":{
-                                     "Debit": null,
-                                     "Credit": null
-                                 },
-                                 "Loss FX Rates":{
-                                     "Debit": null,
-                                     "Credit": null
-                                 },
-                                 "Equity Account for Asset Retrospective":{
-                                     "Debit": null,
-                                     "Credit": null
-                                 }
-                             },
-                             "FX Effect on Opening":{
-                                 "Lease Liabilities Long Term":{
-                                     "Debit": null,
-                                     "Credit": 923705
-                                 },
-                                 "Loss FX Rates":{
-                                     "Debit": 923705,
-                                     "Credit": null
-                                 }
-                             },
-                             "R.o.U Remeasurement":{
-                                 "Right of Use":{
-                                     "Debit": 52146,
-                                     "Credit": 8924
-                                 },
-                                 "Lease Liabilities Long Term":{
-                                     "Debit": 8924,
-                                     "Credit": 52146
-                                 }
-                             },
-                             "R.o.U Remeasurement Inflaction":{
-                                 "Right of Use":{
-                                     "Debit": null,
-                                     "Credit": 3969
-                                 },
-                                 "Lease Liabilities Long Term":{
-                                     "Debit": 3969,
-                                     "Credit": null
-                                 }
-                             },
-                             "RoU & Accumulated Depreciation DeRecognition":{
-                                 "Right of Use":{
-                                     "Debit": null,
-                                     "Credit": 41262
-                                 },
-                                 "Accumulated Depreciation":{
-                                     "Debit": 41262,
-                                     "Credit": null
-                                 }
-                             },
-                             "Depreciation RoU":{
-                                 "Depreciation":{
-                                     "Debit": 1937599,
-                                     "Credit": null
-                                 },
-                                 "Accumulated Depreciation":{
-                                     "Debit": null,
-                                     "Credit": 1695290
-                                 },
-                                 "Gain FX Rates":{
-                                     "Debit": null,
-                                     "Credit": 244568
-                                 },
-                                 "Loss FX Rates":{
-                                     "Debit": 2259,
-                                     "Credit": null
-                                 },
-                                 "Difference for Mergers":{
-                                     "Debit": null,
-                                     "Credit": null
-                                 }
-                             },
-                             "Reclass Liab. Current Portion":{
-                                 "Lease Liabilities Long Term":{
-                                     "Debit": 1939304,
-                                     "Credit": null
-                                 },
-                                 "Lease Liabilities Short Term":{
-                                     "Debit": null,
-                                     "Credit": 1939304
-                                 }
-                             },
-                             "Interest Accrued":{
-                                 "YTD Interest":{
-                                     "Debit": 473769,
-                                     "Credit": null
-                                 },
-                                 "Interest Accrued":{
-                                     "Debit": null,
-                                     "Credit": 497151
-                                 },
-                                 "Gain FX Rates":{
-                                     "Debit": null,
-                                     "Credit": null
-                                 },
-                                 "Loss FX Rates":{
-                                     "Debit": 23382,
-                                     "Credit": null
-                                 },
-                                 "Difference for Mergers":{
-                                     "Debit": null,
-                                     "Credit": null
-                                 }
-                             },
-                             "Reverse Lease Cost":{
-                                 "Lease Cost":{
-                                     "Debit": null,
-                                     "Credit": 2319877
-                                 },
-                                 "Other Liabilities":{
-                                     "Debit": 2431166,
-                                     "Credit": null
-                                 },
-                                 "Gain FX Rates":{
-                                     "Debit": null,
-                                     "Credit": 111290
-                                 },
-                                 "Loss FX Rates":{
-                                     "Debit": null,
-                                     "Credit": null
-                                 }
-                             },
-                             "Payment & Liab. Amortization":{
-                                 "Lease Liabilities Long Term":{
-                                     "Debit": 2431166,
-                                     "Credit": null
-                                 },
-                                 "Other Liabilities":{
-                                     "Debit": null,
-                                     "Credit": 2431166
-                                 }
-                             },
-                             "Payment Interest":{
-                                 "Lease Liabilities Long Term":{
-                                     "Debit": null,
-                                     "Credit": 497151
-                                 },
-                                 "Interest Accrued":{
-                                     "Debit": 497151,
-                                     "Credit": null
-                                 }
-                             },
-                             "Earlier Termination":{
-                                 "Right of Use":{
-                                     "Debit": null,
-                                     "Credit": 17687
-                                 },
-                                 "Accumulated Depreciation":{
-                                     "Debit": 17687,
-                                     "Credit": null
-                                 },
-                                 "Lease Liabilities Long Term":{
-                                     "Debit": null,
-                                     "Credit": null
-                                 },
-                                 "Lease Liabilities Short Term":{
-                                     "Debit": null,
-                                     "Credit": null
-                                 },
-                                 "Gain/Loss for Earlier Termination":{
-                                     "Debit": null,
-                                     "Credit": null
-                                 }
-                             }
-                         }
-                   }
-             }
- 
-            ]
              var oModel = new JSONModel();
-             var filtersModel = new JSONModel();
+             this.getView().setModel(new JSONModel(), 'selectedFiltersModel')
              // Loading the mock data that Steve has built
+
+             // Setting the model with the new incoming data
+            this.getView().setModel(new JSONModel(), 'DataIMA23')
+            // Making the "/matchDataFIlter" to check before the data are printed
+            let oSelectedFiltersModel = this.getView().getModel('selectedFiltersModel');
+
+            oSelectedFiltersModel.setProperty("/matchData", false);
  
+            // Creating the filters model
+            this._createFiltersModel()
+            
              // Set the data to the model
              oModel.setData(jsonData);
              this.getView().setModel(oModel, "repo23Model");
  
-             var oScenarioModel = new JSONModel({ Scenarios: jsonData.map(item => item.Scenario) });
-             var oEntityModel = new JSONModel({ Entities: jsonData.map(item => item.Entity) });
-             var oYearModel = new JSONModel({ Years: jsonData.map(item => item.Year) });
-             var oPeriodModel = new JSONModel({ Periods: jsonData.map(item => item.Period) });
-             var oIcpModel = new JSONModel({ Icps: jsonData.map(item => item.Icp) });
-             var oLeaseNModel = new JSONModel({ LeaseNs: jsonData.map(item => item.Lease_N) });
-             var oCostCenterModel = new JSONModel({ CostCenters: jsonData.map(item => item.Cost_Center) });
- 
-             
-             this.getView().setModel(oScenarioModel, "ScenarioModel");
-             this.getView().setModel(oEntityModel, "EntityModel");
-             this.getView().setModel(oYearModel, "YearModel");
-             this.getView().setModel(oPeriodModel, "PeriodModel");
-             this.getView().setModel(oIcpModel, "IcpModel");
-             this.getView().setModel(oLeaseNModel, "LeaseNModel");
-             this.getView().setModel(oCostCenterModel, "CostCenterModel");
-             // filtersModel.setData(this.jsonData.active_filters);
-             // this.getView().setModel(filtersModel, "activeFiltersModel");
-             // this._initializeTables(jsonData);
+             this.fillFiltersData();
          },
+
+         // TODO: adapt the datas to be filtered for the report 23
+         _createFiltersModel: function () {
+            let oFiltersModel = new JSONModel({
+                Entity: null,
+                TipoContratto: null,
+                Contratto: null,
+                Anno: null,
+                Periodo: null,
+                CostCenter: null,
+                Id_storico:null,
+                CompanyCode: null
+            });
+            this.getView().setModel(oFiltersModel, 'oFiltersModel');
+        },
+
+        _elaboratedMonths: function (monthNumbers) {
+            const mesiItaliani = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
+
+            return monthNumbers
+                .map(num => parseInt(num, 10))
+                .sort((a, b) => a - b)
+                .map(num => ({
+                    ID: num.toString().padStart(3, '0'),
+                    description: mesiItaliani[num - 1]
+                }));
+        },
+
+        // TODO: Adapt the report 23 data values from the incoming Hana table action
+        _getDataFilters: function () {
+            const servicePath = `${this.osUrl}Filters`;  // Append the action name with a trailing slash
+
+            axios.post(servicePath)
+                .then((response) => {
+                    console.log(response.data);  // Handle the response array
+                    let oFiltersModel = this.getView().getModel('oFiltersModel')
+                    oFiltersModel.setData(
+                        {
+                            Entity: this._elaborateEntities(response.data.BUKRS, response.data.BUTXT),
+                            TipoContratto: this._sortStringArray(response.data.RECNTYPE),
+                            Contratto: this._sortStringArray(response.data.RECNNR),
+                            Periodo: this._elaboratedMonths(response.data.PERIODDUEDATE),
+                            Anno: this._sortStringArray(response.data.YEARDUEDATE),
+                            CostCenter: this._sortStringArray(response.data.CDC),
+                            Id_storico: this._sortStringArray(response.data.ID_STORICO)
+                        }
+                    )
+                    console.log('Filters data: ', oFiltersModel.getData());
+                    return
+
+                })
+                .catch((error) => {
+                    console.error(error)
+                    if (error.response) {
+                        console.error("Server responded with error: ", error.response.status, error.response.data);
+                    } else if (error.request) {
+                        console.error("No response received from server: ", error.request);
+                    } else {
+                        console.error("Axios error: ", error.message);
+                    }
+                });
+        },
  
-         _initializeTables: function (jsonData) {
-             // Flatten all sections into one array
-             var aTableData = this.transformJsonData(jsonData);
-             this._createDynamicTable(aTableData);
+         _initializeTables: function () {
+             var aTableData = this.getview().getModel("repo23Model").getData();
+             // this._createDynamicTable(aTableData); // Temporary disabled
          },
- 
-         transformJsonData: function (jsonData) {
-             let aTableRows = [];
- 
-             // Iterate over each top-level key (e.g., Land, Building, etc.)
-             Object.keys(jsonData.Data).forEach(fatherNameString => {
-                 let sectionData = jsonData.Data[fatherNameString];
- 
-                 // Add the section (e.g., "Land" or "Building") as a header row
-                 aTableRows.push({
-                     journalType: fatherNameString,  // This will serve as the header for the section
-                     account: "",  // Empty account field for the header row
-                     debit: "",    // Empty debit field for the header row
-                     credit: ""    // Empty credit field for the header row
-                 });
- 
-                 // If the section (e.g., "Land") is null, add an empty row
-                 if (!sectionData) {
-                     aTableRows.push({
-                         journalType: " ",  // Empty row below the section header
-                         account: " ",
-                         debit: " ",
-                         credit: " "
-                     });
-                     return;  // Move to the next section
-                 }
- 
-                 // If sectionData exists, iterate over its inner objects (e.g., "FX Effect on Opening", "Depreciation RoU")
-                 let previousJournalType = null;  // Variable to track previous journal type
-                 Object.keys(sectionData).forEach(journalType => {
-                     let journalData = sectionData[journalType];
- 
-                     // If journalData is null, insert an empty row for the journal
-                     if (!journalData) {
-                         aTableRows.push({
-                             journalType: journalType,  // Journal Type (e.g., FX Effect on Opening)
-                             account: " ",  // Empty account
-                             debit: "",    // Empty debit
-                             credit: "",   // Empty credit
-                         });
-                         return;
-                     }
- 
-                     // Iterate over the accounts inside each journal (e.g., "Lease Liabilities Long Term", "Loss FX Rates")
-                     Object.keys(journalData).forEach(account => {
-                         let debitCreditObjects = journalData[account];
- 
-                         // Safely extract Debit and Credit, and handle null values
-                         const debit = debitCreditObjects?.Debit !== null ? debitCreditObjects.Debit.toLocaleString() : "-";
-                         const credit = debitCreditObjects?.Credit !== null ? debitCreditObjects.Credit.toLocaleString() : "-";
- 
-                         // Determine if we should display the journalType or leave it blank
-                         let journalTypeDisplay = previousJournalType === journalType ? "" : journalType;
-                         previousJournalType = journalType;
- 
-                         // Push a row for each account
-                         aTableRows.push({
-                             journalType: journalTypeDisplay,  // Journal Type (e.g., FX Effect on Opening)
-                             account: account,                 // Account (e.g., Lease Liabilities Long Term)
-                             debit: debit,                     // Debit amount
-                             credit: credit                    // Credit amount
-                         });
-                     });
-                 });
- 
-                 // After processing a section (e.g., "Building"), insert a separator empty row if needed
-                 aTableRows.push({
-                     journalType: " ",  // Empty row to act as a separator
-                     account: "",
-                     debit: "",
-                     credit: ""
-                 });
-             });
- 
-             return aTableRows;
-         },
+
  
          onAfterRendering: function () {
              this.addEmptyToSelect();
@@ -1250,7 +113,9 @@ function (Controller, CustomData, JSONModel, Table, RowSettings, Column, Text, I
              this.disableFilterStart();
          },
  
-         checkFilterFieldsAllFilled: function () {
+         // TODO: Substitute with the "/allSelected" model source
+
+         /* checkFilterFieldsAllFilled: function () {
              // Works dynamically
  
              const oFilterBar = this.getView().byId("filterbar");
@@ -1279,8 +144,9 @@ function (Controller, CustomData, JSONModel, Table, RowSettings, Column, Text, I
  
  
              return allValid;  // Return true if all values are valid, false if any are empty
-         },
+         }, */
  
+         // TODO: Probably uneuseful
          addEmptyToSelect: function () {
              const oView = this.getView();
              const idsToLog = [
@@ -1303,6 +169,7 @@ function (Controller, CustomData, JSONModel, Table, RowSettings, Column, Text, I
              })
          },
  
+         // TOBEupdated: with the new incoming table data
          _createDynamicTable: function (aTableData) {
              var oTable=this.getView().byId("reportTable")
              oTable.removeAllColumns();
@@ -1342,17 +209,41 @@ function (Controller, CustomData, JSONModel, Table, RowSettings, Column, Text, I
              this._colorTotalRows();
          },
  
+         // TOBeupdated: when the filter data are available
          onSelectionChange: function (oEvent) {
              this.assignReportResume(oEvent);
              this.makeTitleObjAttrBold();
-             // Process data and create tables for each section
-             this.checkFilterFieldsAllFilled();
- 
-             if (this.checkFilterFieldsAllFilled()) {
-                 this.enableFilterStart(null, true);
-             } else {
-                 this.enableFilterStart(null, false);
-             }
+
+             
+            let oSelectedFiltersModel = this.getView().getModel('selectedFiltersModel');
+            let oSelectedFilters = oSelectedFiltersModel.getData();
+             
+            // Make the "/allSelected" to enable the buttons 
+            const selectedControl = oEvent.getSource();
+            const controlName = selectedControl.getName();
+
+            // Update the specific filter in the model
+            if (selectedControl.getMetadata().getName() === "sap.m.MultiComboBox") {
+                // For MultiComboBox, join selected items' keys
+                oSelectedFilters[controlName] = selectedControl.getSelectedKeys();
+            } else {
+                // For Select and ComboBox, get the selected key
+                oSelectedFilters[controlName] = selectedControl.getSelectedKey();
+            }
+
+            // Update the model with new data
+            oSelectedFiltersModel.setData(oSelectedFilters);
+
+            // Check if all required filters are selected
+            let allSelected =
+                oSelectedFilters.Periodo &&
+                    oSelectedFilters.Anno &&
+                    oSelectedFilters.ID_STORICO &&
+                    (oSelectedFilters.TipoContratto && oSelectedFilters.TipoContratto.length > 0) &&
+                    (oSelectedFilters.Entity && oSelectedFilters.Entity.length > 0) ? true : false;
+
+            // Update allSelected property
+            oSelectedFiltersModel.setProperty("/allSelected", allSelected);
  
          },
  
@@ -1388,25 +279,7 @@ function (Controller, CustomData, JSONModel, Table, RowSettings, Column, Text, I
  
          },
  
-         disableFilterStart: function (oEvent) {
- 
-             const filterBarEl = this.getView().byId("filterbar");
-             const searchButtonEl = filterBarEl._getSearchButton();;
- 
-             if (searchButtonEl) {
-                 searchButtonEl.setEnabled(false);  // Disable the search (or Avvio) button
-             }
-         },
- 
-         enableFilterStart: function (oEvent, bool) {
-             const filterBarEl = this.getView().byId("filterbar");
-             const searchButtonEl = filterBarEl._getSearchButton();;
- 
-             if (searchButtonEl) {
-                 searchButtonEl.setEnabled(bool);  // Disable the search (or Avvio) button
-             }
-         },
- 
+         // TOBEchanged
          applyFilters: function () {
              const oTable = this.getView().byId("tableContainer").getItems()[0];
              const aFilters = [];
@@ -1434,6 +307,7 @@ function (Controller, CustomData, JSONModel, Table, RowSettings, Column, Text, I
              binding.filter(combinedFilter)
          },
  
+         //TOBEfixed
          _colorTotalRows: function () {
              var oTable = this.getView().byId("tableContainer").getItems()[0]; // Get the first table in the container
              var fnApplyStyles = function () {
@@ -1475,6 +349,7 @@ function (Controller, CustomData, JSONModel, Table, RowSettings, Column, Text, I
              oPanel.setVisible(false);  // Collapse the panel (similar to closing it)
          },
  
+         //TOBEupdated: with the "/allSelected" model
          enableDownloadButtons: function(oEvent, bool) {
              const excelBtn = this.getView().byId("excelBtn");
              const pdfBtn = this.getView().byId("pdfBtn");
@@ -1486,6 +361,7 @@ function (Controller, CustomData, JSONModel, Table, RowSettings, Column, Text, I
              
          },
  
+         // TOBEupdated: with the new data
          onSearch: function () {
               
      var sSelectedEntity = this.byId("entitySelection").getSelectedKey();
@@ -1532,8 +408,7 @@ function (Controller, CustomData, JSONModel, Table, RowSettings, Column, Text, I
          // oTable.bindRows("/rows");
  
          
-         this.enableDownloadButtons(null, false);
-         // this.setEnabledDownload(null, false);
+         oSelectedFiltersModel.setProperty("/allSelected", false);
      }
  
              // if (this.checkFilterFieldsAllFilled()) {
@@ -1719,5 +594,25 @@ function (Controller, CustomData, JSONModel, Table, RowSettings, Column, Text, I
                  }
              })
          },
+
+         /* UTILITIES FNs */
+        _sortEntitiesByDescription: function(entities) {
+            return entities.sort((a, b) => a.description.localeCompare(b.description));
+        },
+        
+        _elaborateEntities: function (ids, descriptions) {
+            const entities = ids.map((id, index) => ({
+                ID: id,
+                description: descriptions[index]
+            }));
+        
+            return this._sortEntitiesByDescription(entities);
+        },
+
+        _sortStringArray: function(arr) {
+            return arr.sort((a, b) => a.localeCompare(b));
+        },
+        /* UTILITIES FNs */
+         
     });
 });

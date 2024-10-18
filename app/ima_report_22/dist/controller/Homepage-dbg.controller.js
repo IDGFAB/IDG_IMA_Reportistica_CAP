@@ -144,8 +144,13 @@ sap.ui.define([
                     if(typeof response.data === 'object'){
                         let dataArray = []
                         dataArray.push(response.data)
-                        dataFiltered.setData(dataArray)
-                        dataFiltered.refresh()
+                        
+                        if (dataArray && Array.isArray(dataArray)) {
+                            // Convert each object in the array
+                            let processedData = dataArray[0].value.map(this.convertExponentialValues);
+                            dataFiltered.setData(processedData);
+                            dataFiltered.refresh();
+                        }
                     } else {
                         dataFiltered.setData(response.data)
                         dataFiltered.refresh()
@@ -168,6 +173,23 @@ sap.ui.define([
 
                 
 
+        },
+
+        convertExponentialValues: function (obj) {
+            // Iterate through all properties of the object
+            for (let key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    // Check if the value is a string representing a number in exponential form
+                    if (typeof obj[key] === 'string' && obj[key].match(/^-?\d+\.?\d*e[+\-]?\d+$/i)) {
+                        // Convert the string to a number and then to a fixed decimal format
+                        let numberValue = parseFloat(obj[key]);
+                        if (!isNaN(numberValue)) {
+                            obj[key] = numberValue.toFixed(2); // Adjust the number of decimals as needed
+                        }
+                    }
+                }
+            }
+            return obj;
         },
 
 
@@ -711,111 +733,99 @@ sap.ui.define([
                     oSheet.destroy();  // Clean up the export utility
                 });
         },
+        
+
         onDownloadPdfPress: function () {
-            var oTable = this.byId("table");  // Reference to the table control
-            //var oModel = oTable.getModel();  // Access the model of the table
-            //var aData = oTable.getBinding('rows').oList;  // Get the data from the model
-            var aColumns = this._createColumnConfig();  // Create dynamic column configuration
-            
-            var aRows = oTable.getBinding('rows').oList;
-            var maxColumnsPerPage = 10; // Max columns to display per page for readability
-
-            // Extract unique columns from JSON data (for dynamic columns)
-            // function extractUniqueColumns(data) {
-            //     var columns = new Set();
-            //     for (var category in data) {
-            //         if (Array.isArray(data[category])) {
-            //             data[category].forEach(item => {
-            //                 Object.keys(item).forEach(key => {
-            //                     columns.add(key);
-            //                 });
-            //             });
-            //         }
-            //     }
-            //     return Array.from(columns);
-            // }
-
-            // Extract unique columns and add them to aColumns
-            // var extractedColumns = extractUniqueColumns(oData);
-            // aColumns = aColumns.concat(extractedColumns);
-
-            // Split columns into chunks based on maxColumnsPerPage for multi-page layout
-            var aColumnChunks = [];
-            for (var i = 0; i < aColumns.length; i += maxColumnsPerPage) {
-                aColumnChunks.push(aColumns.slice(i, i + maxColumnsPerPage));
-            }
-
-            // Generate rows based on lease data
-            for (var category in aRows) {
-                if (Array.isArray(aRows[category])) {
-                    aRows[category].forEach(function (item) {
-                        var oRow = {
-                            "Category": category,
-                            "Asset Class": item["Asset Class"] || "-"
-                        };
-                        aColumns.forEach(function (col) {
-                            oRow[col] = item[col] || "-";
-                        });
-                        aRows.push(oRow);
-                    });
-                }
-            }
-
-            // Create PDF content, split over pages if needed
-            var aPdfContent = [];
-
-            aColumnChunks.forEach(function (aCurrentColumns, index) {
-                // Build table header for PDF for the current chunk of columns
-                var aTableHeader = aCurrentColumns.map(function (column) {
-                    return { text: column, style: 'tableHeader' };
-                });
-
-                // Build table body for the current chunk of columns
-                var aTableBody = [aTableHeader];
-
-                // Fill rows with only the current chunk's columns
-                aRows.forEach(function (row) {
-                    var aRow = aCurrentColumns.map(function (column) {
-                        return { text: row[column] || "-", style: 'tableCell' };
-                    });
-                    aTableBody.push(aRow);
-                });
-
-                // Add the table to the PDF content
-                aPdfContent.push({
-                    table: {
-                        headerRows: 1,
-                        widths: Array(aCurrentColumns.length).fill('auto'), // Auto-size columns
-                        body: aTableBody
-                    },
-                    // Add a page break between column chunks
-                    pageBreak: index === aColumnChunks.length - 1 ? '' : 'after'
-                });
+            // Ottieni il modello associato alla tabella
+            var oTable = this.byId("table");
+            var oBinding = oTable.getBinding("rows");
+        
+            // Estrai i dati mappati per ogni riga
+            var odata = oBinding.getContexts().map(function (oContext) {
+                return oContext.getObject();
             });
-
-            // Define the PDF document structure
+        
+            // Definisci la struttura del PDF
             var docDefinition = {
                 pageSize: 'A4',
                 pageOrientation: 'landscape',
-                content: aPdfContent,
+                footer: { text: new Date().toLocaleString(), style: ['footerStyle'] },
+                content: [],
                 styles: {
-                    tableHeader: {
-                        fontSize: 12,
+                    headerStyle: {
+                        fontSize: 20,
                         bold: true,
                         alignment: 'center',
-                        fillColor: '#4CAF50',
-                        color: '#FFFFFF'
+                        margin: [0, 10, 0, 25]
                     },
-                    tableCell: {
+                    columnStyle: {
+                        fontSize: 13,
+                        bold: true,
+                        alignment: 'center',
+                        margin: [0, 10, 0, 0]
+                    },
+                    cellStyle: {
                         fontSize: 10,
-                        alignment: 'center'
+                    },
+                    footerStyle: {
+                        fontSize: 7,
+                        alignment: 'right',
+                        margin: [0, 10, 10, 0]
                     }
                 }
             };
-
-            // Generate and download the PDF
-            pdfMake.createPdf(docDefinition).download("Leases_Report.pdf");
+        
+            // Suddivisione delle colonne in gruppi di massimo 5
+            var columns = [
+                "ACC_SECTOR", "ACCUMULATED_DEPRECIATION", "RIGHT_OF_USE", "ASSET_CLASS", 
+                "BUKRS", "CONTRACT_CODE", "CONTRACT_DESCRIPTION", "DEPRECIATION", 
+                "CLOSING_LEASES_LIABILITIES", "INTERCOMPANY", "LEASE_COST", 
+                "CDNET_RIGHT_OF_USEC", "CDC", "CDC_CODE", "YTD_INTEREST", 
+                "GAIN_FX_RATES", "LOSS_FX_RATES"
+            ];
+        
+            // Calcola quante sezioni (o pagine) con colonne divise sono necessarie
+            for (let i = 0; i < columns.length; i += 5) {
+                let pageColumns = columns.slice(i, i + 5);
+                
+                // Struttura la tabella per questa sezione
+                let tableBody = [];
+        
+                // Aggiungi l'intestazione
+                let headerRow = pageColumns.map(col => ({ text: col, style: ['columnStyle'] }));
+                tableBody.push(headerRow);
+        
+                // Popola i dati delle righe nel PDF, solo per le colonne di questa sezione
+                odata.forEach(function (rowData) {
+                    let row = [];
+                    pageColumns.forEach(col => {
+                        row.push({ text: rowData[col] || "-", style: ['cellStyle'] });
+                    });
+                    tableBody.push(row);
+                });
+        
+                // Aggiungi la tabella della sezione al contenuto del PDF come nuova pagina
+                docDefinition.content.push({
+                    table: {
+                        widths: Array(pageColumns.length).fill('auto'),
+                        body: tableBody
+                    },
+                    pageBreak: 'after' // Imposta un'interruzione di pagina dopo ogni tabella
+                });
+            }
+        
+            // Rimuove l'ultima interruzione di pagina per evitare una pagina vuota alla fine
+            if (docDefinition.content.length > 0) {
+                delete docDefinition.content[docDefinition.content.length - 1].pageBreak;
+            }
+        
+            // Crea e scarica il PDF
+            pdfMake.createPdf(docDefinition).download();
         },
+        
+        
+
+
         _createColumnConfig: function () {
             var oTable = this.byId("table");
             var aColumns = oTable.getColumns();
