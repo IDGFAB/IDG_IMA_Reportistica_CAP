@@ -40,7 +40,7 @@
                             <fb:FilterGroupItem name="Entity" label="Entity" groupName="Group1" visibleInFilterBar="true">
                                 <fb:control>
                                     <MultiComboBox  name="Entity" showSelectAll="true" selectionChange=".onSelectionChange" items="{ path: 'oFiltersModel>/Entity', sorter: { path: 'description' }
- }" selectedKeys="{selectedFiltersModel>/entity}" required="true" showClearIcon="true">
+                                            }" selectedKeys="{selectedFiltersModel>/entity}" required="true" showClearIcon="true">
                                         <core:Item key="{oFiltersModel>ID}" text="{oFiltersModel>description}" />
                                     </MultiComboBox>
                                 </fb:control>
@@ -60,7 +60,7 @@
                             <!-- Contratto Filter -->
                             <fb:FilterGroupItem name="Contratto" label="Contract" groupName="Group1" visibleInFilterBar="true">
                                 <fb:control>
-                                    <MultiComboBox name="Contratto" showSelectAll="true" selectionChange=".onSelectionChange" items="{ path: 'oFiltersModel>/Contratto' }" selectedKeys="{selectedFiltersModel>/contratto}" showClearIcon="true">
+                                    <MultiComboBox name="Contratto" showSelectAll="true" selectionChange=".onSelectionChange" items="{ path: 'oFiltersModel>/Contratto' }" selectedKeys="{selectedFiltersModel>/contratto}" showClearIcon="true" enabled="false">
                                         <core:Item key="{oFiltersModel>}" text="{oFiltersModel>}" />
                                     </MultiComboBox>
                                 </fb:control>
@@ -84,7 +84,7 @@
                             <!-- CostCenter Filter -->
                             <fb:FilterGroupItem name="CostCenter" label="Cost Center" groupName="Group1" visibleInFilterBar="true">
                                 <fb:control>
-                                    <MultiComboBox name="CostCenter" showSelectAll="true" selectionChange=".onSelectionChange" items="{ path: 'oFiltersModel>/CostCenter' }" selectedKeys="{selectedFiltersModel>/costCenter}" showClearIcon="true">
+                                    <MultiComboBox name="CostCenter" enabled="false" showSelectAll="true" selectionChange=".onSelectionChange" items="{ path: 'oFiltersModel>/CostCenter' }" selectedKeys="{selectedFiltersModel>/costCenter}" showClearIcon="true">
                                         <core:Item key="{oFiltersModel>}" text="{oFiltersModel>}" />
                                     </MultiComboBox>
                                 </fb:control>
@@ -145,129 +145,129 @@
             <ScrollContainer horizontal="true" width="100%">
                 <!-- Table Definition -->
                 <table:Table id="table" selectionMode="None" visibleRowCountMode="Interactive" minAutoRowCount="8" enableBusyIndicator="true" enableColumnFreeze="true" width="100%" rows="{DataIMA22>/}">
-    <table:columns>
-        <table:Column width="11rem">
-            <Label text="ASSET_CLASS" />
-            <table:template>
-                <Text text="{DataIMA22>ASSET_CLASS}" />
-            </table:template>
-        </table:Column>
-        <table:Column width="11rem">
-            <Label text="INTERCOMPANY" />
-            <table:template>
-                <Text text="{DataIMA22>INTERCOMPANY}" />
-            </table:template>
-        </table:Column>
-        <table:Column width="11rem">
-            <Label text="CDC" />
-            <table:template>
-                <Text text="{DataIMA22>CDC}" />
-            </table:template>
-        </table:Column>
-        <table:Column width="11rem">
-            <Label text="CDC_CODE" />
-            <table:template>
-                <Text text="{DataIMA22>CDC_CODE}" />
-            </table:template>
-        </table:Column>
-        <table:Column width="11rem">
-            <Label text="LEASE_NUMBER" />
-            <table:template>
-                <Text text="{DataIMA22>LEASE_NUMBER}" />
-            </table:template>
-        </table:Column>
-        <table:Column width="11rem">
-            <Label text="CONTRACT_CODE" />
-            <table:template>
-                <Text text="{DataIMA22>CONTRACT_CODE}" />
-            </table:template>
-        </table:Column>
-        <table:Column width="11rem">
-            <Label text="ACC_SECTOR" />
-            <table:template>
-                <Text text="{DataIMA22>ACC_SECTOR}" />
-            </table:template>
-        </table:Column>
-        <table:Column width="11rem">
-            <Label text="CONTRACT_DESCRIPTION" />
-            <table:template>
-                <Text text="{DataIMA22>CONTRACT_DESCRIPTION}" />
-            </table:template>
-        </table:Column>
-        <table:Column width="11rem">
-            <Label text="MERGED_ENTITY" />
-            <table:template>
-                <Text text="{DataIMA22>MERGED_ENTITY}" />
-            </table:template>
-        </table:Column>
-        <table:Column width="11rem">
-            <Label text="RIGHT_OF_USE" />
-            <table:template>
-                <Text text="{DataIMA22>RIGHT_OF_USE}" />
-            </table:template>
-        </table:Column>
-        <table:Column width="11rem">
-            <Label text="ACCUMULATED_DEPRECIATION" />
-            <table:template>
-                <Text text="{DataIMA22>ACCUMULATED_DEPRECIATION}" />
-            </table:template>
-        </table:Column>
-        <table:Column width="11rem">
-            <Label text="NET_RIGHT_OF_USE" />
-            <table:template>
-                <Text text="{DataIMA22>NET_RIGHT_OF_USE}" />
-            </table:template>
-        </table:Column>
-        <table:Column width="11rem">
-            <Label text="CLOSING_LEASES_LIABILITIES" />
-            <table:template>
-                <Text text="{DataIMA22>CLOSING_LEASES_LIABILITIES}" />
-            </table:template>
-        </table:Column>
-        <table:Column width="11rem">
-            <Label text="LEASE_LIABILITIES_SHORT_TERM" />
-            <table:template>
-                <Text text="{DataIMA22>LEASE_LIABILITIES_SHORT_TERM}" />
-            </table:template>
-        </table:Column>
-        <table:Column width="11rem">
-            <Label text="LEASE_LIABILITIES_LONG_TERM" />
-            <table:template>
-                <Text text="{DataIMA22>LEASE_LIABILITIES_LONG_TERM}" />
-            </table:template>
-        </table:Column>
-        <table:Column width="11rem">
-            <Label text="YTD_INTEREST" />
-            <table:template>
-                <Text text="{DataIMA22>YTD_INTEREST}" />
-            </table:template>
-        </table:Column>
-        <table:Column width="11rem">
-            <Label text="LEASE_COST" />
-            <table:template>
-                <Text text="{DataIMA22>LEASE_COST}" />
-            </table:template>
-        </table:Column>
-        <table:Column width="11rem">
-            <Label text="DEPRECIATION" />
-            <table:template>
-                <Text text="{DataIMA22>DEPRECIATION}" />
-            </table:template>
-        </table:Column>
-        <table:Column width="11rem">
-            <Label text="GAIN_FX_RATES" />
-            <table:template>
-                <Text text="{DataIMA22>GAIN_FX_RATES}" />
-            </table:template>
-        </table:Column>
-        <table:Column width="11rem">
-            <Label text="LOSS_FX_RATES" />
-            <table:template>
-                <Text text="{DataIMA22>LOSS_FX_RATES}" />
-            </table:template>
-        </table:Column>
-    </table:columns>
-</table:Table>
+                    <table:columns>
+                        <table:Column width="11rem">
+                            <Label text="ASSET_CLASS" />
+                            <table:template>
+                                <Text text="{DataIMA22>ASSET_CLASS}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="INTERCOMPANY" />
+                            <table:template>
+                                <Text text="{DataIMA22>INTERCOMPANY}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="CDC" />
+                            <table:template>
+                                <Text text="{DataIMA22>CDC}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="CDC_CODE" />
+                            <table:template>
+                                <Text text="{DataIMA22>CDC_CODE}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="LEASE_NUMBER" />
+                            <table:template>
+                                <Text text="{DataIMA22>LEASE_NUMBER}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="CONTRACT_CODE" />
+                            <table:template>
+                                <Text text="{DataIMA22>CONTRACT_CODE}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="ACC_SECTOR" />
+                            <table:template>
+                                <Text text="{DataIMA22>ACC_SECTOR}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="CONTRACT_DESCRIPTION" />
+                            <table:template>
+                                <Text text="{DataIMA22>CONTRACT_DESCRIPTION}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="MERGED_ENTITY" />
+                            <table:template>
+                                <Text text="{DataIMA22>MERGED_ENTITY}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="RIGHT_OF_USE" />
+                            <table:template>
+                                <Text text="{DataIMA22>RIGHT_OF_USE}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="ACCUMULATED_DEPRECIATION" />
+                            <table:template>
+                                <Text text="{DataIMA22>ACCUMULATED_DEPRECIATION}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="NET_RIGHT_OF_USE" />
+                            <table:template>
+                                <Text text="{DataIMA22>NET_RIGHT_OF_USE}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="CLOSING_LEASES_LIABILITIES" />
+                            <table:template>
+                                <Text text="{DataIMA22>CLOSING_LEASES_LIABILITIES}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="LEASE_LIABILITIES_SHORT_TERM" />
+                            <table:template>
+                                <Text text="{DataIMA22>LEASE_LIABILITIES_SHORT_TERM}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="LEASE_LIABILITIES_LONG_TERM" />
+                            <table:template>
+                                <Text text="{DataIMA22>LEASE_LIABILITIES_LONG_TERM}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="YTD_INTEREST" />
+                            <table:template>
+                                <Text text="{DataIMA22>YTD_INTEREST}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="LEASE_COST" />
+                            <table:template>
+                                <Text text="{DataIMA22>LEASE_COST}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="DEPRECIATION" />
+                            <table:template>
+                                <Text text="{DataIMA22>DEPRECIATION}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="GAIN_FX_RATES" />
+                            <table:template>
+                                <Text text="{DataIMA22>GAIN_FX_RATES}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="LOSS_FX_RATES" />
+                            <table:template>
+                                <Text text="{DataIMA22>LOSS_FX_RATES}" />
+                            </table:template>
+                        </table:Column>
+                    </table:columns>
+                </table:Table>
 
 
             </ScrollContainer>

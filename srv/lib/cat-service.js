@@ -591,4 +591,116 @@ async Filters() {
 			ID_STORICO: ID_STORICO
         };
 }
+
+
+async FilterControl(entity, tipoContratto) {
+
+    const { GV_FILTRI_ID22 } = cds.entities();
+
+    // Costruisci la query utilizzando i parametri in ingresso per filtrare i risultati
+    const filteredData = await cds.run(
+        SELECT.distinct
+            .from('CATALOGSERVICE_GV_FILTRI_ID22')
+            .columns('RECNNR', 'IDENTOBJNR')
+            .where({
+                BUKRS: entity,
+                RECNTYPE: tipoContratto
+            })
+    );
+    
+    const recnnr = new Set();
+    const cdc = new Set();
+
+    filteredData.forEach(row => {
+        recnnr.add(row.RECNNR);
+        cdc.add(row.IDENTOBJNR);
+    })
+
+    const RECNNR = Array.from(recnnr);
+    const CDC = Array.from(cdc);
+
+    return {
+        RECNNR: RECNNR,
+        CDC: CDC,
+    }
+
+}
+
+
+
+// async func (entity = [], tipoContratto = [], contratto = [], year = null, period = null, costCenter = [], Id_storico = null) {
+
+//     const filteredData = await cds.run(
+//         SELECT.distinct
+//             .from('CATALOGSERVICE_GV_FILTRI_ID22')
+//             .columns('BUTXT', 'RECNTYPE', 'RECNNR', 'YEARDUEDATE', 'PERIODDUEDATE', 'IDENTOBJNR', 'BUKRS', 'ID_STORICO')
+//             .where({
+//                 BUKRS: entity? entity : null,
+//                 RECNTYPE: tipoContratto? tipoContratto : null,
+//                 RECNNR: contratto? contratto : null
+//             }) 
+//     );
+
+//      // Usa Set per rimuovere automaticamente i duplicati
+//      const butxt = new Set();
+//      const recntype = new Set();
+//      const recnnr = new Set();
+//      const yearduedate = new Set();
+//      const periodduedate = new Set();
+//      const cdc = new Set();
+//      const bukrs = new Set();
+//      const id_storico = new Set();
+
+     
+//      // Loop attraverso i dati distinti e popola i set
+//      distinctData.forEach(row => {
+//          butxt.add(row.BUTXT);
+//          recntype.add(row.RECNTYPE);
+//          recnnr.add(row.RECNNR);
+//          yearduedate.add(row.YEARDUEDATE);
+//          periodduedate.add(row.PERIODDUEDATE);
+//          cdc.add(row.IDENTOBJNR);
+//          bukrs.add(row.BUKRS);
+//          id_storico.add(row.ID_STORICO);
+
+//      });
+     
+//      // Converte i set in array
+//      const BUTXT = Array.from(butxt);
+//      const RECNTYPE = Array.from(recntype);
+//      const RECNNR = Array.from(recnnr);
+//      const YEARDUEDATE = Array.from(yearduedate);
+//      const PERIODDUEDATE = Array.from(periodduedate);
+//      const CDC = Array.from(cdc);
+//      const BUKRS = Array.from(bukrs);
+//      const ID_STORICO = Array.from(id_storico);
+
+     
+//      console.log("butxt array:", BUTXT);
+//      console.log("recntype array:", RECNTYPE);
+//      console.log("recnnr array:", RECNNR);
+//      console.log("yearduedate array:", YEARDUEDATE);
+//      console.log("periodduedate array:", PERIODDUEDATE);
+//      console.log("cdc array:", CDC);
+//      console.log("bukrs array:", BUKRS);
+//      console.log("Id_storico array:", ID_STORICO);
+     
+//      // Ritorna gli array
+//      return {
+//          BUTXT: BUTXT,
+//          RECNTYPE: RECNTYPE,
+//          RECNNR: RECNNR,
+//          YEARDUEDATE: YEARDUEDATE,
+//          PERIODDUEDATE: PERIODDUEDATE,
+//          CDC: CDC,
+//          BUKRS: BUKRS,
+//          ID_STORICO: ID_STORICO
+//      };
+
+
+
+
+
+// }
+
 }

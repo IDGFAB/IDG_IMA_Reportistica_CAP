@@ -93,6 +93,9 @@
             ],
             "js": [
                 {
+                    "uri": "utils/axios.min.js"
+                },
+                {
                     "uri": "utils/pdfmake.min.js"
                 },
                 {

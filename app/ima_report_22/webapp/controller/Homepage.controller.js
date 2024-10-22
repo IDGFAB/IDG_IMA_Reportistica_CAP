@@ -236,6 +236,7 @@ sap.ui.define([
 
             // Update allSelected property
             oSelectedFiltersModel.setProperty("/allSelected", allSelected);
+            this.selectFiltering(oSelectedFilters);
 
             // this._bindToolbarText(); // Update toolbar text
 
@@ -244,6 +245,59 @@ sap.ui.define([
             // } else {
             //     this.setEnabledDownload(false);
             // }
+        },
+
+        selectFiltering: function(data) {
+            if (data.TipoContratto?.length > 0 && data.Entity?.length > 0 ) {
+
+                //enabled true
+                //key clear
+
+                const servicePath = `${this.osUrl}FilterControl`;
+
+                let oSelectedFilters = this.getView().getModel('selectedFiltersModel').getData();
+                //let oSelectedFiltersModel = this.getView().getModel('selectedFiltersModel');
+
+                const requestData = {
+                    entity: Object.values(oSelectedFilters.entity),
+                    tipoContratto: Object.values(oSelectedFilters.tipoContratto),
+                }
+    
+
+                axios.post(servicePath, requestData)
+                    .then((response) => {
+                        console.log(response.data);  // Handle the response array
+                        let oFiltersModel = this.getView().getModel('oFiltersModel')
+                        // oFiltersModel.setData(
+                        //     {                           
+                        //         Contratto: this._sortStringArray(response.data.RECNNR),                          
+                        //         CostCenter: this._sortStringArray(response.data.CDC),                        
+                        //     }
+                        // )
+                        oFiltersModel.setProperty("/Contratto", this._sortStringArray(response.data.RECNNR))
+                        oFiltersModel.setProperty("/CostCenter", this._sortStringArray(response.data.CDC))
+
+                        oFiltersModel.refresh()
+                        console.log('Filters data: ', oFiltersModel.getData());
+                        return
+
+                    })
+                    .catch((error) => {
+                        console.error(error)
+                        if (error.response) {
+                            console.error("Server responded with error: ", error.response.status, error.response.data);
+                        } else if (error.request) {
+                            console.error("No response received from server: ", error.request);
+                        } else {
+                            console.error("Axios error: ", error.message);
+                        }
+                    });
+
+
+
+            } else {
+                this._getDataFilters()
+            }
         },
 
 

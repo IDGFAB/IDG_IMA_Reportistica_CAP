@@ -18,75 +18,84 @@
             <f:DynamicPageHeader id="dynamicHeader">
                 <layout:HorizontalLayout id="hLayout" allowWrapping="true">
                     <layout:VerticalLayout id="vLayout" class="sapUiMediumMarginEnd">
-                        <ObjectAttribute title="Scenario" text="" />
                         <ObjectAttribute title="Entity" text="" />
-                        <ObjectAttribute title="Year" text="" />
-                        <ObjectAttribute title="Lease N" text="" />
+                        <ObjectAttribute title="Contract Type" text="" />
+                        <ObjectAttribute title="Contract" text="" />
                     </layout:VerticalLayout>
-
                     <layout:VerticalLayout id="vLayout2">
                         <ObjectAttribute title="Period" text="" />
-                        <ObjectAttribute title="Icp" text="" />
+                        <ObjectAttribute title="Year" text="" />
                         <ObjectAttribute title="Cost Center" text="" />
+                        <ObjectAttribute title="ID Storico" text="" />
                     </layout:VerticalLayout>
                 </layout:HorizontalLayout>
 
                 <f:content>
-                    <fb:FilterBar id="filterbar" useToolbar="false" search=".onSearch" filterChange=".onFilterChange" afterVariantLoad=".onAfterVariantLoad">
+                    <fb:FilterBar id="filterbar" persistencyKey="myPersKey" useToolbar="false" search=".onSearch" afterVariantLoad=".onAfterVariantLoad" searchEnabled="{selectedFiltersModel>/allSelected}">
                         <fb:filterGroupItems>
-                            <fb:FilterGroupItem name="scenario" label="Scenario" groupName="Group1" visibleInFilterBar="true">
+                            <!-- Entity Filter -->
+                            <fb:FilterGroupItem name="Entity" label="Entity" groupName="Group1" visibleInFilterBar="true">
                                 <fb:control>
-                                    <Select forceSelection="false" name="Scenario" change=".onSelectionChange" items="{ path: 'ScenarioModel>/Scenarios' }" id="scenarioSelection">
-                                        <core:Item key="{ScenarioModel>}" text="{ScenarioModel>}" />
+                                    <MultiComboBox name="Entity" showSelectAll="true" selectionChange=".onSelectionChange" items="{ path: 'oFiltersModel>/Entity', sorter: { path: 'description' }
+ }" selectedKeys="{selectedFiltersModel>/entity}" required="true" showClearIcon="true">
+                                        <core:Item key="{oFiltersModel>ID}" text="{oFiltersModel>description}" />
+                                    </MultiComboBox>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <!-- TipoContratto Filter -->
+                            <fb:FilterGroupItem name="TipoContratto" label="Contract type" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <MultiComboBox name="TipoContratto" showSelectAll="true" selectionChange=".onSelectionChange" items="{ 
+                                            path: 'oFiltersModel>/TipoContratto'
+                                        }" selectedKeys="{selectedFiltersModel>/tipoContratto}" required="true" showClearIcon="true">
+                                        <core:Item key="{oFiltersModel>}" text="{oFiltersModel>}" />
+                                    </MultiComboBox>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <!-- Contratto Filter -->
+                            <fb:FilterGroupItem name="Contratto" label="Contract" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <MultiComboBox name="Contratto" showSelectAll="true" selectionChange=".onSelectionChange" items="{ path: 'oFiltersModel>/Contratto' }" selectedKeys="{selectedFiltersModel>/contratto}" showClearIcon="true">
+                                        <core:Item key="{oFiltersModel>}" text="{oFiltersModel>}" />
+                                    </MultiComboBox>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <!-- Periodo Filter -->
+                            <fb:FilterGroupItem name="Periodo" label="Period" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <Select name="Periodo" change=".onSelectionChange" selectedKey="{selectedFiltersModel>/period}" forceSelection="false" items="{ path: 'oFiltersModel>/Periodo' }" required="true">
+                                        <core:Item key="{oFiltersModel>ID}" text="{oFiltersModel>description}" />
                                     </Select>
                                 </fb:control>
                             </fb:FilterGroupItem>
-                            <fb:FilterGroupItem name="entity" label="Entity" groupName="Group1" visibleInFilterBar="true" id="groupFilter">
+                            <!-- Anno Filter -->
+                            <fb:FilterGroupItem name="Anno" label="Year" groupName="Group1" visibleInFilterBar="true">
                                 <fb:control>
-                                    <Select forceSelection="false" name="Entity" change=".onSelectionChange" items="{ path: 'EntityModel>/Entities' }" id="entitySelection">
-                                        <core:Item key="{EntityModel>}" text="{EntityModel>}" />
+                                    <Select name="Anno" change=".onSelectionChange" forceSelection="false" items="{ path: 'oFiltersModel>/Anno' }" selectedKey="{selectedFiltersModel>/year}" required="true">
+                                        <core:Item key="{oFiltersModel>}" text="{oFiltersModel>}" />
                                     </Select>
                                 </fb:control>
                             </fb:FilterGroupItem>
-                            <fb:FilterGroupItem name="year" label="Year" groupName="Group1" visibleInFilterBar="true">
+                            <!-- CostCenter Filter -->
+                            <fb:FilterGroupItem name="CostCenter" label="Cost Center" groupName="Group1" visibleInFilterBar="true">
                                 <fb:control>
-                                    <Select forceSelection="false" name="year" change=".onSelectionChange" items="{ path: 'YearModel>/Years' }" id="yearSelection">
-                                        <core:Item key="{YearModel>}" text="{YearModel>}" />
-                                    </Select>
+                                    <MultiComboBox name="CostCenter" showSelectAll="true" selectionChange=".onSelectionChange" items="{ path: 'oFiltersModel>/CostCenter' }" selectedKeys="{selectedFiltersModel>/costCenter}" showClearIcon="true">
+                                        <core:Item key="{oFiltersModel>}" text="{oFiltersModel>}" />
+                                    </MultiComboBox>
                                 </fb:control>
                             </fb:FilterGroupItem>
-                            <fb:FilterGroupItem name="period" label="Period" groupName="Group1" visibleInFilterBar="true">
+                            <!-- ID Storico Filter -->
+                            <fb:FilterGroupItem name="ID_STORICO" label="ID Storico" groupName="Group1" visibleInFilterBar="true">
                                 <fb:control>
-                                    <Select forceSelection="false" name="period" change=".onSelectionChange" items="{ path: 'PeriodModel>/Periods' }" id="periodSelection">
-                                        <core:Item key="{PeriodModel>}" text="{PeriodModel>}" />
-                                    </Select>
-                                </fb:control>
-                            </fb:FilterGroupItem>
-                            <fb:FilterGroupItem name="icp" label="Icp" groupName="Group1" visibleInFilterBar="true">
-                                <fb:control>
-                                    <Select forceSelection="false" name="icp" change=".onSelectionChange" items="{ path: 'IcpModel>/Icps' }" id="icpSelection">
-                                        <core:Item key="{IcpModel>}" text="{IcpModel>}" />
-                                    </Select>
-                                </fb:control>
-                            </fb:FilterGroupItem>
-                            <fb:FilterGroupItem name="lease n" label="Lease N" groupName="Group1" visibleInFilterBar="true">
-                                <fb:control>
-                                    <Select forceSelection="false" name="lease n" change=".onSelectionChange" items="{ path: 'LeaseNModel>/LeaseNs' }" id="lease_nSelection">
-                                        <core:Item key="{LeaseNModel>}" text="{LeaseNModel>}" />
-                                    </Select>
-                                </fb:control>
-                            </fb:FilterGroupItem>
-                            <fb:FilterGroupItem name="cost center" label="Cost Center" groupName="Group1" visibleInFilterBar="true">
-                                <fb:control>
-                                    <Select forceSelection="false" name="Cost Center" change=".onSelectionChange" items="{ path: 'CostCenterModel>/CostCenters' }" id="costCenterSelection">
-                                        <core:Item key="{CostCenterModel>}" text="{CostCenterModel>}" />
+                                    <Select name="ID_STORICO" forceSelection="false" change=".onSelectionChange" items="{ path: 'oFiltersModel>/Id_storico' }" required="true">
+                                        <core:Item key="{oFiltersModel>}" text="{oFiltersModel>}" />
                                     </Select>
                                 </fb:control>
                             </fb:FilterGroupItem>
                         </fb:filterGroupItems>
                     </fb:FilterBar>
                     <VBox alignItems="End" wrap="Wrap" justifyContent="End" alignContent="Stretch" class="sapUiMediumMarginTop flex-row gap1">
-                        <Button icon="sap-icon://excel-attachment" id="excelBtn" text="Download Excel" press=".onDownloadExcel" enabled="false" />
+                        <Button icon="sap-icon://excel-attachment" id="excelBtn" text="Download Excel" press=".onDownloadExcelPress" enabled="false" />
                         <Button icon="sap-icon://pdf-attachment" id="pdfBtn" text="Download PDF" press=".onDownloadPdfPress" enabled="false" />
                         <Button id="clearFiltersBtn" text="Clear Filters" press=".onClearFilters" visible="false" />
                     </VBox>
