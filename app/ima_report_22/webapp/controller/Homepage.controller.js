@@ -347,11 +347,30 @@ sap.ui.define([
                     if(this.contractKeys == undefined){
                         let aSelectedKeys = selectedControl.getSelectedKeys();
                         this.contractKeys = aSelectedKeys.length
-                    } else{
-                        this.getView().byId("AnnoSelect").setSelectedKey(null)
-                        this.getView().byId("PeriodoSelect").setSelectedKey(null)
-                        this.getView().byId("CostCenterBox").setSelectedKeys(null)
-                        this.getView().byId("IdStoricoSelect").setSelectedKey(null)
+                    } else {
+                        const els = [
+                            this.getView().byId("AnnoSelect"),
+                            this.getView().byId("PeriodoSelect"),
+                            this.getView().byId("CostCenterBox"),
+                            this.getView().byId("IdStoricoSelect")
+                        ]
+
+                        els.forEach(el => {
+                            if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
+                                // Handle MultiComboBox
+                                el.setSelectedKeys(null)
+                            } else if (el.getMetadata().getName() === "sap.m.Select") {
+                                // Handle Select
+                                el.setSelectedKey(null)
+                            } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
+                                // Handle ComboBox
+                                el.setSelectedKey(null)
+                            }
+
+                            // Checking each label's concatenation to empty it
+                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
+                            this.makeTitleObjAttrBold();
+                        })
                     }
                         
                     break;
@@ -360,10 +379,29 @@ sap.ui.define([
                     if(this.annoKey == undefined){
                         let aSelectedKey = selectedControl.getSelectedKey();
                         this.annoKey = aSelectedKey
-                    } else{
-                        this.getView().byId("PeriodoSelect").setSelectedKey(null)
-                        this.getView().byId("CostCenterBox").setSelectedKeys(null)
-                        this.getView().byId("IdStoricoSelect").setSelectedKey(null)
+                    } else {
+                        const els = [
+                            this.getView().byId("PeriodoSelect"),
+                            this.getView().byId("CostCenterBox"),
+                            this.getView().byId("IdStoricoSelect")
+                        ]
+
+                        els.forEach(el => {
+                            if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
+                                // Handle MultiComboBox
+                                el.setSelectedKeys(null)
+                            } else if (el.getMetadata().getName() === "sap.m.Select") {
+                                // Handle Select
+                                el.setSelectedKey(null)
+                            } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
+                                // Handle ComboBox
+                                el.setSelectedKey(null)
+                            }
+
+                            // Checking each label's concatenation to empty it
+                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
+                            this.makeTitleObjAttrBold();
+                        })
                     }
                      
                     break;
@@ -372,9 +410,28 @@ sap.ui.define([
                     if(this.periodoKey == undefined){
                         let aSelectedKey = selectedControl.getSelectedKey();
                         this.periodoKey = aSelectedKey
-                    } else{
-                        this.getView().byId("CostCenterBox").setSelectedKeys(null)
-                        this.getView().byId("IdStoricoSelect").setSelectedKey(null)
+                    } else {
+                        const els = [
+                            this.getView().byId("CostCenterBox"),
+                            this.getView().byId("IdStoricoSelect")
+                        ]
+
+                        els.forEach(el => {
+                            if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
+                                // Handle MultiComboBox
+                                el.setSelectedKeys(null)
+                            } else if (el.getMetadata().getName() === "sap.m.Select") {
+                                // Handle Select
+                                el.setSelectedKey(null)
+                            } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
+                                // Handle ComboBox
+                                el.setSelectedKey(null)
+                            }
+
+                            // Checking each label's concatenation to empty it
+                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
+                            this.makeTitleObjAttrBold();
+                        })
                     }
                            
                     break;
@@ -383,8 +440,27 @@ sap.ui.define([
                     if(this.cdcKeys == undefined){
                         let aSelectedKeys = selectedControl.getSelectedKeys();
                         this.cdcKeys = aSelectedKeys.length
-                    } else{
-                        this.getView().byId("IdStoricoSelect").setSelectedKey(null)
+                    } else {
+                        const els = [
+                            this.getView().byId("IdStoricoSelect")
+                        ]
+
+                        els.forEach(el => {
+                            if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
+                                // Handle MultiComboBox
+                                el.setSelectedKeys(null)
+                            } else if (el.getMetadata().getName() === "sap.m.Select") {
+                                // Handle Select
+                                el.setSelectedKey(null)
+                            } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
+                                // Handle ComboBox
+                                el.setSelectedKey(null)
+                            }
+
+                            // Checking each label's concatenation to empty it
+                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
+                            this.makeTitleObjAttrBold();
+                        })
                     }
                      
                     break;  

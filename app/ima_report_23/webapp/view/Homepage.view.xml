@@ -131,10 +131,6 @@
                             <table:template>
                                 <Text text="{DataIMA23>ASSET_CLASS}" />
                             </table:template>
-                             <Label text="JOURNAL_TYPE2" />
-                            <table:template>
-                                <Text text="{DataIMA23>ASSET_CLASS}" />
-                            </table:template>
                         </table:Column>
                         <table:Column width="17rem">
                             <Label text="ACCOUNT" />
