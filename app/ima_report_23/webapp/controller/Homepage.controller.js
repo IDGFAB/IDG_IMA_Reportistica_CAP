@@ -22,1711 +22,483 @@ sap.ui.define([
        
 
 
-        onInit: function () {
-           var jsonData = [
-            {
-                "Scenario": "Actual",
-                  "Entity": "ILAPAK INTERNATIONAL SA",
-                  "Year": 2023,
-                  "Period": "December",
-                  "Icp": "ICP Top",
-                  "Lease_N": "Totale Custom2",
-                  "Cost_Center": "Totale Custom5",
-                  "Data": {
-                     "Land": null,
-                    "Building": {
-                      "FX Effect on Opening": {
-                        "Lease Liabilities Long Term": {
-                          "Debit": null,
-                          "Credit": 99999999999999
-                        },
-                        "Loss FX Rates": {
-                          "Debit": 913643,
-                          "Credit": null
+             onInit: function () {
+            // Initialize filters and data
+            this.getView().setModel(new JSONModel(), 'selectedFiltersModel')
+
+            this._initializeFilters();
+            // this.getDataMock(); // Load mock data for table
+
+            this.osUrl = this.getOwnerComponent().getModel().sServiceUrl;
+
+            this._createFiltersModel()
+
+            this._getDataFilters()
+
+            // this.getTableData()
+
+            this.getView().setModel(new JSONModel(), 'DataIMA23')
+            // this._bindToolbarText();
+            let oSelectedFiltersModel = this.getView().getModel('selectedFiltersModel');
+
+            oSelectedFiltersModel.setProperty("/matchData", false);
+
+            this.entityKeys;
+            this.typeContractKeys;
+            this.contractKeys;
+            this.cdcKeys;
+            this.annoKey;
+            this.periodoKey;
+        },
+
+        createSorter: function() {
+            return new Sorter("description", false); // false for ascending order
+        },
+
+        _createFiltersModel: function () {
+            let oFiltersModel = new JSONModel({
+                Entity: null,
+               // TipoContratto: null,
+                Contratto: null,
+                Anno: null,
+                Periodo: null,
+               // CostCenter: null,
+                Id_storico:null,
+                CompanyCode: null
+            });
+            this.getView().setModel(oFiltersModel, 'oFiltersModel');
+        },
+
+        _elaboratedMonths: function (monthNumbers) {
+            const mesiItaliani = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
+
+            return monthNumbers
+                .map(num => parseInt(num, 10))
+                .sort((a, b) => a - b)
+                .map(num => ({
+                    ID: num.toString().padStart(3, '0'),
+                    description: mesiItaliani[num - 1]
+                }));
+        },
+
+
+        _sortEntitiesByDescription: function(entities) {
+            return entities.sort((a, b) => a.description.localeCompare(b.description));
+        },
+        
+        _elaborateEntities: function (ids, descriptions) {
+            const entities = ids.map((id, index) => ({
+                ID: id,
+                description: descriptions[index]
+            }));
+        
+            return this._sortEntitiesByDescription(entities);
+        },
+
+        _sortStringArray: function(arr) {
+            return arr.sort((a, b) => a.localeCompare(b));
+        },
+        
+        _getDataFilters: function () {
+            const servicePath = `${this.osUrl}Filters`;  // Append the action name with a trailing slash
+
+            axios.post(servicePath)
+                .then((response) => {
+                    console.log(response.data);  // Handle the response array
+                    let oFiltersModel = this.getView().getModel('oFiltersModel')
+                    oFiltersModel.setData(
+                        {
+                            Entity: this._elaborateEntities(response.data.BUKRS, response.data.BUTXT),
+                           // TipoContratto: this._sortStringArray(response.data.RECNTYPE),
+                            Contratto: this._sortStringArray(response.data.RECNNR),
+                            Periodo: this._elaboratedMonths(response.data.PERIODDUEDATE),
+                            Anno: this._sortStringArray(response.data.YEARDUEDATE),
+                          //  CostCenter: this._sortStringArray(response.data.CDC),
+                            Id_storico: this._sortStringArray(response.data.ID_STORICO)
                         }
-                      },
-                      "Depreciation RoU": {
-                        "Depreciation": {
-                          "Debit": 1767562,
-                          "Credit": null
-                        },
-                        "Accumulated Depreciation": {
-                          "Debit": null,
-                          "Credit": 1524283
-                        },
-                        "Gain FX Rates": {
-                          "Debit": null,
-                          "Credit": 243280
-                        }
-                      },
-                      "Reclass Liab. Current Portion": {
-                        "Lease Liabilities Long Term": {
-                          "Debit": 1819554,
-                          "Credit": null
-                        },
-                        "Lease Liabilities Short Term": {
-                          "Debit": null,
-                          "Credit": 1819554
-                        }
-                      },
-                      "Interest Accrued": {
-                        "YTD Interest": {
-                          "Debit": 470162,
-                          "Credit": null
-                        },
-                        "Interest Accrued": {
-                          "Debit": null,
-                          "Credit": 493414
-                        },
-                        "Loss FX Rates": {
-                          "Debit": 23252,
-                          "Credit": null
-                        }
-                      },
-                      "Reverse Lease Cost": {
-                        "Lease Cost": {
-                          "Debit": null,
-                          "Credit": 2146149
-                        },
-                        "Other Liabilities": {
-                          "Debit": 2252287,
-                          "Credit": null
-                        }
-                      },
-                      "Payment Interest": {
-                        "Lease Liabilities Long Term": {
-                          "Debit": null,
-                          "Credit": 493414
-                        },
-                        "Interest Accrued": {
-                          "Debit": 493414,
-                          "Credit": null
-                        }
-                      },
-                      "Payment & Liab. Amortization": {
-                        "Lease Liabilities Long Term": {
-                          "Debit": 2252287,
-                          "Credit": null
-                        },
-                        "Other Liabilities": {
-                          "Debit": null,
-                          "Credit": 2252287
-                        }
-                      },
-                      "Guest quarters in pool": null,
-                      "Guest quarters in benefit": null,
-                      "Garage in pool": null,
-                      "Garage in benefit": null
-                    },
-                    "Cars in pool":{
-                        "FX Effect on Opening":{
-                            "Lease Liabilities Long Term":{
-                                "Debit": null,
-                                "Credit": 3724
-                            },
-                            "Loss FX Rates":{
-                                "Debit": 3724,
-                                "Credit": null
-                            }
-                        },
-                        "R.o.U Remeasurement":{
-                            "Right of Use":{
-                                "Debit": 42711,
-                                "Credit": null
-                            },
-                            "Lease Liabilities Long Term":{
-                                "Debit": null,
-                                "Credit": 42711
-                            }
-                        },
-                        "R.o.U Remeasurement Inflaction":{
-                            "Right of Use":{
-                                "Debit": null,
-                                "Credit": 3664
-                            },
-                            "Lease Liabilities Long Term":{
-                                "Debit": 3664,
-                                "Credit": null
-                            }
-                        },
-                        "RoU & Accumulated Depreciation DeRecognition":{
-                            "Right of Use":{
-                                "Debit": null,
-                                "Credit": 14984
-                            },
-                            "Accumulated Depreciation":{
-                                "Debit": 14984,
-                                "Credit": null
-                            }
-                        },
-                        "Depreciation RoU":{
-                            "Depreciation":{
-                                "Debit": 62657,
-                                "Credit": null
-                            },
-                            "Accumulated Depreciation":{
-                                "Debit": null,
-                                "Credit": 64381
-                            },
-                            "Gain FX Rates":{
-                                "Debit": null,
-                                "Credit": 276
-                            },
-                            "Loss FX Rates":{
-                                "Debit": 2000,
-                                "Credit": null
-                            }
-                        },
-                        "Reclass Liab. Current Portion":{
-                            "Lease Liabilities Long Term":{
-                                "Debit": 40070,
-                                "Credit": null
-                            },
-                            "Lease Liabilities Short Term":{
-                                "Debit": null,
-                                "Credit": 40070
-                            }
-                        },
-                        "Interest Accrued":{
-                            "YTD Interest":{
-                                "Debit": 904,
-                                "Credit": null
-                            },
-                            "Interest Accrued":{
-                                "Debit": null,
-                                "Credit": 948
-                            },
-                            "Loss FX Rates":{
-                                "Debit": 43,
-                                "Credit": null
-                            }
-                        },
-                        "Reverse Lease Cost":{
-                            "Lease Cost":{
-                                "Debit": null,
-                                "Credit": 63652
-                            },
-                            "Other Liabilities":{
-                                "Debit": 66688,
-                                "Credit": null
-                            },
-                            "Gain FX Rates":{
-                                "Debit": null,
-                                "Credit": 3036
-                            }
-                        },
-                        "Payment Interest":{
-                            "Lease Liabilities Long Term":{
-                                "Debit": null,
-                                "Credit": 948
-                            },
-                            "Interest Accrued":{
-                                "Debit": 948,
-                                "Credit": null
-                            }
-                        },
-                        "Payment & Liab. Amortization":{
-                            "Lease Liabilities Long Term":{
-                                "Debit": 66688,
-                                "Credit": null
-                            },
-                            "Other Liabilities":{
-                                "Debit": null,
-                                "Credit": 66688
-                            }
-                        },
-                    },
-                    "Cars in benefit":{
-                        "RoU initial Recognition":{
-                            "Right of Use": {
-                                "Debit": 28901,
-                                "Credit": null
-                            },
-                            "Lease Liabilities Long Term": {
-                                "Debit": null,
-                                "Credit": 28901
-                            }
-                        },
-                        "FX Effect on Opening":{
-                            "Lease Liabilities Long Term": {
-                                "Debit": null,
-                                "Credit": 6338
-                            },
-                            "Loss FX Rates": {
-                                "Debit": 6338,
-                                "Credit": null
-                            }
-                        },
-                        "R.o.U Remeasurement":{
-                            "Right of Use": {
-                                "Debit": 9435,
-                                "Credit": 8924
-                            },
-                            "Lease Liabilities Long Term": {
-                                "Debit": 8924,
-                                "Credit": 9435
-                            }
-                        },
-                        "R.o.U Remeasurement Inflaction":{
-                            "Right of Use": {
-                                "Debit": null,
-                                "Credit": 305
-                            },
-                            "Lease Liabilities Long Term": {
-                                "Debit": 305,
-                                "Credit": null
-                            }
-                        },
-                        "RoU & Accumulated Depreciation DeRecognition":{
-                            "Right of Use": {
-                                "Debit": null,
-                                "Credit": 26278
-                            },
-                            "Accumulated Depreciation": {
-                                "Debit": 26278,
-                                "Credit": null
-                            }
-                        },
-                        "Depreciation RoU":{
-                            "Depreciation": {
-                                "Debit": 107380,
-                                "Credit": null
-                            },
-                            "Accumulated Depreciation": {
-                                "Debit": null,
-                                "Credit": 106626
-                            },
-                            "Gain FX Rates": {
-                                "Debit": null,
-                                "Credit": 1012
-                            },
-                            "Loss FX Rates": {
-                                "Debit": 258,
-                                "Credit": null
-                            }
-                        },
-                        "Reclass Liab. Current Portion":{
-                            "Lease Liabilities Long Term": {
-                                "Debit": 79680,
-                                "Credit": null
-                            },
-                            "Lease Liabilities Short Term": {
-                                "Debit": null,
-                                "Credit": 79680
-                            }
-                        },
-                        "Interest Accrued":{
-                            "YTD Interest": {
-                                "Debit": 2703,
-                                "Credit": null
-                            },
-                            "Interest Accrued": {
-                                "Debit": null,
-                                "Credit": 2790
-                            },
-                            "Loss FX Rates": {
-                                "Debit": 87,
-                                "Credit": null
-                            }
-                        },
-                        "Reverse Lease Cost":{
-                            "Lease Cost": {
-                                "Debit": null,
-                                "Credit": 110076
-                            },
-                            "Other Liabilities": {
-                                "Debit": 112192,
-                                "Credit": null
-                            },
-                            "Gain FX Rates": {
-                                "Debit": null,
-                                "Credit": 2116
-                            }
-                        },
-                        "Earlier Termination":{
-                            "Right of Use": {
-                                "Debit": null,
-                                "Credit": 17687
-                            },
-                            "Accumulated Depreciation": {
-                                "Debit": 17687,
-                                "Credit": null
-                            }
-                        },
-                        "Payment Interest":{
-                            "Lease Liabilities Long Term": {
-                                "Debit": null,
-                                "Credit": 2790
-                            },
-                            "Interest Accrued": {
-                                "Debit": 2790,
-                                "Credit": null
-                            }
-                        },
-                        "Payment & Liab. Amortization":{
-                            "Lease Liabilities Long Term":{
-                                "Debit": 112192,
-                                "Credit": null
-                            },
-                            "Other Liabilities":{
-                                "Debit": null,
-                                "Credit": 112192
-                            }
-                        },
-                        "Other motor vehicles": null,
-                        "In house handling equipment": null,
-                        "Productive machinery": null,
-                        "Other productive equipment": null,
-                        "Hardware": null,
-                        "Other Asset": null
-                        },
-                        "Total Asset Category": {
-                            "RoU initial Recognition":{
-                                "Right of Use":{
-                                    "Debit": 28901,
-                                    "Credit": null
-                                },
-                                "Lease Liabilities Long Term":{
-                                    "Debit": null,
-                                    "Credit": 28901
-                                },
-                                "Initial maxi rent-quota":{
-                                    "Debit": null,
-                                    "Credit": null
-                                },
-                                "Initial direct costs or takeover costs":{
-                                    "Debit": null,
-                                    "Credit": null
-                                },
-                                "Incentives received -":{
-                                    "Debit": null,
-                                    "Credit": null
-                                },
-                                "Other Initial Costs not included in Liabilities":{
-                                    "Debit": null,
-                                    "Credit": null
-                                },
-                                "Removal / dismantling Cost":{
-                                    "Debit": null,
-                                    "Credit": null
-                                },
-                                "Gain FX Rates":{
-                                    "Debit": null,
-                                    "Credit": null
-                                },
-                                "Loss FX Rates":{
-                                    "Debit": null,
-                                    "Credit": null
-                                },
-                                "Equity Account for Asset Retrospective":{
-                                    "Debit": null,
-                                    "Credit": null
-                                }
-                            },
-                            "FX Effect on Opening":{
-                                "Lease Liabilities Long Term":{
-                                    "Debit": null,
-                                    "Credit": 923705
-                                },
-                                "Loss FX Rates":{
-                                    "Debit": 923705,
-                                    "Credit": null
-                                }
-                            },
-                            "R.o.U Remeasurement":{
-                                "Right of Use":{
-                                    "Debit": 52146,
-                                    "Credit": 8924
-                                },
-                                "Lease Liabilities Long Term":{
-                                    "Debit": 8924,
-                                    "Credit": 52146
-                                }
-                            },
-                            "R.o.U Remeasurement Inflaction":{
-                                "Right of Use":{
-                                    "Debit": null,
-                                    "Credit": 3969
-                                },
-                                "Lease Liabilities Long Term":{
-                                    "Debit": 3969,
-                                    "Credit": null
-                                }
-                            },
-                            "RoU & Accumulated Depreciation DeRecognition":{
-                                "Right of Use":{
-                                    "Debit": null,
-                                    "Credit": 41262
-                                },
-                                "Accumulated Depreciation":{
-                                    "Debit": 41262,
-                                    "Credit": null
-                                }
-                            },
-                            "Depreciation RoU":{
-                                "Depreciation":{
-                                    "Debit": 1937599,
-                                    "Credit": null
-                                },
-                                "Accumulated Depreciation":{
-                                    "Debit": null,
-                                    "Credit": 1695290
-                                },
-                                "Gain FX Rates":{
-                                    "Debit": null,
-                                    "Credit": 244568
-                                },
-                                "Loss FX Rates":{
-                                    "Debit": 2259,
-                                    "Credit": null
-                                },
-                                "Difference for Mergers":{
-                                    "Debit": null,
-                                    "Credit": null
-                                }
-                            },
-                            "Reclass Liab. Current Portion":{
-                                "Lease Liabilities Long Term":{
-                                    "Debit": 1939304,
-                                    "Credit": null
-                                },
-                                "Lease Liabilities Short Term":{
-                                    "Debit": null,
-                                    "Credit": 1939304
-                                }
-                            },
-                            "Interest Accrued":{
-                                "YTD Interest":{
-                                    "Debit": 473769,
-                                    "Credit": null
-                                },
-                                "Interest Accrued":{
-                                    "Debit": null,
-                                    "Credit": 497151
-                                },
-                                "Gain FX Rates":{
-                                    "Debit": null,
-                                    "Credit": null
-                                },
-                                "Loss FX Rates":{
-                                    "Debit": 23382,
-                                    "Credit": null
-                                },
-                                "Difference for Mergers":{
-                                    "Debit": null,
-                                    "Credit": null
-                                }
-                            },
-                            "Reverse Lease Cost":{
-                                "Lease Cost":{
-                                    "Debit": null,
-                                    "Credit": 2319877
-                                },
-                                "Other Liabilities":{
-                                    "Debit": 2431166,
-                                    "Credit": null
-                                },
-                                "Gain FX Rates":{
-                                    "Debit": null,
-                                    "Credit": 111290
-                                },
-                                "Loss FX Rates":{
-                                    "Debit": null,
-                                    "Credit": null
-                                }
-                            },
-                            "Payment & Liab. Amortization":{
-                                "Lease Liabilities Long Term":{
-                                    "Debit": 2431166,
-                                    "Credit": null
-                                },
-                                "Other Liabilities":{
-                                    "Debit": null,
-                                    "Credit": 2431166
-                                }
-                            },
-                            "Payment Interest":{
-                                "Lease Liabilities Long Term":{
-                                    "Debit": null,
-                                    "Credit": 497151
-                                },
-                                "Interest Accrued":{
-                                    "Debit": 497151,
-                                    "Credit": null
-                                }
-                            },
-                            "Earlier Termination":{
-                                "Right of Use":{
-                                    "Debit": null,
-                                    "Credit": 17687
-                                },
-                                "Accumulated Depreciation":{
-                                    "Debit": 17687,
-                                    "Credit": null
-                                },
-                                "Lease Liabilities Long Term":{
-                                    "Debit": null,
-                                    "Credit": null
-                                },
-                                "Lease Liabilities Short Term":{
-                                    "Debit": null,
-                                    "Credit": null
-                                },
-                                "Gain/Loss for Earlier Termination":{
-                                    "Debit": null,
-                                    "Credit": null
-                                }
-                            }
-                        }
-                  }
-            },
-            {
-                "Scenario": "Actual",
-                  "Entity": "ILAPAK INTERNATIONAL SA",
-                  "Year": 2021,
-                  "Period": "Febrary",
-                  "Icp": "ICP Top",
-                  "Lease_N": "Totale Custom2",
-                  "Cost_Center": "Totale Custom5",
-                  "Data": {
-                     "Land": null,
-                    "Building": {
-                      "FX Effect on Opening": {
-                        "Lease Liabilities Long Term": {
-                          "Debit": null,
-                          "Credit": 1111111111111111
-                        },
-                        "Loss FX Rates": {
-                          "Debit": 913643,
-                          "Credit": null
-                        }
-                      },
-                      "Depreciation RoU": {
-                        "Depreciation": {
-                          "Debit": 1767562,
-                          "Credit": null
-                        },
-                        "Accumulated Depreciation": {
-                          "Debit": null,
-                          "Credit": 1524283
-                        },
-                        "Gain FX Rates": {
-                          "Debit": null,
-                          "Credit": 243280
-                        }
-                      },
-                      "Reclass Liab. Current Portion": {
-                        "Lease Liabilities Long Term": {
-                          "Debit": 1819554,
-                          "Credit": null
-                        },
-                        "Lease Liabilities Short Term": {
-                          "Debit": null,
-                          "Credit": 1819554
-                        }
-                      },
-                      "Interest Accrued": {
-                        "YTD Interest": {
-                          "Debit": 470162,
-                          "Credit": null
-                        },
-                        "Interest Accrued": {
-                          "Debit": null,
-                          "Credit": 493414
-                        },
-                        "Loss FX Rates": {
-                          "Debit": 23252,
-                          "Credit": null
-                        }
-                      },
-                      "Reverse Lease Cost": {
-                        "Lease Cost": {
-                          "Debit": null,
-                          "Credit": 2146149
-                        },
-                        "Other Liabilities": {
-                          "Debit": 2252287,
-                          "Credit": null
-                        }
-                      },
-                      "Payment Interest": {
-                        "Lease Liabilities Long Term": {
-                          "Debit": null,
-                          "Credit": 493414
-                        },
-                        "Interest Accrued": {
-                          "Debit": 493414,
-                          "Credit": null
-                        }
-                      },
-                      "Payment & Liab. Amortization": {
-                        "Lease Liabilities Long Term": {
-                          "Debit": 2252287,
-                          "Credit": null
-                        },
-                        "Other Liabilities": {
-                          "Debit": null,
-                          "Credit": 2252287
-                        }
-                      },
-                      "Guest quarters in pool": null,
-                      "Guest quarters in benefit": null,
-                      "Garage in pool": null,
-                      "Garage in benefit": null
-                    },
-                    "Cars in pool":{
-                        "FX Effect on Opening":{
-                            "Lease Liabilities Long Term":{
-                                "Debit": null,
-                                "Credit": 3724
-                            },
-                            "Loss FX Rates":{
-                                "Debit": 3724,
-                                "Credit": null
-                            }
-                        },
-                        "R.o.U Remeasurement":{
-                            "Right of Use":{
-                                "Debit": 42711,
-                                "Credit": null
-                            },
-                            "Lease Liabilities Long Term":{
-                                "Debit": null,
-                                "Credit": 42711
-                            }
-                        },
-                        "R.o.U Remeasurement Inflaction":{
-                            "Right of Use":{
-                                "Debit": null,
-                                "Credit": 3664
-                            },
-                            "Lease Liabilities Long Term":{
-                                "Debit": 3664,
-                                "Credit": null
-                            }
-                        },
-                        "RoU & Accumulated Depreciation DeRecognition":{
-                            "Right of Use":{
-                                "Debit": null,
-                                "Credit": 14984
-                            },
-                            "Accumulated Depreciation":{
-                                "Debit": 14984,
-                                "Credit": null
-                            }
-                        },
-                        "Depreciation RoU":{
-                            "Depreciation":{
-                                "Debit": 62657,
-                                "Credit": null
-                            },
-                            "Accumulated Depreciation":{
-                                "Debit": null,
-                                "Credit": 64381
-                            },
-                            "Gain FX Rates":{
-                                "Debit": null,
-                                "Credit": 276
-                            },
-                            "Loss FX Rates":{
-                                "Debit": 2000,
-                                "Credit": null
-                            }
-                        },
-                        "Reclass Liab. Current Portion":{
-                            "Lease Liabilities Long Term":{
-                                "Debit": 40070,
-                                "Credit": null
-                            },
-                            "Lease Liabilities Short Term":{
-                                "Debit": null,
-                                "Credit": 40070
-                            }
-                        },
-                        "Interest Accrued":{
-                            "YTD Interest":{
-                                "Debit": 904,
-                                "Credit": null
-                            },
-                            "Interest Accrued":{
-                                "Debit": null,
-                                "Credit": 948
-                            },
-                            "Loss FX Rates":{
-                                "Debit": 43,
-                                "Credit": null
-                            }
-                        },
-                        "Reverse Lease Cost":{
-                            "Lease Cost":{
-                                "Debit": null,
-                                "Credit": 63652
-                            },
-                            "Other Liabilities":{
-                                "Debit": 66688,
-                                "Credit": null
-                            },
-                            "Gain FX Rates":{
-                                "Debit": null,
-                                "Credit": 3036
-                            }
-                        },
-                        "Payment Interest":{
-                            "Lease Liabilities Long Term":{
-                                "Debit": null,
-                                "Credit": 948
-                            },
-                            "Interest Accrued":{
-                                "Debit": 948,
-                                "Credit": null
-                            }
-                        },
-                        "Payment & Liab. Amortization":{
-                            "Lease Liabilities Long Term":{
-                                "Debit": 66688,
-                                "Credit": null
-                            },
-                            "Other Liabilities":{
-                                "Debit": null,
-                                "Credit": 66688
-                            }
-                        },
-                    },
-                    "Cars in benefit":{
-                        "RoU initial Recognition":{
-                            "Right of Use": {
-                                "Debit": 28901,
-                                "Credit": null
-                            },
-                            "Lease Liabilities Long Term": {
-                                "Debit": null,
-                                "Credit": 28901
-                            }
-                        },
-                        "FX Effect on Opening":{
-                            "Lease Liabilities Long Term": {
-                                "Debit": null,
-                                "Credit": 6338
-                            },
-                            "Loss FX Rates": {
-                                "Debit": 6338,
-                                "Credit": null
-                            }
-                        },
-                        "R.o.U Remeasurement":{
-                            "Right of Use": {
-                                "Debit": 9435,
-                                "Credit": 8924
-                            },
-                            "Lease Liabilities Long Term": {
-                                "Debit": 8924,
-                                "Credit": 9435
-                            }
-                        },
-                        "R.o.U Remeasurement Inflaction":{
-                            "Right of Use": {
-                                "Debit": null,
-                                "Credit": 305
-                            },
-                            "Lease Liabilities Long Term": {
-                                "Debit": 305,
-                                "Credit": null
-                            }
-                        },
-                        "RoU & Accumulated Depreciation DeRecognition":{
-                            "Right of Use": {
-                                "Debit": null,
-                                "Credit": 26278
-                            },
-                            "Accumulated Depreciation": {
-                                "Debit": 26278,
-                                "Credit": null
-                            }
-                        },
-                        "Depreciation RoU":{
-                            "Depreciation": {
-                                "Debit": 107380,
-                                "Credit": null
-                            },
-                            "Accumulated Depreciation": {
-                                "Debit": null,
-                                "Credit": 106626
-                            },
-                            "Gain FX Rates": {
-                                "Debit": null,
-                                "Credit": 1012
-                            },
-                            "Loss FX Rates": {
-                                "Debit": 258,
-                                "Credit": null
-                            }
-                        },
-                        "Reclass Liab. Current Portion":{
-                            "Lease Liabilities Long Term": {
-                                "Debit": 79680,
-                                "Credit": null
-                            },
-                            "Lease Liabilities Short Term": {
-                                "Debit": null,
-                                "Credit": 79680
-                            }
-                        },
-                        "Interest Accrued":{
-                            "YTD Interest": {
-                                "Debit": 2703,
-                                "Credit": null
-                            },
-                            "Interest Accrued": {
-                                "Debit": null,
-                                "Credit": 2790
-                            },
-                            "Loss FX Rates": {
-                                "Debit": 87,
-                                "Credit": null
-                            }
-                        },
-                        "Reverse Lease Cost":{
-                            "Lease Cost": {
-                                "Debit": null,
-                                "Credit": 110076
-                            },
-                            "Other Liabilities": {
-                                "Debit": 112192,
-                                "Credit": null
-                            },
-                            "Gain FX Rates": {
-                                "Debit": null,
-                                "Credit": 2116
-                            }
-                        },
-                        "Earlier Termination":{
-                            "Right of Use": {
-                                "Debit": null,
-                                "Credit": 17687
-                            },
-                            "Accumulated Depreciation": {
-                                "Debit": 17687,
-                                "Credit": null
-                            }
-                        },
-                        "Payment Interest":{
-                            "Lease Liabilities Long Term": {
-                                "Debit": null,
-                                "Credit": 2790
-                            },
-                            "Interest Accrued": {
-                                "Debit": 2790,
-                                "Credit": null
-                            }
-                        },
-                        "Payment & Liab. Amortization":{
-                            "Lease Liabilities Long Term":{
-                                "Debit": 112192,
-                                "Credit": null
-                            },
-                            "Other Liabilities":{
-                                "Debit": null,
-                                "Credit": 112192
-                            }
-                        },
-                        "Other motor vehicles": null,
-                        "In house handling equipment": null,
-                        "Productive machinery": null,
-                        "Other productive equipment": null,
-                        "Hardware": null,
-                        "Other Asset": null
-                        },
-                        "Total Asset Category": {
-                            "RoU initial Recognition":{
-                                "Right of Use":{
-                                    "Debit": 28901,
-                                    "Credit": null
-                                },
-                                "Lease Liabilities Long Term":{
-                                    "Debit": null,
-                                    "Credit": 28901
-                                },
-                                "Initial maxi rent-quota":{
-                                    "Debit": null,
-                                    "Credit": null
-                                },
-                                "Initial direct costs or takeover costs":{
-                                    "Debit": null,
-                                    "Credit": null
-                                },
-                                "Incentives received -":{
-                                    "Debit": null,
-                                    "Credit": null
-                                },
-                                "Other Initial Costs not included in Liabilities":{
-                                    "Debit": null,
-                                    "Credit": null
-                                },
-                                "Removal / dismantling Cost":{
-                                    "Debit": null,
-                                    "Credit": null
-                                },
-                                "Gain FX Rates":{
-                                    "Debit": null,
-                                    "Credit": null
-                                },
-                                "Loss FX Rates":{
-                                    "Debit": null,
-                                    "Credit": null
-                                },
-                                "Equity Account for Asset Retrospective":{
-                                    "Debit": null,
-                                    "Credit": null
-                                }
-                            },
-                            "FX Effect on Opening":{
-                                "Lease Liabilities Long Term":{
-                                    "Debit": null,
-                                    "Credit": 923705
-                                },
-                                "Loss FX Rates":{
-                                    "Debit": 923705,
-                                    "Credit": null
-                                }
-                            },
-                            "R.o.U Remeasurement":{
-                                "Right of Use":{
-                                    "Debit": 52146,
-                                    "Credit": 8924
-                                },
-                                "Lease Liabilities Long Term":{
-                                    "Debit": 8924,
-                                    "Credit": 52146
-                                }
-                            },
-                            "R.o.U Remeasurement Inflaction":{
-                                "Right of Use":{
-                                    "Debit": null,
-                                    "Credit": 3969
-                                },
-                                "Lease Liabilities Long Term":{
-                                    "Debit": 3969,
-                                    "Credit": null
-                                }
-                            },
-                            "RoU & Accumulated Depreciation DeRecognition":{
-                                "Right of Use":{
-                                    "Debit": null,
-                                    "Credit": 41262
-                                },
-                                "Accumulated Depreciation":{
-                                    "Debit": 41262,
-                                    "Credit": null
-                                }
-                            },
-                            "Depreciation RoU":{
-                                "Depreciation":{
-                                    "Debit": 1937599,
-                                    "Credit": null
-                                },
-                                "Accumulated Depreciation":{
-                                    "Debit": null,
-                                    "Credit": 1695290
-                                },
-                                "Gain FX Rates":{
-                                    "Debit": null,
-                                    "Credit": 244568
-                                },
-                                "Loss FX Rates":{
-                                    "Debit": 2259,
-                                    "Credit": null
-                                },
-                                "Difference for Mergers":{
-                                    "Debit": null,
-                                    "Credit": null
-                                }
-                            },
-                            "Reclass Liab. Current Portion":{
-                                "Lease Liabilities Long Term":{
-                                    "Debit": 1939304,
-                                    "Credit": null
-                                },
-                                "Lease Liabilities Short Term":{
-                                    "Debit": null,
-                                    "Credit": 1939304
-                                }
-                            },
-                            "Interest Accrued":{
-                                "YTD Interest":{
-                                    "Debit": 473769,
-                                    "Credit": null
-                                },
-                                "Interest Accrued":{
-                                    "Debit": null,
-                                    "Credit": 497151
-                                },
-                                "Gain FX Rates":{
-                                    "Debit": null,
-                                    "Credit": null
-                                },
-                                "Loss FX Rates":{
-                                    "Debit": 23382,
-                                    "Credit": null
-                                },
-                                "Difference for Mergers":{
-                                    "Debit": null,
-                                    "Credit": null
-                                }
-                            },
-                            "Reverse Lease Cost":{
-                                "Lease Cost":{
-                                    "Debit": null,
-                                    "Credit": 2319877
-                                },
-                                "Other Liabilities":{
-                                    "Debit": 2431166,
-                                    "Credit": null
-                                },
-                                "Gain FX Rates":{
-                                    "Debit": null,
-                                    "Credit": 111290
-                                },
-                                "Loss FX Rates":{
-                                    "Debit": null,
-                                    "Credit": null
-                                }
-                            },
-                            "Payment & Liab. Amortization":{
-                                "Lease Liabilities Long Term":{
-                                    "Debit": 2431166,
-                                    "Credit": null
-                                },
-                                "Other Liabilities":{
-                                    "Debit": null,
-                                    "Credit": 2431166
-                                }
-                            },
-                            "Payment Interest":{
-                                "Lease Liabilities Long Term":{
-                                    "Debit": null,
-                                    "Credit": 497151
-                                },
-                                "Interest Accrued":{
-                                    "Debit": 497151,
-                                    "Credit": null
-                                }
-                            },
-                            "Earlier Termination":{
-                                "Right of Use":{
-                                    "Debit": null,
-                                    "Credit": 17687
-                                },
-                                "Accumulated Depreciation":{
-                                    "Debit": 17687,
-                                    "Credit": null
-                                },
-                                "Lease Liabilities Long Term":{
-                                    "Debit": null,
-                                    "Credit": null
-                                },
-                                "Lease Liabilities Short Term":{
-                                    "Debit": null,
-                                    "Credit": null
-                                },
-                                "Gain/Loss for Earlier Termination":{
-                                    "Debit": null,
-                                    "Credit": null
-                                }
-                            }
-                        }
-                  }
+                    )
+                    console.log('Filters data: ', oFiltersModel.getData());
+                    return
+
+                })
+                .catch((error) => {
+                    console.error(error)
+                    if (error.response) {
+                        console.error("Server responded with error: ", error.response.status, error.response.data);
+                    } else if (error.request) {
+                        console.error("No response received from server: ", error.request);
+                    } else {
+                        console.error("Axios error: ", error.message);
+                    }
+                });
+        },
+
+        getTableData: function () {
+
+            this.getView().byId("table").setBusy(true)
+
+            // Initialize filter models
+            let oSelectedFilters = this.getView().getModel('selectedFiltersModel').getData();
+            let oSelectedFiltersModel = this.getView().getModel('selectedFiltersModel');
+
+
+
+            console.log(Object.values(oSelectedFilters.entity));
+            const requestData = {
+                entity: Object.values(oSelectedFilters.entity),
+               // tipoContratto: Object.values(oSelectedFilters.tipoContratto),
+                contratto: oSelectedFilters.contratto ? Object.values(oSelectedFilters.contratto) : null, // Campo opzionale
+                year: oSelectedFilters.year,
+                period: oSelectedFilters.period,
+         //       costCenter: oSelectedFilters.costCenter ? Object.values(oSelectedFilters.costCenter) : null, // Campo opzionale
+                Id_storico: oSelectedFilters.ID_STORICO,
             }
 
-           ]
+            const servicePath = `${this.osUrl}GetTabellaFiltrata`;  // Append the action name with a trailing slash
+            axios.post(servicePath,  requestData)
+                .then((response) => {
+                    this.getView().byId("table").setBusy(false)
+                    oSelectedFiltersModel.setProperty("/matchData", true);
+                    console.log(response.data);  // Handle the response array
+                    let dataFiltered = this.getView().getModel('DataIMA23');
+                    if(typeof response.data === 'object'){
+                        let dataArray = []
+                        dataArray.push(response.data)
+                        
+                        if (dataArray && Array.isArray(dataArray)) {
+                            // Convert each object in the array
+                            let processedData = dataArray[0].value.map(this.convertExponentialValues);
+                            dataFiltered.setData(processedData);
+                            dataFiltered.refresh();
+                        }
+                    } else {
+                        dataFiltered.setData(response.data)
+                        dataFiltered.refresh()
+                    }     
+                    return
+                    
 
 
-
-
-           //RIUTILIZZABILE
-            var oModel = new JSONModel();
-            var filtersModel = new JSONModel();
-            // Loading the mock data that Steve has built
-
-            // Set the data to the model
-            oModel.setData(jsonData);
-            this.getView().setModel(oModel, "repo23Model");
-
-            var oScenarioModel = new JSONModel({ Scenarios: jsonData.map(item => item.Scenario) });
-            var oEntityModel = new JSONModel({ Entities: jsonData.map(item => item.Entity) });
-            var oYearModel = new JSONModel({ Years: jsonData.map(item => item.Year) });
-            var oPeriodModel = new JSONModel({ Periods: jsonData.map(item => item.Period) });
-            var oIcpModel = new JSONModel({ Icps: jsonData.map(item => item.Icp) });
-            var oLeaseNModel = new JSONModel({ LeaseNs: jsonData.map(item => item.Lease_N) });
-            var oCostCenterModel = new JSONModel({ CostCenters: jsonData.map(item => item.Cost_Center) });
-
-            
-            this.getView().setModel(oScenarioModel, "ScenarioModel");
-            this.getView().setModel(oEntityModel, "EntityModel");
-            this.getView().setModel(oYearModel, "YearModel");
-            this.getView().setModel(oPeriodModel, "PeriodModel");
-            this.getView().setModel(oIcpModel, "IcpModel");
-            this.getView().setModel(oLeaseNModel, "LeaseNModel");
-            this.getView().setModel(oCostCenterModel, "CostCenterModel");
-            // filtersModel.setData(this.jsonData.active_filters);
-            // this.getView().setModel(filtersModel, "activeFiltersModel");
-            // this._initializeTables(jsonData);
-        },
-
-        _initializeTables: function (jsonData) {
-            // Flatten all sections into one array
-            var aTableData = this.transformJsonData(jsonData);
-            this._createDynamicTable(aTableData);
-        },
-
-        transformJsonData: function (jsonData) {
-            let aTableRows = [];
-
-            // Iterate over each top-level key (e.g., Land, Building, etc.)
-            Object.keys(jsonData.Data).forEach(fatherNameString => {
-                let sectionData = jsonData.Data[fatherNameString];
-
-                // Add the section (e.g., "Land" or "Building") as a header row
-                aTableRows.push({
-                    journalType: fatherNameString,  // This will serve as the header for the section
-                    account: "",  // Empty account field for the header row
-                    debit: "",    // Empty debit field for the header row
-                    credit: ""    // Empty credit field for the header row
-                });
-
-                // If the section (e.g., "Land") is null, add an empty row
-                if (!sectionData) {
-                    aTableRows.push({
-                        journalType: " ",  // Empty row below the section header
-                        account: " ",
-                        debit: " ",
-                        credit: " "
-                    });
-                    return;  // Move to the next section
-                }
-
-                // If sectionData exists, iterate over its inner objects (e.g., "FX Effect on Opening", "Depreciation RoU")
-                let previousJournalType = null;  // Variable to track previous journal type
-                Object.keys(sectionData).forEach(journalType => {
-                    let journalData = sectionData[journalType];
-
-                    // If journalData is null, insert an empty row for the journal
-                    if (!journalData) {
-                        aTableRows.push({
-                            journalType: journalType,  // Journal Type (e.g., FX Effect on Opening)
-                            account: " ",  // Empty account
-                            debit: "",    // Empty debit
-                            credit: "",   // Empty credit
-                        });
-                        return;
+                })
+                .catch((error) => {
+                    console.error(error)
+                    if (error.response) {
+                        console.error("Server responded with error: ", error.response.status, error.response.data);
+                    } else if (error.request) {
+                        console.error("No response received from server: ", error.request);
+                    } else {
+                        console.error("Axios error: ", error.message);
                     }
-
-                    // Iterate over the accounts inside each journal (e.g., "Lease Liabilities Long Term", "Loss FX Rates")
-                    Object.keys(journalData).forEach(account => {
-                        let debitCreditObjects = journalData[account];
-
-                        // Safely extract Debit and Credit, and handle null values
-                        const debit = debitCreditObjects?.Debit !== null ? debitCreditObjects.Debit.toLocaleString() : "-";
-                        const credit = debitCreditObjects?.Credit !== null ? debitCreditObjects.Credit.toLocaleString() : "-";
-
-                        // Determine if we should display the journalType or leave it blank
-                        let journalTypeDisplay = previousJournalType === journalType ? "" : journalType;
-                        previousJournalType = journalType;
-
-                        // Push a row for each account
-                        aTableRows.push({
-                            journalType: journalTypeDisplay,  // Journal Type (e.g., FX Effect on Opening)
-                            account: account,                 // Account (e.g., Lease Liabilities Long Term)
-                            debit: debit,                     // Debit amount
-                            credit: credit                    // Credit amount
-                        });
-                    });
                 });
 
-                // After processing a section (e.g., "Building"), insert a separator empty row if needed
-                aTableRows.push({
-                    journalType: " ",  // Empty row to act as a separator
-                    account: "",
-                    debit: "",
-                    credit: ""
-                });
-            });
+                
 
-            return aTableRows;
         },
+
+        convertExponentialValues: function (obj) {
+            // Iterate through all properties of the object
+            for (let key in obj) {
+                if (obj.hasOwnProperty(key)) {
+                    // Check if the value is a string representing a number in exponential form
+                    if (typeof obj[key] === 'string' && obj[key].match(/^-?\d+\.?\d*e[+\-]?\d+$/i)) {
+                        // Convert the string to a number
+                        let numberValue = parseFloat(obj[key]);
+                        if (!isNaN(numberValue)) {
+                            // Format the number to Italian style with 2 decimal places
+                            obj[key] = numberValue.toLocaleString('it-IT', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            });
+                        }
+                    }
+                }
+            }
+            return obj;
+        },
+        
+
+
 
         onAfterRendering: function () {
-            this.addEmptyToSelect();
             this.makeTitleObjAttrBold();
-            this.checkFilterFieldsAllFilled();
             this.disableFilterStart();
         },
-
-
-        //------------------------------------------------------------------------------------------------
-
-        checkFilterFieldsAllFilled: function () {
-            // Works dynamically
-
-            const oFilterBar = this.getView().byId("filterbar");
-            const aFilterItems = oFilterBar.getFilterGroupItems();
-            let allValid = true;
-
-            this.filterArray = []
-
-            aFilterItems.forEach(oFilterGroupItem => {
-                // Getting the selected filter parent `name=""` and the filter selected key 
-                // SO IS IMPORTANT THE NAME OF THE FILTERS
-                let filterParentName = oFilterGroupItem.getControl().getParent().getLabel();
-                let filterNameKey = oFilterGroupItem.getControl().getSelectedKey();
-                this.filterArray.push({ [filterParentName]: filterNameKey })
-
-                const oControl = oFilterGroupItem.getControl();
-
-                if (oControl instanceof sap.m.Select) {
-                    const sSelectedKey = oControl.getSelectedKey();
-
-                    if (!sSelectedKey) {
-                        allValid = false;
-                    }
-                }
-            });
-
-
-            return allValid;  // Return true if all values are valid, false if any are empty
-        },
-
-        addEmptyToSelect: function () {
-            const oView = this.getView();
-            const idsToLog = [
-                "scenarioSelection",
-                "entitySelection",
-                "yearSelection",
-                "periodSelection",
-                "icpSelection",
-                "lease_nSelection",
-                "costCenterSelection",
-            ]
-
-            idsToLog.forEach(id => {
-                const oscenarioSelection = oView.byId(id);
-                oscenarioSelection.insertItem(new Item({
-                    key: "",
-                    text: ""  // Empty item
-                }), 0);
-                oscenarioSelection.setSelectedKey("");
-            })
-        },
-
-        //RIUTILIZZABILE
-
-        _createDynamicTable: function (aTableData) {
-            var oTable=this.getView().byId("reportTable")
-            oTable.removeAllColumns();
-            // var oTable = new Table({
-            //     id: "reportTable",
-            //     title: null,
-            //     visibleRowCount: aTableData.length > 0 ? 18 : 0,
-            //     selectionMode: "None"
-            // });
-
-            // Define the columns dynamically based on the structure
-            var aColumns = [
-                { label: "Journal Type", property: "journalType", width: '200px' },
-                { label: "Account", property: "account", width: '230px' },
-                { label: "Debit", property: "debit", width: '50%' },
-                { label: "Credit", property: "credit", width: '50%' },
-            ];
-
-            // Add columns to the table dynamically
-            aColumns.forEach(column => {
-                oTable.addColumn(new Column({
-                    label: new Text({ text: column.label }),
-                    template: new Text().bindText(column.property),
-                    width: column.width
-                }));
-            });
-
-            // Set the model for the table
-            var oTableModel = new JSONModel({ tableRows: aTableData });
-            oTable.setModel(oTableModel);
-            oTable.bindRows("/tableRows");
-            this.setTableHeight(null, oTable)
-            // Add the table to the view
-            // this.getView().byId("tableContainer").addItem(oTable);
-
-            // Call the function to color total rows after the table is created and bound
-            this._colorTotalRows();
-        },
-
-        //-------------------------------------------------------------------------------------------------------------------
-
 
         onSelectionChange: function (oEvent) {
             this.assignReportResume(oEvent);
             this.makeTitleObjAttrBold();
-            
-            // Process data and create tables for each section
-            this.checkFilterFieldsAllFilled();
 
-            if (this.checkFilterFieldsAllFilled()) {
-                this.enableFilterStart(null, true);
+            let oSelectedFiltersModel = this.getView().getModel('selectedFiltersModel');
+            let oSelectedFilters = oSelectedFiltersModel.getData();
+
+            const selectedControl = oEvent.getSource();
+            const controlName = selectedControl.getName();
+            console.log("selected control", selectedControl)
+            console.log("control name", controlName)
+
+            // Update the specific filter in the model
+            if (selectedControl.getMetadata().getName() === "sap.m.MultiComboBox") {
+                // For MultiComboBox, join selected items' keys
+                oSelectedFilters[controlName] = selectedControl.getSelectedKeys();
             } else {
-                this.enableFilterStart(null, false);
+                // For Select and ComboBox, get the selected key
+                oSelectedFilters[controlName] = selectedControl.getSelectedKey();
             }
+
+            // Update the model with new data
+            oSelectedFiltersModel.setData(oSelectedFilters);
+
+            // Check if all required filters are selected
+            let allSelected =
+                oSelectedFilters.Periodo &&
+                    oSelectedFilters.Anno &&
+                    oSelectedFilters.ID_STORICO &&
+                    //(oSelectedFilters.TipoContratto && oSelectedFilters.TipoContratto.length > 0) &&
+                    (oSelectedFilters.Entity && oSelectedFilters.Entity.length > 0) ? true : false;
+
+            // Update allSelected property
+            oSelectedFiltersModel.setProperty("/allSelected", allSelected);
+
+
+
+            this.clearFilter(oEvent)
+
+
+
+            this.selectFiltering();
+
+            // this._bindToolbarText(); // Update toolbar text
+
+            // if (allSelected) {
+            //     this.setEnabledDownload(true);
+            // } else {
+            //     this.setEnabledDownload(false);
+            // }
+        },
+
+
+        clearFilter: function(oEvent) {
+
+            let oSelectedFiltersModel = this.getView().getModel('selectedFiltersModel');
+            let filtriSelezionati = oSelectedFiltersModel.getData();
+
+            const selectedControl = oEvent.getSource();
+            const controlName = selectedControl.getName();
+
+            let aPreviousSelectedKeys = filtriSelezionati[controlName] || [];
+            console.log("vecchie chiavi", aPreviousSelectedKeys)
+
+            switch (controlName) {
+                case "Entity":
+                    if(this.entityKeys == undefined){
+                        let aSelectedKeys = selectedControl.getSelectedKeys();
+                        this.entityKeys = aSelectedKeys.length
+                    } else{
+                        //this.getView().byId("TipoContrattoBox").setSelectedKeys(null)
+                        this.getView().byId("ContrattoBox").setSelectedKeys(null)
+                        this.getView().byId("AnnoSelect").setSelectedKey(null)
+                        this.getView().byId("PeriodoSelect").setSelectedKey(null)
+                       // this.getView().byId("CostCenterBox").setSelectedKeys(null)
+                        this.getView().byId("IdStoricoSelect").setSelectedKey(null)
+                    }
+                    break;
+        
+                // case "TipoContratto":
+                //     if(this.typeContractKeys == undefined){
+                //         let aSelectedKeys = selectedControl.getSelectedKeys();
+                //         this.typeContractKeys = aSelectedKeys.length
+                //     } else{
+                //         this.getView().byId("ContrattoBox").setSelectedKeys(null)
+                //         this.getView().byId("AnnoSelect").setSelectedKey(null)
+                //         this.getView().byId("PeriodoSelect").setSelectedKey(null)
+                //         this.getView().byId("CostCenterBox").setSelectedKeys(null)
+                //         this.getView().byId("IdStoricoSelect").setSelectedKey(null)
+                //     }
+                     
+                //     break;
+        
+                case "Contratto":                    
+                    if(this.contractKeys == undefined){
+                        let aSelectedKeys = selectedControl.getSelectedKeys();
+                        this.contractKeys = aSelectedKeys.length
+                    } else{
+                        this.getView().byId("AnnoSelect").setSelectedKey(null)
+                        this.getView().byId("PeriodoSelect").setSelectedKey(null)
+                  //      this.getView().byId("CostCenterBox").setSelectedKeys(null)
+                        this.getView().byId("IdStoricoSelect").setSelectedKey(null)
+                    }
+                        
+                    break;
+        
+                case "Anno":
+                    if(this.annoKey == undefined){
+                        let aSelectedKey = selectedControl.getSelectedKey();
+                        this.annoKey = aSelectedKey
+                    } else{
+                        this.getView().byId("PeriodoSelect").setSelectedKey(null)
+                   //     this.getView().byId("CostCenterBox").setSelectedKeys(null)
+                        this.getView().byId("IdStoricoSelect").setSelectedKey(null)
+                    }
+                     
+                    break;
+        
+                case "Periodo":
+                    if(this.periodoKey == undefined){
+                        let aSelectedKey = selectedControl.getSelectedKey();
+                        this.periodoKey = aSelectedKey
+                    } else{
+                 //       this.getView().byId("CostCenterBox").setSelectedKeys(null)
+                        this.getView().byId("IdStoricoSelect").setSelectedKey(null)
+                    }
+                           
+                    break;
+        
+                // case "CostCenter":                    
+                //     if(this.cdcKeys == undefined){
+                //         let aSelectedKeys = selectedControl.getSelectedKeys();
+                //         this.cdcKeys = aSelectedKeys.length
+                //     } else{
+                //         this.getView().byId("IdStoricoSelect").setSelectedKey(null)
+                //     }
+                     
+                //     break;  
+                
+                case "ID_STORICO":
+                break;
+                default:
+                    console.error("default, errore nello switch")
+                    break;
+            }
+
+            this.assignReportResume(oEvent);
+            this.makeTitleObjAttrBold();
+        },
+
+
+
+        selectFiltering: function() {
+            
+            const servicePath = `${this.osUrl}applyFilters`;
+
+            let oSelectedFilters = this.getView().getModel('selectedFiltersModel').getData();
+
+            console.log(Object.values(oSelectedFilters.entity));
+            const requestData = {
+                entity: Object.values(oSelectedFilters.entity),
+               // tipoContratto: oSelectedFilters.tipoContratto ? Object.values(oSelectedFilters.tipoContratto) : null,
+                contratto: oSelectedFilters.contratto ? Object.values(oSelectedFilters.contratto) : null, // Campo opzionale
+                year: oSelectedFilters.year,
+                period: oSelectedFilters.period,
+            //    costCenter: oSelectedFilters.costCenter ? Object.values(oSelectedFilters.costCenter) : null, // Campo opzionale
+                Id_storico: oSelectedFilters.ID_STORICO,
+            }
+
+            axios.post(servicePath, requestData)
+            .then((response) => {
+                console.log("dati filtrati test", response.data);  // Handle the response array
+                let oFiltersModel = this.getView().getModel('oFiltersModel')
+              
+                // if(!requestData.tipoContratto || requestData.tipoContratto.length == 0){
+                // oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
+                // oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
+                // oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
+                // oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
+                // oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                // oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                
+                // }
+                
+                if(!requestData.contratto || requestData.contratto.length == 0){
+                    oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
+                    oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
+                    oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
+               //     oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                    oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                    
+                    }
+
+                    if(!requestData.year){
+                        oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
+                        oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
+                    //    oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                        oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                        
+                        }
+
+                if(!requestData.period){
+                    oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
+                //    oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                    oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                    
+                    }
+
+                // if(!requestData.costCenter || requestData.costCenter.length == 0){
+                //     oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                //     oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                    
+                //     }
+                if(!requestData.Id_storico){
+                    oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                    
+                    }
+                   
+                console.log(oFiltersModel.getData().Entity)
+
+
+                
+
+             //   console.log("Tipo Contratto",oFiltersModel.getData().TipoContratto)
+                
+                // {
+                //         Entity: this._elaborateEntities(response.data.BUKRS, response.data.BUTXT),
+                //         TipoContratto: this._sortStringArray(response.data.RECNTYPE),
+                //         Contratto: this._sortStringArray(response.data.RECNNR),
+                //         Periodo: this._elaboratedMonths(response.data.PERIODDUEDATE),
+                //         Anno: this._sortStringArray(response.data.YEARDUEDATE),
+                //         CostCenter: this._sortStringArray(response.data.CDC),
+                //         Id_storico: this._sortStringArray(response.data.ID_STORICO)
+                //     }
+        
+
+                oFiltersModel.refresh()
+                //oSelectedFilters.refresh()
+                console.log('Filters data: ', oFiltersModel.getData());
+                return
+
+            })
+            .catch((error) => {
+                console.error(error)
+                if (error.response) {
+                    console.error("Server responded with error: ", error.response.status, error.response.data);
+                } else if (error.request) {
+                    console.error("No response received from server: ", error.request);
+                } else {
+                    console.error("Axios error: ", error.message);
+                }
+            });
 
         },
 
-        assignReportResume: function (oEvent) {
-            // TODO: is not setting every value
 
-            const selectedSelectObj = oEvent.getSource();
-            const selectedNameString = selectedSelectObj ? selectedSelectObj.getName() : "";
-            const selectedItemText = selectedSelectObj.getSelectedItem().getText();
 
-            // Entering in the elements of the resume in the header of the DynamicPage 
-            const resumeAttributesWrapperElements = this.getView().byId("hLayout");
-            const attributesContent = resumeAttributesWrapperElements.getContent();
+        setEnabledDownload: function (bool) {
+            const excelBtnEl = this.getView().byId("excelBtn");
+            const pdfBtnEl = this.getView().byId("pdfBtn");
 
-            attributesContent.forEach(content => {
-                const objectAttributes = content.getContent();
 
-                objectAttributes.forEach(objAttr => {
-                    if (objAttr instanceof ObjectAttribute) {
-
-                        // Checks between the name of the ObjectAttribute {text:""} and the <Select name="">
-                        if (objAttr.getTitle().toLowerCase() === selectedNameString.toLowerCase()) {
-                            objAttr.setText(selectedItemText);
-
-                            // This .rerender() forces the element to be rendered right away (try removing it)
-                            objAttr.rerender();
-                        }
-
-                    }
-                })
-
-            })
+            excelBtnEl.setEnabled(bool)
+            pdfBtnEl.setEnabled(bool)
 
         },
 
         disableFilterStart: function (oEvent) {
 
             const filterBarEl = this.getView().byId("filterbar");
-            const searchButtonEl = filterBarEl._getSearchButton();;
+            const searchButtonEl = filterBarEl._getSearchButton();
 
             if (searchButtonEl) {
                 searchButtonEl.setEnabled(false);  // Disable the search (or Avvio) button
             }
-        },
-
-        enableFilterStart: function (oEvent, bool) {
-            const filterBarEl = this.getView().byId("filterbar");
-            const searchButtonEl = filterBarEl._getSearchButton();;
-
-            if (searchButtonEl) {
-                searchButtonEl.setEnabled(bool);  // Disable the search (or Avvio) button
-            }
-        },
-
-        applyFilters: function () {
-            const oTable = this.getView().byId("tableContainer").getItems()[0];
-            const aFilters = [];
-
-            this.filterArray.forEach(obj => {
-                const filterParent = Object.keys(obj)[0];
-                const filterValue = obj[filterParent];
-
-                if (filterValue) {
-                    let newFilter = new Filter({
-                        path: filterParent,
-                        value1: filterValue,
-                        FilterOperator: FilterOperator.EQ,
-                    })
-                    aFilters.push(newFilter)
-                }
-            });
-
-            const combinedFilter = new Filter({
-                filters: aFilters,
-                and: true,
-            })
-
-            const binding = oTable.getBinding("rows");
-            binding.filter(combinedFilter)
-        },
-
-
-        //RIUTILIZZABILE
-
-        _colorTotalRows: function () {
-            var oTable = this.getView().byId("reportTable"); // Get the first table in the container
-            var fnApplyStyles = function () {
-                var aRows = oTable.getRows(); // Get all rows in the table
-                var bIsTotalCategory = false; // Flag to track if it's a total category row
-
-                aRows.forEach(function (oRow) {
-                    var oContext = oRow.getBindingContext(); // Get the row's context
-                    var $rowDomFix = oRow._mDomRefs.jQuery.row[0]; // Get the DOM reference of the fixed column
-                    if (oContext && $rowDomFix) {
-                        var sAssetCategory = oContext.getProperty("journalType"); // Get the 'account' property
-
-                        // New Asset Category encountered
-                        if (sAssetCategory === " ") {
-                            bIsTotalCategory = true;
-                        } else {
-                            bIsTotalCategory = false;
-                        }
-                        // Apply styles based on whether it's a total row
-                        if (bIsTotalCategory) {
-
-                            $($rowDomFix).addClass("highlightEnd");
-                        } else {
-                            $($rowDomFix).removeClass("highlightEnd");
-                        }
-                    }
-                });
-            };
-
-            // Attach the event handler to the rowsUpdated event
-            oTable.attachEvent("rowsUpdated", fnApplyStyles);
-
-            // Apply styles initially
-            fnApplyStyles();
-        },
-
-        //---------------------------------------------------------------------------------------------------------------
-
-        onCloseLegend: function (oEvent) {
-            var oPanel = this.byId("legendPanel");
-            oPanel.setVisible(false);  // Collapse the panel (similar to closing it)
-        },
-
-        enableDownloadButtons: function(oEvent, bool) {
-            const excelBtn = this.getView().byId("excelBtn");
-            const pdfBtn = this.getView().byId("pdfBtn");
-
-            
-                excelBtn.setEnabled(bool)
-                pdfBtn.setEnabled(bool)
-         
-            
-        },
-
-        onSearch: function () {
-             
-    var sSelectedEntity = this.byId("entitySelection").getSelectedKey();
-    var sSelectedPeriod = this.byId("periodSelection").getSelectedKey();
-    var sSelectedYear = this.byId("yearSelection").getSelectedKey();
-    var sSelectedScenario = this.byId("scenarioSelection").getSelectedKey();
-    var sSelectedIcp = this.byId("icpSelection").getSelectedKey();
-    var sSelectedLease_n = this.byId("lease_nSelection").getSelectedKey();
-    var sSelectedCostCenter= this.byId("costCenterSelection").getSelectedKey();
-    var oTable = this.byId("tableContainer");
-    var AllIma = this.getView().getModel('repo23Model').getData();
-
-    var aFilteredData = AllIma.filter(function(item) {
-        console.log(item.Lease_N);
-        return (item.Entity == sSelectedEntity) &&
-               (item.Period == sSelectedPeriod) &&
-               (item.Year == sSelectedYear) &&
-               (item.Scenario == sSelectedScenario)&&
-               (item.Icp == sSelectedIcp)&&
-               (item.Lease_N == sSelectedLease_n)&&
-               (item.Cost_Center == sSelectedCostCenter)
-    });
-
-    
-
-    if (aFilteredData.length > 0) {
-        var aData = this.transformJsonData(aFilteredData[0]);
-
-        this._createDynamicTable(aData);
-        // oTable.setModel(oTableModel);
-        // oTable.bindRows("/rows");
-         this.enableDownloadButtons(null, true);
-
-
-        
-    } else{
-        
-        // var oEmptyModel = new JSONModel({ rows: [] });
-        // this._createDynamicTable(oEmptyModel);
-        var oTable=this.getView().byId("reportTable")
-            oTable.removeAllColumns();
-
-        // oTable.setModel(oEmptyModel);
-        // oTable.bindRows("/rows");
-
-        
-        this.enableDownloadButtons(null, false);
-        // this.setEnabledDownload(null, false);
-    }
-
-            // if (this.checkFilterFieldsAllFilled()) {
-            //     const tableContainer = this.getView().byId("tableContainer");
-            //     // Check if the container already contains a table with ID 'reportTable'
-            //     const existingTable = tableContainer.getItems().find(function (oItem) {
-            //         return oItem.getId() === "reportTable";
-            //     });
-
-            //     // Make the table if it's not existing
-            //     if (!existingTable && this.checkFilterFieldsAllFilled()) {
-            //         this._initializeTables(this.jsonData);
-            //         this.getView().byId("emptyTableText").setVisible(false);
-            //         this.enableDownloadButtons(null, true)
-            //         this.applyFilters()
-            //     } else if (!existingTable && !this.checkFilterFieldsAllFilled()) {
-            //         this.getView().byId("emptyTableText").setVisible(true);
-            //         existingTable.destroy();
-            //         this.enableDownloadButtons(null, false)
-            //     } else {
-            //         // this.applyFilters();
-            //         return;
-            //     }
-            // }
-
-            // const oView = this.getView();
-            // const idsToLog = [
-            //     "scenarioSelection",
-            //     "entitySelection",
-            //     "yearSelection",
-            //     "periodSelection",
-            //     "icpSelection",
-            //     "lease_nSelection",
-            //     "costCenterSelection",
-            // ]
-
-            // // Logging them
-            // idsToLog.forEach(id => {
-            //     const oscenarioSelection = oView.byId(id);
-            //     const aSelectedScenarios = oscenarioSelection.getSelectedItem().getText();
-
-            // })
-
-        },
-
-        //RIUTILIZZABILE
-
-        setTableHeight: function(oEvent, oTable) {
-            let iScreenHeight = window.innerHeight;
-            let iScreenWidth = window.innerWidth;
-
-            oTable.setVisibleRowCountMode("Interactive")
-            oTable.setMinAutoRowCount(5)
-            
-            if (iScreenWidth < 450) {
-                let iRowCount = Math.floor(iScreenHeight / 120);  // Assuming each row is around 120px in height
-                oTable.setVisibleRowCount(iRowCount);
-            } else {
-                let iRowCount = Math.floor(iScreenHeight / 80);
-                oTable.setVisibleRowCount(iRowCount);
-            }
-        },
-
-        //-------------------------------------------------------------------------------------------------
-        
-        onDownloadExcel: function () {
-            // var oTable = this.getView().byId("tableContainer").getItems()[0]; // Get the table
-            var oTable = this.getView().byId("reportTable")
-            var oModel = oTable.getModel(); // Get the table's model data
-            var aTableRows = oModel.getProperty("/tableRows"); // Fetch the rows of the table
-
-            // Convert data to a worksheet format using SheetJS
-            var aoa = [["Journal Type", "Account", "Debit", "Credit"]]; // Header
-
-            aTableRows.forEach(function (row) {
-                aoa.push([
-                    row.journalType || "",
-                    row.account || "",
-                    row.debit || "",
-                    row.credit || ""
-                ]);
-            });
-
-            // Create a new Workbook
-            var wb = XLSX.utils.book_new();
-            var ws = XLSX.utils.aoa_to_sheet(aoa); // Convert array to worksheet
-
-            // Append the worksheet to the workbook
-            XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
-
-            // Export the workbook
-            XLSX.writeFile(wb, "tableData.xlsx");
-        },
-
-        onDownloadPdfPress: function () {
-            // var oTableContainer = this.getView().byId("tableContainer");
-            // var oTable = oTableContainer.getItems()[0]; // Get the first table in the container
-            // if (!oTable) {
-            //     console.error("Table not found!");
-            //     return;
-            // }
-            var oTable = this.getView().byId("reportTable")
-
-            var oModel = oTable.getModel();
-            var aTableRows = oModel.getProperty("/tableRows");
-
-            // Define the PDF document structure
-            var docDefinition = {
-                pageSize: 'A4',
-                pageOrientation: 'landscape',
-                header: { text: "Report Periodo di Dicembre", style: 'headerStyle' },
-                footer: function (currentPage, pageCount) {
-                    return { text: currentPage.toString() + ' of ' + pageCount, alignment: 'right', style: 'footerStyle' };
-                },
-                content: [
-                    {
-                        table: {
-                            headerRows: 1,
-                            widths: ['auto', 'auto', 'auto', 'auto'],
-                            body: []
-                        }
-                    }
-                ],
-                styles: {
-                    headerStyle: {
-                        fontSize: 16,
-                        bold: true,
-                        alignment: 'center',
-                        margin: [0, 10, 0, 10]
-                    },
-                    columnHeaderStyle: {
-                        fontSize: 12,
-                        bold: true,
-                        fillColor: '#eeeeee',
-                        alignment: 'center',
-                        margin: [0, 5, 0, 5]
-                    },
-                    cellStyle: {
-                        fontSize: 10,
-                        margin: [0, 5, 0, 5]
-                    },
-                    footerStyle: {
-                        fontSize: 8,
-                        margin: [0, 10, 10, 0]
-                    }
-                }
-            };
-
-            // Define the table headers
-            docDefinition.content[0].table.body.push([
-                { text: "Journal Type", style: 'columnHeaderStyle' },
-                { text: "Account", style: 'columnHeaderStyle' },
-                { text: "Debit", style: 'columnHeaderStyle' },
-                { text: "Credit", style: 'columnHeaderStyle' }
-            ]);
-
-            // Populate the table with data
-            aTableRows.forEach(function (row) {
-                docDefinition.content[0].table.body.push([
-                    { text: row.journalType || "", style: 'cellStyle' },
-                    { text: row.account || "", style: 'cellStyle' },
-                    { text: row.debit || "", style: 'cellStyle' },
-                    { text: row.credit || "", style: 'cellStyle' }
-                ]);
-            });
-
-            // Generate and download the PDF
-            pdfMake.createPdf(docDefinition).download("Report.pdf");
         },
 
         makeTitleObjAttrBold: function () {
@@ -1749,6 +521,735 @@ sap.ui.define([
                 }
             })
         },
+
+        assignReportResume: function (oEvent) {
+            const selectedSelectObj = oEvent.getSource();
+            const selectedNameString = selectedSelectObj ? selectedSelectObj.getLabels()[0].getText() : "";
+            let selectedItemsText = "";
+
+            if (selectedSelectObj.getMetadata().getName() === "sap.m.MultiComboBox") {
+                // Handle MultiComboBox
+                selectedItemsText = selectedSelectObj.getSelectedItems()
+                    .map(item => item.getText())
+                    .join(", ");
+            } else if (selectedSelectObj.getMetadata().getName() === "sap.m.Select") {
+                // Handle Select
+                const selectedItem = selectedSelectObj.getSelectedItem();
+                selectedItemsText = selectedItem ? selectedItem.getText() : "";
+            } else if (selectedSelectObj.getMetadata().getName() === "sap.m.ComboBox") {
+                // Handle ComboBox
+                const selectedItem = selectedSelectObj.getSelectedItem();
+                selectedItemsText = selectedItem ? selectedItem.getText() : "";
+            }
+
+            // Entering in the elements of the resume in the header of the DynamicPage 
+            const resumeAttributesWrapperElements = this.getView().byId("hLayout");
+            const attributesContent = resumeAttributesWrapperElements.getContent();
+
+            attributesContent.forEach(content => {
+                const objectAttributes = content.getContent();
+
+                objectAttributes.forEach(objAttr => {
+                    if (objAttr instanceof ObjectAttribute) {
+
+                        // Checks between the name of the ObjectAttribute {text:""} and the <Select label="">
+                        if (objAttr.getTitle().toLowerCase() === selectedNameString.toLowerCase()) {
+                            objAttr.setText(selectedItemsText);
+
+                            // This .rerender() forces the element to be rendered right away (try removing it)
+                            objAttr.rerender();
+                        }
+
+                    }
+                })
+
+            })
+
+        },
+
+        onCloseLegend: function (oEvent) {
+            var oPanel = this.byId("legendPanel");
+            oPanel.setVisible(false);  // Collapse the panel (similar to closing it)
+        },
+
+        _initializeFilters: function () {
+            console.log("Filters data: ", this.getView().getModel('oFiltersModel'));
+
+
+
+            /* var url = "https://port4004-workspaces-ws-54xj8.eu20.applicationstudio.cloud.sap/odata/v4/catalog/View_All_Data";
+             var urlBase= "https://port4004-workspaces-ws-54xj8.eu20.applicationstudio.cloud.sap/odata/v4/catalog/"
+ 
+             var oTable = this.getView().byId("table"); 
+         
+             // Mostra l'indicatore di caricamento mentre i dati vengono recuperati
+             //oTable.setBusy(true);
+         
+             var that = this;
+         
+             function fetchAllData(url, allData = []) {
+                 axios.get(url)
+                 .then((response) => {
+                     // Aggiunge i dati ottenuti all'array allData
+                     allData = allData.concat(response.data.value);
+         
+                     // Controlla se esiste un '@odata.nextLink' per continuare la paginazione
+                     if (response.data['@odata.nextLink']) {
+                         console.log("Next link for pagination: ", response.data['@odata.nextLink']);
+ 
+                         var urlGetSuccessive = urlBase + response.data['@odata.nextLink'];
+                         fetchAllData(urlGetSuccessive, allData);
+                     } else {
+                         let tableModel = that.getView().getModel('tableModel');
+                         if (!tableModel) {
+                             tableModel = new sap.ui.model.json.JSONModel();
+                             that.getView().setModel(tableModel, 'tableModel');
+                         }
+                         tableModel.setData({ allTableData: allData });
+                         console.log("All records fetched: ", allData.length); 
+         
+                         
+                         var dati = tableModel.getProperty("/allTableData");
+ 
+                        
+                         let oFilterModel = new sap.ui.model.json.JSONModel({
+                             Scenarios: [],
+                             Periods: [],
+                             Years: [],
+                             Entity: []
+                         });
+ 
+                         
+                         if (dati && dati.length > 0) {
+                             
+                             var scenarios = [{ name: "Actual" }, { name: "Budget" }];
+                             var periods = [];
+                             var years = [];
+                             var entities = [];
+ 
+                             dati.forEach((item) => {
+                                 if (item.PERIODDUEDATE && !periods.some(period => period.name === item.PERIODDUEDATE)) {
+                                     periods.push({ name: item.PERIODDUEDATE });
+                                 }
+                             
+                                 if (item.YEARDUEDATE && !years.some(year => year.name === item.YEARDUEDATE)) {
+                                     years.push({ name: item.YEARDUEDATE });
+                                 }
+                             
+                                 if (item.IDENTASSET && !entities.some(entity => entity.name === item.IDENTASSET)) {
+                                     entities.push({ name: item.IDENTASSET });
+                                 }
+                             });
+ 
+                             
+                             oFilterModel.setData({
+                                 Scenarios: scenarios,
+                                 Periods: periods,
+                                 Years: years,
+                                 Entity: entities
+                             });
+ 
+                             // Imposta il modello sulla vista
+                             that.getView().setModel(oFilterModel, 'filterModel');
+                             
+                         } else {
+                             console.log("No data available in tableModel to populate filterModel.");
+                         }
+ 
+                     }
+                 })
+                 .catch((error) => {
+                     console.error("Error fetching data: ", error);
+                     // Nasconde l'indicatore di caricamento anche in caso di errore
+                     //oTable.setBusy(false);
+ 
+                 });
+                 
+             }
+         
+             // Inizializza il fetch dei dati
+             fetchAllData(url); */
+
+            // let oFilterModel = new JSONModel({
+            //     Scenarios: [{ name: "Actual" }, { name: "Budget" }],
+            //     Periods: [{ name: "January" }, { name: "February" }, { name: "December" }],
+            //     Years: [{ name: "2021" }, { name: "2022" }, { name: "2023" }],
+            //     Entity: [{ name: "IMA - Industria Macchine Automatiche" }, { name: "COMADIS SPA" }, { name: "ILAPAK INTERNATIONAL SA" }]
+            // });
+            // this.getView().setModel(oFilterModel, 'filterModel');
+        },
+
+        _matchData: function () {
+            let dataFilter = this.getView().getModel('selectedFiltersModel').getData();
+            // let dataFromJSON = this.getView().getModel('tableModel').getData();
+
+            // console.log(dataFilter, dataFromJSON);
+            this.getView().setModel(new JSONModel(), "DataIMA23");
+            var arrayFiltrato = []
+
+            // dataFromJSON.allTableData
+            //     .filter(el => {
+            //         if (el.IDENTASSET === dataFilter.entity &&
+            //             el.YEARDUEDATE === dataFilter.year &&
+            //             el.PERIODDUEDATE === dataFilter.period) {
+            //             arrayFiltrato.push(el)
+            //         }
+            //     });
+            this.getView().getModel("DataIMA23").setData(arrayFiltrato)
+            this.getView().getModel("DataIMA23").refresh()
+            console.log(this.getView().getModel("DataIMA23"))
+
+            // const keyMapping = {e
+            //     entity: "Entity",
+            //     period: "Period",
+            //     scenario: "Scenario",
+            //     year: "Year"
+            // };
+
+            // // Compare data using the keyMapping
+            // return Object.keys(dataFilter).filter(el => el !== 'allSelected').every(key => {
+            //     const jsonKey = keyMapping[key];
+            //     if (!dataFilter[key]) return true; // Skip null filters
+            //     return dataFromJSON[jsonKey] === dataFilter[key];
+            // });
+        },
+
+        onSearch: function () {
+
+            // let oSelectedFiltersModel = this.getView().getModel('selectedFiltersModel');
+            // let dataFilled = Object.values(oSelectedFiltersModel.getData()).every(filter => filter != null);
+
+
+            // oSelectedFiltersModel.setProperty("/matchData", false);
+            // if (dataFilled) {
+            //     const result = this._matchData();
+            //     if (!result) {
+            //         oSelectedFiltersModel.setProperty("/matchData", false);
+            //         var oTable = this.byId("table");
+
+            //         var oEmptyModel = new JSONModel({ rows: [] });
+            //         oTable.setModel(oEmptyModel);
+            //         oTable.unbindRows();
+            //         sap.m.MessageToast.show("No report found");
+
+            //         return;
+            //     } else {
+            //         oSelectedFiltersModel.setProperty("/matchData", true);
+            //     }
+
+            //     const dataFromJSON = this.getView().getModel('DataIMA23');
+            //     this._loadData(dataFromJSON); // Load filtered data into table
+
+            // }
+
+
+            this.getTableData()
+        },
+
+        _loadData: function (oModel) {
+            var oTable = this.byId("table");
+            if (oModel) {
+                var aData = this._prepareData(oModel.getData().Leases);
+                var oTableModel = new JSONModel({ rows: aData });
+                oTable.setModel(oTableModel);
+                oTable.bindRows("/rows");
+                this._createColumns(aData);
+                this._colorTotalRows();
+                this.setTableHeight(null, oTable)
+            }
+        },
+
+        // _prepareData: function (leasesData) {
+        //     var aRows = [];
+
+        //     // Loop through all categories of leases
+        //     for (const category in leasesData) {
+        //         if (Array.isArray(leasesData[category])) {
+        //             // Handle non-Summary lease categories (e.g., Buildings, Cars in pool)
+        //             leasesData[category].forEach(item => {
+        //                 let oRowData = { "Category": category };  // Add category name as a column
+        //                 for (let key in item) {
+        //                     oRowData[key] = item[key] === null ? "-" : item[key];
+        //                 }
+        //                 aRows.push(oRowData);
+        //             });
+        //         } else if (category === "Summary") {
+        //             // Handle the Summary section separately
+        //             let summaryData = leasesData[category];
+        //             for (const subCategory in summaryData) {
+        //                 let summaryRow = { "Category": subCategory };
+        //                 let summaryValues = summaryData[subCategory];
+
+        //                 for (let key in summaryValues) {
+        //                     summaryRow[key] = summaryValues[key] === null ? "-" : summaryValues[key];
+        //                 }
+        //                 // Mark this row as a summary row
+        //                 summaryRow["_isTotal"] = true;
+        //                 aRows.push(summaryRow);
+        //             }
+        //         }
+        //     }
+
+        //     return aRows;
+        // },
+
+
+
+        _prepareData: function (leasesData) {
+            var aRows = [];
+            var lastCategory = "";  // Per tenere traccia dell'ultima categoria usata
+
+            // Loop attraverso tutte le categorie di leases
+            for (const category in leasesData) {
+                if (Array.isArray(leasesData[category])) {
+                    // Gestisci categorie non-Summary (es: Buildings, Cars in pool)
+                    leasesData[category].forEach(item => {
+                        let oRowData = { "Category": category === lastCategory ? "" : category };  // Evita di ripetere la categoria
+
+                        // Aggiorna lastCategory per le prossime iterazioni
+                        lastCategory = category;
+
+                        // Aggiungi gli altri dati
+                        for (let key in item) {
+                            oRowData[key] = item[key] === null ? "-" : item[key];
+                        }
+                        aRows.push(oRowData);
+                    });
+                } else if (category === "Summary") {
+                    // Gestisci la sezione Summary separatamente
+                    let summaryData = leasesData[category];
+                    for (const subCategory in summaryData) {
+                        let summaryRow = { "Category": subCategory === lastCategory ? "" : subCategory };
+                        let summaryValues = summaryData[subCategory];
+
+                        // Aggiorna lastCategory per evitare ripetizioni
+                        lastCategory = subCategory;
+
+                        for (let key in summaryValues) {
+                            summaryRow[key] = summaryValues[key] === null ? "-" : summaryValues[key];
+                        }
+                        // Marca questa riga come riga di riepilogo
+                        summaryRow["_isTotal"] = true;
+                        aRows.push(summaryRow);
+                    }
+                }
+            }
+
+            return aRows;
+        },
+
+
+        _createColumns: function (aData) {
+            var oTable = this.byId("table");
+            var aExistingColumns = new Set();
+            Object.keys(aData[0] || {}).forEach(sColumnName => {
+                if (!aExistingColumns.has(sColumnName)) {
+                    this._addColumn(sColumnName);
+                    aExistingColumns.add(sColumnName);
+                }
+            });
+        },
+
+        _addColumn: function (sColumnName) {
+            var oTable = this.byId("table");
+            var oColumn = new sap.ui.table.Column({
+                label: new sap.m.Label({ text: sColumnName }),
+                template: new sap.m.Text({ text: "{" + sColumnName + "}" }),
+                width: "11rem"
+            });
+            oTable.addColumn(oColumn);
+        },
+
+        setTableHeight: function (oEvent, oTable) {
+            let iScreenHeight = window.innerHeight;
+            let iScreenWidth = window.innerWidth;
+            if (iScreenWidth < 450) {
+                let iRowCount = Math.floor(iScreenHeight / 100);  // Assuming each row is around 100px in height
+                oTable.setVisibleRowCount(iRowCount);
+            } else {
+                let iRowCount = Math.floor(iScreenHeight / 80);  // Assuming each row is around 100px in height
+                oTable.setVisibleRowCount(iRowCount);
+            }
+        },
+
+        _colorTotalRows: function () {
+            var oTable = this.byId("table");
+            var fnApplyStyles = function () {
+                var aRows = oTable.getRows(); // Get all visible rows
+
+                aRows.forEach(function (oRow) {
+                    var oContext = oRow.getBindingContext(); // Get row context (data)
+                    var $rowDom = oRow._mDomRefs.jQuery.row[1]; // Get DOM reference of row
+                    var $rowDomFix = oRow._mDomRefs.jQuery.row[0]; // Get fixed column DOM reference
+
+                    if (oContext && ($rowDom || $rowDomFix)) {
+                        // Fetch the row data (e.g., Category and _isTotal)
+                        var sCategory = oContext.getProperty("Category");
+                        var bIsTotal = oContext.getProperty("_isTotal");
+
+                        // Check if the row belongs to the 'Total' category and is marked as a total row
+                        if (sCategory === "Total" && bIsTotal === true) {
+                            // Add the CSS class to highlight the total row
+                            $($rowDom).addClass("highlightRow");
+                            $($rowDomFix).addClass("highlightRow");
+                        } else {
+                            // Remove the CSS class in case it was previously added
+                            $($rowDom).removeClass("highlightRow");
+                            $($rowDomFix).removeClass("highlightRow");
+                        }
+                    }
+                });
+            };
+
+            // Attach the event handler to the rowsUpdated event to ensure styles are applied after rendering
+            oTable.attachEvent("rowsUpdated", fnApplyStyles);
+            // Apply styles initially as well
+            fnApplyStyles();
+        },
+
+
+        _bindToolbarText: function () {
+            let oSelectedFilters = this.getView().getModel('selectedFiltersModel').getData();
+            let sInfoText = `Scenario: ${oSelectedFilters.scenario || "-"} - Period: ${oSelectedFilters.period || "-"} - Year: ${oSelectedFilters.year || "-"} - Entity: ${oSelectedFilters.entity || "-"}`;
+            // this.byId("dynamicInfoText").setText(sInfoText);
+        },
+
+        onDownloadExcelPress: function () {
+            var oTable = this.byId("table");  // Reference to the table control
+            var oModel = oTable.getModel();  // Access the model of the table
+            var aData = oTable.getBinding('rows').oList;  // Get the data from the model
+            var aCols = this._createColumnConfig();  // Create dynamic column configuration
+
+            // Excel Export settings
+            var oSettings = {
+                workbook: {
+                    columns: aCols,  // Dynamic columns based on data
+                    context: {
+                        sheetName: 'Exported Data'  // Name of the Excel sheet
+                    },
+                    // Define custom styles for the Excel export
+                    styles: [
+                        {
+                            id: "header",  // Style ID for headers
+                            fontSize: 12,  // Font size
+                            fontColor: "#ffffff",  // Font color (white)
+                            backgroundColor: "#808080",  // Background color (grey)
+                            bold: true,  // Bold font
+                            hAlign: "Center",  // Center alignment
+                            border: {
+                                top: { style: "thin", color: "#000000" },  // Top border
+                                bottom: { style: "thin", color: "#000000" },  // Bottom border
+                                left: { style: "thin", color: "#000000" },  // Left border
+                                right: { style: "thin", color: "#000000" }  // Right border
+                            }
+                        },
+                        {
+                            id: "content",  // Style ID for content cells
+                            fontSize: 10,  // Font size
+                            hAlign: "Left",  // Left alignment
+                            border: {
+                                top: { style: "thin", color: "#000000" },  // Top border
+                                bottom: { style: "thin", color: "#000000" },  // Bottom border
+                                left: { style: "thin", color: "#000000" },  // Left border
+                                right: { style: "thin", color: "#000000" }  // Right border
+                            }
+                        }
+                    ]
+                },
+                dataSource: aData,  // Data source for the export
+                fileName: 'ExportedData.xlsx',  // File name for the exported file
+                worker: false  // Disable worker threads for simplicity
+            };
+
+            // Create a new instance of the Spreadsheet export utility
+            var oSheet = new Spreadsheet(oSettings);
+            oSheet.build()  // Build the Excel file
+                .then(function () {
+                    sap.m.MessageToast.show('Excel export successful!');  // Show success message
+                })
+                .finally(function () {
+                    oSheet.destroy();  // Clean up the export utility
+                });
+        },
+        
+
+        onDownloadPdfPress: function () {
+            // Ottieni il modello associato alla tabella
+            var oTable = this.byId("table");
+            var oBinding = oTable.getBinding("rows");
+        
+            // Estrai i dati mappati per ogni riga
+            var odata = oBinding.getContexts().map(function (oContext) {
+                return oContext.getObject();
+            });
+        
+            // Definisci la struttura del PDF
+            var docDefinition = {
+                pageSize: 'A4',
+                pageOrientation: 'landscape',
+                footer: { text: new Date().toLocaleString(), style: ['footerStyle'] },
+                content: [],
+                styles: {
+                    headerStyle: {
+                        fontSize: 20,
+                        bold: true,
+                        alignment: 'center',
+                        margin: [0, 10, 0, 25]
+                    },
+                    columnStyle: {
+                        fontSize: 13,
+                        bold: true,
+                        alignment: 'center',
+                        margin: [0, 10, 0, 0]
+                    },
+                    cellStyle: {
+                        fontSize: 10,
+                    },
+                    footerStyle: {
+                        fontSize: 7,
+                        alignment: 'right',
+                        margin: [0, 10, 10, 0]
+                    }
+                }
+            };
+        
+            // Suddivisione delle colonne in gruppi di massimo 5
+            var columns = [
+                "ACC_SECTOR", "ACCUMULATED_DEPRECIATION", "RIGHT_OF_USE", "ASSET_CLASS", 
+                "BUKRS", "CONTRACT_CODE", "CONTRACT_DESCRIPTION", "DEPRECIATION", 
+                "CLOSING_LEASES_LIABILITIES", "INTERCOMPANY", "LEASE_COST", 
+                "CDNET_RIGHT_OF_USEC", "CDC", "CDC_CODE", "YTD_INTEREST", 
+                "GAIN_FX_RATES", "LOSS_FX_RATES"
+            ];
+        
+            // Calcola quante sezioni (o pagine) con colonne divise sono necessarie
+            for (let i = 0; i < columns.length; i += 5) {
+                let pageColumns = columns.slice(i, i + 5);
+                
+                // Struttura la tabella per questa sezione
+                let tableBody = [];
+        
+                // Aggiungi l'intestazione
+                let headerRow = pageColumns.map(col => ({ text: col, style: ['columnStyle'] }));
+                tableBody.push(headerRow);
+        
+                // Popola i dati delle righe nel PDF, solo per le colonne di questa sezione
+                odata.forEach(function (rowData) {
+                    let row = [];
+                    pageColumns.forEach(col => {
+                        row.push({ text: rowData[col] || "-", style: ['cellStyle'] });
+                    });
+                    tableBody.push(row);
+                });
+        
+                // Aggiungi la tabella della sezione al contenuto del PDF come nuova pagina
+                docDefinition.content.push({
+                    table: {
+                        widths: Array(pageColumns.length).fill('auto'),
+                        body: tableBody
+                    },
+                    pageBreak: 'after' // Imposta un'interruzione di pagina dopo ogni tabella
+                });
+            }
+        
+            // Rimuove l'ultima interruzione di pagina per evitare una pagina vuota alla fine
+            if (docDefinition.content.length > 0) {
+                delete docDefinition.content[docDefinition.content.length - 1].pageBreak;
+            }
+        
+            // Crea e scarica il PDF
+            pdfMake.createPdf(docDefinition).download();
+        },
+        
+        
+
+
+        _createColumnConfig: function () {
+            var oTable = this.byId("table");
+            var aColumns = oTable.getColumns();
+            return aColumns.map(oColumn => ({
+                label: oColumn.getLabel().getText(),
+                property: oColumn.getLabel().getText(),
+                type: 'string'
+            }));
+        },
+        // getDataMock: function () {
+        //     // Set JSON data to the model
+        //     let oData = {
+        //         "Entity": "ILAPAK INTERNATIONAL SA",
+        //         "Scenario": "Actual",
+        //         "Period": "December",
+        //         "Year": "2023",
+        //         "Leases": {
+        //             "Buildings": [
+        //                 {
+        //                     "Asset Class": "Building",
+        //                     "Intercompany": "None",
+        //                     "CDC": "SPESE GENERALIDI GRUPPO",
+        //                     "Sector": "SPESE GENERALI",
+        //                     "Contract Description": "Affitto nuovo immobile",
+        //                     "Lease N.": "IIN4298",
+        //                     "Net Right of Use": 1134683,
+        //                     "Closing Leases Liabilities": 1496413,
+        //                     "Lease Liabilities Short Term": 200664,
+        //                     "Lease Liabilities Long Term": 1295749,
+        //                     "Depreciation": -236682,
+        //                     "FX Rates Gain": 194931,
+        //                     "FX Rates Loss": -38534
+        //                 },
+        //                 {
+        //                     "Asset Class": "Building",
+        //                     "Intercompany": "none",
+        //                     "CDC": "SPESE GENERALIDI GRUPPO",
+        //                     "Sector": "SPAZI ATTR Lugano",
+        //                     "Contract Description": "Affitto nuovo immobile",
+        //                     "Lease N.": "IIN4225",
+        //                     "Net Right of Use": 4371810,
+        //                     "Closing Leases Liabilities": 5765516,
+        //                     "Lease Liabilities Short Term": 773138,
+        //                     "Lease Liabilities Long Term": 4992378,
+        //                     "Depreciation": -911910,
+        //                     "FX Rates Gain": 751046,
+        //                     "FX Rates Loss": -148469
+        //                 },
+        //                 {
+        //                     "Asset Class": "Building",
+        //                     "Intercompany CDC": "None",
+        //                     "Sector": "SPAZI ATTR Lugano",
+        //                     "Contract Description": "Affitto vecchio immobile",
+        //                     "Lease N.": "IIN4225",
+        //                     "Net Right of Use": 4782416,
+        //                     "Closing Leases Liabilities": 6307020,
+        //                     "Lease Liabilities Short Term": 845752,
+        //                     "Lease Liabilities Long Term": 5461268,
+        //                     "Depreciation": -997558,
+        //                     "FX Rates Gain": 821585,
+        //                     "FX Rates Loss": -162413
+        //                 }
+        //             ],
+        //             "Cars in pool": [
+        //                 {
+        //                     "Asset Class": "Cars in pool",
+        //                     "Intercompany CDC": "None",
+        //                     "Sector": "COSTI COMUNI OPERATIONS",
+        //                     "Contract Description": "Leasing auto",
+        //                     "Lease N.": "IIN2424",
+        //                     "Net Right of Use": 2397,
+        //                     "Closing Leases Liabilities": 2992,
+        //                     "Lease Liabilities Short Term": 2992,
+        //                     "Depreciation": -3419,
+        //                     "FX Rates Gain": 3371,
+        //                     "FX Rates Loss": -169
+        //                 },
+        //                 {
+        //                     "Asset Class": "Cars in pool",
+        //                     "Intercompany CDC": "None",
+        //                     "Sector": "ASSISTENZA TEC GRUPPO IMA",
+        //                     "Contract Description": "Leasing auto",
+        //                     "Lease N.": "IIN3422",
+        //                     "Net Right of Use": 2397,
+        //                     "Closing Leases Liabilities": 2992,
+        //                     "Lease Liabilities Short Term": 2992,
+        //                     "Depreciation": -3419,
+        //                     "FX Rates Gain": 3371,
+        //                     "FX Rates Loss": -169
+        //                 },
+        //                 {
+        //                     "Asset Class": "Cars in pool",
+        //                     "Intercompany CDC": "None",
+        //                     "Sector": "RICAMBI",
+        //                     "Contract Description": "LEASING AUTO GD595BC",
+        //                     "Lease N.": "IIN4213",
+        //                     "Net Right of Use": 2031,
+        //                     "Closing Leases Liabilities": 2059,
+        //                     "Lease Liabilities Short Term": 2059,
+        //                     "Depreciation": -2256,
+        //                     "FX Rates Gain": 2216,
+        //                     "FX Rates Loss": 0
+        //                 }
+        //             ],
+        //             "Cars in benefit": [
+        //                 {
+        //                     "Asset Class": "Cars in benefit",
+        //                     "Intercompany CDC": "None",
+        //                     "Sector": "ACQUISTI E SPEDIZIONI",
+        //                     "Contract Description": "LEASING AUTO GC978PH",
+        //                     "Lease N.": "IIN4217",
+        //                     "Net Right of Use": 1788,
+        //                     "Closing Leases Liabilities": 1813,
+        //                     "Lease Liabilities Short Term": 1813,
+        //                     "Depreciation": -2184,
+        //                     "FX Rates Gain": 2145,
+        //                     "FX Rates Loss": 0
+        //                 },
+        //                 {
+        //                     "Asset Class": "Cars in benefit",
+        //                     "Intercompany CDC": "None",
+        //                     "Sector": "DIREZIONE UFFICIO TECNICO",
+        //                     "Contract Description": "LEASING AUTO GE716CK",
+        //                     "Lease N.": "IIN4216",
+        //                     "Net Right of Use": 4828,
+        //                     "Closing Leases Liabilities": 4894,
+        //                     "Lease Liabilities Short Term": 3911,
+        //                     "Lease Liabilities Long Term": 984,
+        //                     "Depreciation": -3942,
+        //                     "FX Rates Gain": 3862,
+        //                     "FX Rates Loss": 0
+        //                 },
+        //                 {
+        //                     "Asset Class": "Cars in benefit",
+        //                     "Intercompany CDC": "None",
+        //                     "Sector": "DIREZIONE VENDITE",
+        //                     "Contract Description": "LEASING AUTO TI265703",
+        //                     "Lease N.": "IIN4220",
+        //                     "Net Right of Use": 8068,
+        //                     "Closing Leases Liabilities": 9697,
+        //                     "Lease Liabilities Short Term": 6830,
+        //                     "Lease Liabilities Long Term": 2866,
+        //                     "Depreciation": -6571,
+        //                     "FX Rates Gain": 6436,
+        //                     "FX Rates Loss": -1066
+        //                 }
+        //             ],
+        //             "Summary": {
+        //                 "Building": {
+        //                     "Net Right of Use": 10288910,
+        //                     "Closing Leases Liabilities": 13568950,
+        //                     "Lease Liabilities Short Term": 1819554,
+        //                     "Lease Liabilities Long Term": 11749396,
+        //                     "Depreciation": -2146149,
+        //                     "FX Rates Gain": 1767562,
+        //                     "FX Rates Loss": -349417,
+        //                     "Total Gain/Loss": 936895
+        //                 },
+        //                 "Other tangible fixed assets": {
+        //                     "Net Right of Use": 162676,
+        //                     "Closing Leases Liabilities": 181583,
+        //                     "Lease Liabilities Short Term": 119750,
+        //                     "Lease Liabilities Long Term": 61833,
+        //                     "Depreciation": -173727,
+        //                     "FX Rates Gain": 170037,
+        //                     "FX Rates Loss": -6440,
+        //                     "Total Gain/Loss": 12451
+        //                 },
+        //                 "Total": {
+        //                     "Net Right of Use": 10451586,
+        //                     "Closing Leases Liabilities": 13750533,
+        //                     "Lease Liabilities Short Term": 1939304,
+        //                     "Lease Liabilities Long Term": 11811229,
+        //                     "Depreciation": -2319877,
+        //                     "FX Rates Gain": 1937599,
+        //                     "FX Rates Loss": -355857,
+        //                     "Total Gain/Loss": 949346
+        //                 }
+        //             }
+        //         }
+        //     };
+        //     let oModel = new JSONModel(oData);
+        //     this.getView().setModel(oModel, "DataIMA23");
+        // }
+    });
+});
 
         //FILTRI DELLA 22
 
@@ -1804,12 +1305,12 @@ sap.ui.define([
         // _matchData: function () {
         //     let dataFilter = this.getView().getModel('selectedFiltersModel').getData();
 
-        //     this.getView().setModel(new JSONModel(), "DataIMA22");
+        //     this.getView().setModel(new JSONModel(), "DataIMA23");
         //     var arrayFiltrato = []
 
-        //     this.getView().getModel("DataIMA22").setData(arrayFiltrato)
-        //     this.getView().getModel("DataIMA22").refresh()
-        //     console.log(this.getView().getModel("DataIMA22"))
+        //     this.getView().getModel("DataIMA23").setData(arrayFiltrato)
+        //     this.getView().getModel("DataIMA23").refresh()
+        //     console.log(this.getView().getModel("DataIMA23"))
 
         // },
 
@@ -1874,8 +1375,109 @@ sap.ui.define([
         //         });
         // },
 
+        //-------------------------------------------------------------------------------------------------------
+        //cascade filtering
+
+        // selectFiltering: function() {
+            
+        //     const servicePath = `${this.osUrl}applyFilters`;
+
+        //     let oSelectedFilters = this.getView().getModel('selectedFiltersModel').getData();
+
+        //     console.log(Object.values(oSelectedFilters.entity));
+        //     const requestData = {
+        //         entity: Object.values(oSelectedFilters.entity),
+        //         tipoContratto: oSelectedFilters.tipoContratto ? Object.values(oSelectedFilters.tipoContratto) : null,
+        //         contratto: oSelectedFilters.contratto ? Object.values(oSelectedFilters.contratto) : null, // Campo opzionale
+        //         year: oSelectedFilters.year,
+        //         period: oSelectedFilters.period,
+        //         costCenter: oSelectedFilters.costCenter ? Object.values(oSelectedFilters.costCenter) : null, // Campo opzionale
+        //         Id_storico: oSelectedFilters.ID_STORICO,
+        //     }
+
+        //     axios.post(servicePath, requestData)
+        //     .then((response) => {
+        //         console.log("dati filtrati test", response.data);  // Handle the response array
+        //         let oFiltersModel = this.getView().getModel('oFiltersModel')
+              
+        //         if(!requestData.tipoContratto || requestData.tipoContratto.length == 0){
+        //         oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
+        //         oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
+        //         oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
+        //         oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
+        //         oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+        //         oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                
+        //         }
+                
+        //         if(!requestData.contratto || requestData.contratto.length == 0){
+        //             oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
+        //             oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
+        //             oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
+        //             oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+        //             oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                    
+        //             }
+
+        //             if(!requestData.year){
+        //                 oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
+        //                 oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
+        //                 oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+        //                 oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                        
+        //                 }
+
+        //         if(!requestData.period){
+        //             oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
+        //             oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+        //             oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                    
+        //             }
+
+        //         if(!requestData.costCenter || requestData.costCenter.length == 0){
+        //             oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+        //             oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                    
+        //             }
+        //         if(!requestData.Id_storico){
+        //             oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                    
+        //             }
+                   
+        //         console.log(oFiltersModel.getData().Entity)
 
 
+                
 
-    });
-    });
+        //         console.log("Tipo Contratto",oFiltersModel.getData().TipoContratto)
+                
+        //         // {
+        //         //         Entity: this._elaborateEntities(response.data.BUKRS, response.data.BUTXT),
+        //         //         TipoContratto: this._sortStringArray(response.data.RECNTYPE),
+        //         //         Contratto: this._sortStringArray(response.data.RECNNR),
+        //         //         Periodo: this._elaboratedMonths(response.data.PERIODDUEDATE),
+        //         //         Anno: this._sortStringArray(response.data.YEARDUEDATE),
+        //         //         CostCenter: this._sortStringArray(response.data.CDC),
+        //         //         Id_storico: this._sortStringArray(response.data.ID_STORICO)
+        //         //     }
+        
+
+        //         oFiltersModel.refresh()
+        //         //oSelectedFilters.refresh()
+        //         console.log('Filters data: ', oFiltersModel.getData());
+        //         return
+
+        //     })
+        //     .catch((error) => {
+        //         console.error(error)
+        //         if (error.response) {
+        //             console.error("Server responded with error: ", error.response.status, error.response.data);
+        //         } else if (error.request) {
+        //             console.error("No response received from server: ", error.request);
+        //         } else {
+        //             console.error("Axios error: ", error.message);
+        //         }
+        //     });
+
+        // },
+

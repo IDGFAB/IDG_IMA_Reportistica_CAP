@@ -6,7 +6,7 @@
     xmlns:fb="sap.ui.comp.filterbar"
     xmlns:table="sap.ui.table"
     xmlns:core="sap.ui.core">
-    <f:DynamicPage id="page" title="{i18n>title}">
+    <f:DynamicPage id="page">
         <f:title>
             <f:DynamicPageTitle id="pageTitleWrapper">
                 <f:heading>
@@ -14,8 +14,10 @@
                 </f:heading>
             </f:DynamicPageTitle>
         </f:title>
+
+        <!-- Filter Bar -->
         <f:header>
-            <f:DynamicPageHeader id="dynamicHeader">
+            <f:DynamicPageHeader pinnable="false" blocked="false">
                 <layout:HorizontalLayout id="hLayout" allowWrapping="true">
                     <layout:VerticalLayout id="vLayout" class="sapUiMediumMarginEnd">
                         <ObjectAttribute title="Entity" text="" />
@@ -29,70 +31,56 @@
                         <ObjectAttribute title="ID Storico" text="" />
                     </layout:VerticalLayout>
                 </layout:HorizontalLayout>
-
                 <f:content>
-                   <fb:FilterBar id="filterbar" useToolbar="false" search=".onSearch" filterChange=".onFilterChange" afterVariantLoad=".onAfterVariantLoad">
+
+                    <fb:FilterBar id="filterbar" persistencyKey="myPersKey" useToolbar="false" search=".onSearch" afterVariantLoad=".onAfterVariantLoad" searchEnabled="{selectedFiltersModel>/allSelected}">
                         <fb:filterGroupItems>
-                            <fb:FilterGroupItem name="scenario" label="Scenario" groupName="Group1" visibleInFilterBar="true">
+                            <!-- Entity Filter -->
+                            <fb:FilterGroupItem  name="Entity" label="Entity" groupName="Group1" visibleInFilterBar="true">
                                 <fb:control>
-                                    <Select forceSelection="false" name="Scenario" change=".onSelectionChange" items="{ path: 'ScenarioModel>/Scenarios' }" id="scenarioSelection">
-                                        <core:Item  key="{ScenarioModel>}" text="{ScenarioModel>}" />
+                                    <MultiComboBox id="EntityBox" name="Entity" showSelectAll="true" selectionChange=".onSelectionChange" items="{ path: 'oFiltersModel>/Entity', sorter: { path: 'description' }
+                                            }" selectedKeys="{selectedFiltersModel>/entity}" required="true" showClearIcon="true">
+                                        <core:Item key="{oFiltersModel>ID}" text="{oFiltersModel>description}" />
+                                    </MultiComboBox>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                        
+                            <!-- Contratto Filter -->
+                            <fb:FilterGroupItem name="Contratto" label="Contract" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <MultiComboBox id="ContrattoBox" name="Contratto" showSelectAll="true" selectionChange=".onSelectionChange" items="{ path: 'oFiltersModel>/Contratto' }" selectedKeys="{selectedFiltersModel>/contratto}" showClearIcon="true" enabled="{= ${selectedFiltersModel>/tipoContratto} &amp;&amp; ${selectedFiltersModel>/tipoContratto}.length > 0 &amp;&amp; ${selectedFiltersModel>/entity} &amp;&amp; ${selectedFiltersModel>/entity}.length > 0 ? true : false }">
+                                        <core:Item key="{oFiltersModel>}" text="{oFiltersModel>}" />
+                                    </MultiComboBox>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <!-- Anno Filter -->
+                            <fb:FilterGroupItem name="Anno" label="Year" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <Select id="AnnoSelect" name="Anno"  enabled="{=  ${selectedFiltersModel>/entity} &amp;&amp; ${selectedFiltersModel>/entity}.length > 0 ? true : false }" change=".onSelectionChange" forceSelection="false" items="{ path: 'oFiltersModel>/Anno' }" selectedKey="{selectedFiltersModel>/year}" required="true">
+                                        <core:Item key="{oFiltersModel>}" text="{oFiltersModel>}" />
                                     </Select>
                                 </fb:control>
                             </fb:FilterGroupItem>
-                            <fb:FilterGroupItem name="entity" label="Entity" groupName="Group1" visibleInFilterBar="true" id="groupFilter">
+                            <!-- Periodo Filter -->
+                            <fb:FilterGroupItem name="Periodo" label="Period" groupName="Group1" visibleInFilterBar="true">
                                 <fb:control>
-                                    <Select forceSelection="false" name="Entity" change=".onSelectionChange" items="{ path: 'EntityModel>/Entities' }" id="entitySelection">
-                                        <core:Item key="{EntityModel>}" text="{EntityModel>}" />
+                                    <Select id="PeriodoSelect" name="Periodo"  enabled="{= ${selectedFiltersModel>/year} &amp;&amp; ${selectedFiltersModel>/year}.length > 0  &amp;&amp; ${selectedFiltersModel>/entity} &amp;&amp; ${selectedFiltersModel>/entity}.length > 0 ? true : false }" change=".onSelectionChange" selectedKey="{selectedFiltersModel>/period}" forceSelection="false" items="{ path: 'oFiltersModel>/Periodo' }" required="true">
+                                        <core:Item key="{oFiltersModel>ID}" text="{oFiltersModel>description}" />
                                     </Select>
                                 </fb:control>
                             </fb:FilterGroupItem>
-                            <fb:FilterGroupItem name="year" label="Year" groupName="Group1" visibleInFilterBar="true">
+                            <!-- ID Storico Filter -->
+                            <fb:FilterGroupItem name="ID_STORICO" label="ID Storico" groupName="Group1" visibleInFilterBar="true">
                                 <fb:control>
-                                    <Select forceSelection="false" name="year" change=".onSelectionChange" items="{ path: 'YearModel>/Years' }"
-                                     id="yearSelection">
-                                        <core:Item key="{YearModel>}" text="{YearModel>}" />
-                                    </Select>
-                                </fb:control>
-                            </fb:FilterGroupItem>
-                            <fb:FilterGroupItem name="period" label="Period" groupName="Group1" visibleInFilterBar="true">
-                                <fb:control>
-                                    <Select forceSelection="false" name="period" change=".onSelectionChange" 
-                                    items="{ path: 'PeriodModel>/Periods' }"
-                                     id="periodSelection">
-                                        <core:Item  key="{PeriodModel>}" text="{PeriodModel>}" />
-                                    </Select>
-                                </fb:control>
-                            </fb:FilterGroupItem>
-                            <fb:FilterGroupItem name="icp" label="Icp" groupName="Group1" visibleInFilterBar="true">
-                                <fb:control>
-                                    <Select forceSelection="false" name="icp" change=".onSelectionChange"
-                                     items="{ path: 'IcpModel>/Icps' }" id="icpSelection">
-                                        <core:Item key="{IcpModel>}" text="{IcpModel>}" />
-                                    </Select>
-                                </fb:control>
-                            </fb:FilterGroupItem>
-                            <fb:FilterGroupItem name="lease n" label="Lease N" groupName="Group1" visibleInFilterBar="true">
-                                <fb:control>
-                                    <Select forceSelection="false" name="lease n" change=".onSelectionChange" items="{ path: 'LeaseNModel>/LeaseNs' }"
-                                     id="lease_nSelection">
-                                        <core:Item key="{LeaseNModel>}" text="{LeaseNModel>}" />
-                                    </Select>
-                                </fb:control>
-                            </fb:FilterGroupItem>
-                            <fb:FilterGroupItem name="cost center" label="Cost Center" groupName="Group1" visibleInFilterBar="true">
-                                <fb:control>
-                                    <Select forceSelection="false" name="Cost Center" change=".onSelectionChange" 
-                                    items="{ path: 'CostCenterModel>/CostCenters' }"
-                                    id="costCenterSelection">
-                                        <core:Item key="{CostCenterModel>}" text="{CostCenterModel>}" />
+                                    <Select id="IdStoricoSelect" name="ID_STORICO" enabled="{= ${selectedFiltersModel>/period} &amp;&amp; ${selectedFiltersModel>/period}.length > 0  &amp;&amp; ${selectedFiltersModel>/entity} &amp;&amp; ${selectedFiltersModel>/entity}.length > 0 ? true : false }" forceSelection="false" change=".onSelectionChange" items="{ path: 'oFiltersModel>/Id_storico' }" selectedKey="{selectedFiltersModel>/ID_STORICO}" required="true">
+                                        <core:Item key="{oFiltersModel>}" text="{oFiltersModel>}" />
                                     </Select>
                                 </fb:control>
                             </fb:FilterGroupItem>
                         </fb:filterGroupItems>
                     </fb:FilterBar>
                     <VBox alignItems="End" wrap="Wrap" justifyContent="End" alignContent="Stretch" class="sapUiMediumMarginTop flex-row gap1">
-                        <Button icon="sap-icon://excel-attachment" id="excelBtn" text="Download Excel" press=".onDownloadExcel" enabled="{selectedFiltersModel>/matchData}" />
+                        <Button icon="sap-icon://excel-attachment" id="excelBtn" text="Download Excel" press=".onDownloadExcelPress" enabled="{selectedFiltersModel>/matchData}" />
                         <Button icon="sap-icon://pdf-attachment" id="pdfBtn" text="Download PDF" press=".onDownloadPdfPress" enabled="{selectedFiltersModel>/matchData}" />
                         <Button id="clearFiltersBtn" text="Clear Filters" press=".onClearFilters" visible="false" />
                     </VBox>
@@ -104,7 +92,6 @@
                                 <Button icon="sap-icon://decline" type="Ghost" press=".onCloseLegend" />
                             </Toolbar>
                         </headerToolbar>
-
                         <content>
                             <List>
                                 <CustomListItem>
@@ -113,14 +100,12 @@
                                         <Label class="icon" text="Cliccare sul titolo delle colonne per bloccarle." wrapping="true"/>
                                     </HBox>
                                 </CustomListItem>
-
                                 <CustomListItem>
                                     <HBox>
                                         <core:Icon src="sap-icon://circle-task" class="legendAmber icon"></core:Icon>
                                         <Label class="icon" text="Selezionare i filtri ed avviare la ricerca per mostrare la tabella." wrapping="true"/>
                                     </HBox>
                                 </CustomListItem>
-
                                 <CustomListItem>
                                     <HBox>
                                         <core:Icon src="sap-icon://circle-task" class="legendAmber icon"></core:Icon>
@@ -128,18 +113,81 @@
                                     </HBox>
                                 </CustomListItem>
                             </List>
-
                         </content>
                     </Panel>
                 </f:content>
             </f:DynamicPageHeader>
         </f:header>
 
+        <!-- Table Content -->
         <f:content>
-            <ScrollContainer id="tableContainer" horizontal="true" width="100%">
-                <table:Table id="reportTable" visibleRowCount="18" selectionMode="None">
-                    <!-- Colonne possono essere aggiunte qui se lo desideri -->
+            <!-- ScrollContainer to allow horizontal scrolling -->
+            <ScrollContainer horizontal="true" width="100%">
+                <!-- Table Definition -->
+                <table:Table id="table" selectionMode="None" visibleRowCountMode="Interactive" minAutoRowCount="8" enableBusyIndicator="true" enableColumnFreeze="true" width="100%" rows="{DataIMA23>/}">
+                    <table:columns>
+                        <table:Column width="17rem">
+                            <Label text="JOURNAL_TYPE" />
+                            <table:template>
+                                <Text text="{DataIMA23>ASSET_CLASS}" />
+                            </table:template>
+                             <Label text="JOURNAL_TYPE2" />
+                            <table:template>
+                                <Text text="{DataIMA23>ASSET_CLASS}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="17rem">
+                            <Label text="ACCOUNT" />
+                            <table:template>
+                                <Text text="{DataIMA23>INTERCOMPANY}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="COST_CENTER" />
+                            <table:template>
+                                <Text text="{DataIMA23>CDC}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="14rem">
+                            <Label text="LEASE_N" />
+                            <table:template>
+                                <Text text="{DataIMA23>CDC_CODE}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="14rem">
+                            <Label text="ASSET_CATEGORY" />
+                            <table:template>
+                                <Text text="{DataIMA23>LEASE_NUMBER}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="10rem">
+                            <Label text="DEBIT" />
+                            <table:template>
+                                <Text text="{DataIMA23>CONTRACT_CODE}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="10rem">
+                            <Label text="CREDIT" />
+                            <table:template>
+                                <Text text="{DataIMA23>ACC_SECTOR}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="10rem">
+                            <Label text="DEBIT" />
+                            <table:template>
+                                <Text text="{DataIMA23>CONTRACT_DESCRIPTION}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem">
+                            <Label text="CREDIT" />
+                            <table:template>
+                                <Text text="{DataIMA23>MERGED_ENTITY}" />
+                            </table:template>
+                        </table:Column>
+                    </table:columns>
                 </table:Table>
+
+
             </ScrollContainer>
         </f:content>
 
