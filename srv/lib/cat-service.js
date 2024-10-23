@@ -593,38 +593,38 @@ async Filters() {
 }
 
 
-async FilterControl(entity, tipoContratto) {
+// async FilterControl(entity, tipoContratto) {
 
-    const { GV_FILTRI_ID22 } = cds.entities();
+//     const { GV_FILTRI_ID22 } = cds.entities();
 
-    // Costruisci la query utilizzando i parametri in ingresso per filtrare i risultati
-    const filteredData = await cds.run(
-        SELECT.distinct
-            .from('CATALOGSERVICE_GV_FILTRI_ID22')
-            .columns('RECNNR', 'IDENTOBJNR')
-            .where({
-                BUKRS: entity,
-                RECNTYPE: tipoContratto
-            })
-    );
+//     // Costruisci la query utilizzando i parametri in ingresso per filtrare i risultati
+//     const filteredData = await cds.run(
+//         SELECT.distinct
+//             .from('CATALOGSERVICE_GV_FILTRI_ID22')
+//             .columns('RECNNR', 'IDENTOBJNR')
+//             .where({
+//                 BUKRS: entity,
+//                 RECNTYPE: tipoContratto
+//             })
+//     );
     
-    const recnnr = new Set();
-    const cdc = new Set();
+//     const recnnr = new Set();
+//     const cdc = new Set();
 
-    filteredData.forEach(row => {
-        recnnr.add(row.RECNNR);
-        cdc.add(row.IDENTOBJNR);
-    })
+//     filteredData.forEach(row => {
+//         recnnr.add(row.RECNNR);
+//         cdc.add(row.IDENTOBJNR);
+//     })
 
-    const RECNNR = Array.from(recnnr);
-    const CDC = Array.from(cdc);
+//     const RECNNR = Array.from(recnnr);
+//     const CDC = Array.from(cdc);
 
-    return {
-        RECNNR: RECNNR,
-        CDC: CDC,
-    }
+//     return {
+//         RECNNR: RECNNR,
+//         CDC: CDC,
+//     }
 
-}
+// }
 
 
 
@@ -697,10 +697,120 @@ async FilterControl(entity, tipoContratto) {
 //          ID_STORICO: ID_STORICO
 //      };
 
-
-
-
-
 // }
+
+
+async applyFilters(
+    entity = [], 
+    tipoContratto = [], 
+    contratto = [], 
+    year = null, 
+    period = null, 
+    costCenter = [], 
+    Id_storico = null
+) {
+    // Definizione dei filtri progressivi
+    const whereClause = {};
+
+    //primo filtro: entity (BUTXT)
+    if (entity?.length > 0) {
+        whereClause.BUKRS = entity;
+    }
+
+    // secondo filtro: tipoContratto (RECNTYPE), solo se il primo è stato selezionato
+    if (tipoContratto?.length > 0) {
+        whereClause.RECNTYPE = tipoContratto;
+    }
+
+    // Filtro per contratto (RECNNR), opzionale ma deve considerare i filtri precedenti
+    if (contratto?.length > 0) {
+        whereClause.RECNNR = contratto;
+    }
+
+    // Filtro per anno (YEARDUEDATE)
+    if (year) {
+        whereClause.YEARDUEDATE = year;
+    }
+
+    // Filtro per periodo (PERIODDUEDATE)
+    if (period) {
+        whereClause.PERIODDUEDATE = period;
+    }
+
+    // Filtro per centro di costo (IDENTOBJNR), si sblocca solo dopo year e period
+    if (costCenter?.length > 0) {
+        whereClause.IDENTOBJNR = costCenter;
+    }
+
+    // Filtro per storico (ID_STORICO), si sblocca dopo year e period
+    if (Id_storico) {
+        whereClause.ID_STORICO = Id_storico;
+    }
+
+    // Esegui la query di selezione con i filtri dinamici
+    const filteredData = await cds.run(
+        SELECT.distinct
+            .from('CATALOGSERVICE_GV_FILTRI_ID22')
+            .columns('BUTXT', 'RECNTYPE', 'RECNNR', 'YEARDUEDATE', 'PERIODDUEDATE', 'IDENTOBJNR', 'BUKRS', 'ID_STORICO')
+            .where(whereClause)  // Inserisci la clausola WHERE dinamica
+    );
+
+
+    this.log.info(filteredData)
+
+    // Usa Set per rimuovere automaticamente i duplicati dai risultati
+    const butxt = new Set();
+    const recntype = new Set();
+    const recnnr = new Set();
+    const yearduedate = new Set();
+    const periodduedate = new Set();
+    const cdc = new Set();
+    const bukrs = new Set();
+    const id_storico = new Set();
+
+    // Popola i set con i risultati filtrati
+    filteredData.forEach(row => {
+        butxt.add(row.BUTXT);
+        recntype.add(row.RECNTYPE);
+        recnnr.add(row.RECNNR);
+        yearduedate.add(row.YEARDUEDATE);
+        periodduedate.add(row.PERIODDUEDATE);
+        cdc.add(row.IDENTOBJNR);
+        bukrs.add(row.BUKRS);
+        id_storico.add(row.ID_STORICO);
+    });
+
+    // Converte i set in array
+    const BUTXT = Array.from(butxt);
+    const RECNTYPE = Array.from(recntype);
+    const RECNNR = Array.from(recnnr);
+    const YEARDUEDATE = Array.from(yearduedate);
+    const PERIODDUEDATE = Array.from(periodduedate);
+    const CDC = Array.from(cdc);
+    const BUKRS = Array.from(bukrs);
+    const ID_STORICO = Array.from(id_storico);
+
+    console.log("butxt array:", BUTXT);
+    console.log("recntype array:", RECNTYPE);
+    console.log("recnnr array:", RECNNR);
+    console.log("yearduedate array:", YEARDUEDATE);
+    console.log("periodduedate array:", PERIODDUEDATE);
+    console.log("cdc array:", CDC);
+    console.log("bukrs array:", BUKRS);
+    console.log("Id_storico array:", ID_STORICO);
+
+    // Ritorna gli array filtrati
+    return {
+        BUTXT: BUTXT,
+        RECNTYPE: RECNTYPE,
+        RECNNR: RECNNR,
+        YEARDUEDATE: YEARDUEDATE,
+        PERIODDUEDATE: PERIODDUEDATE,
+        CDC: CDC,
+        BUKRS: BUKRS,
+        ID_STORICO: ID_STORICO
+    };
+}
+
 
 }

@@ -29,6 +29,13 @@ sap.ui.define([
             let oSelectedFiltersModel = this.getView().getModel('selectedFiltersModel');
 
             oSelectedFiltersModel.setProperty("/matchData", false);
+
+            this.entityKeys;
+            this.typeContractKeys;
+            this.contractKeys;
+            this.cdcKeys;
+            this.annoKey;
+            this.periodoKey;
         },
 
         createSorter: function() {
@@ -213,6 +220,8 @@ sap.ui.define([
 
             const selectedControl = oEvent.getSource();
             const controlName = selectedControl.getName();
+            console.log("selected control", selectedControl)
+            console.log("control name", controlName)
 
             // Update the specific filter in the model
             if (selectedControl.getMetadata().getName() === "sap.m.MultiComboBox") {
@@ -236,7 +245,14 @@ sap.ui.define([
 
             // Update allSelected property
             oSelectedFiltersModel.setProperty("/allSelected", allSelected);
-            this.selectFiltering(oSelectedFilters);
+
+
+
+            this.clearFilter(oEvent)
+
+
+
+            this.selectFiltering();
 
             // this._bindToolbarText(); // Update toolbar text
 
@@ -247,57 +263,207 @@ sap.ui.define([
             // }
         },
 
-        selectFiltering: function(data) {
-            if (data.TipoContratto?.length > 0 && data.Entity?.length > 0 ) {
 
-                //enabled true
-                //key clear
+        clearFilter: function(oEvent) {
 
-                const servicePath = `${this.osUrl}FilterControl`;
+            let oSelectedFiltersModel = this.getView().getModel('selectedFiltersModel');
+            let filtriSelezionati = oSelectedFiltersModel.getData();
 
-                let oSelectedFilters = this.getView().getModel('selectedFiltersModel').getData();
-                //let oSelectedFiltersModel = this.getView().getModel('selectedFiltersModel');
+            const selectedControl = oEvent.getSource();
+            const controlName = selectedControl.getName();
 
-                const requestData = {
-                    entity: Object.values(oSelectedFilters.entity),
-                    tipoContratto: Object.values(oSelectedFilters.tipoContratto),
-                }
-    
+            let aPreviousSelectedKeys = filtriSelezionati[controlName] || [];
+            console.log("vecchie chiavi", aPreviousSelectedKeys)
 
-                axios.post(servicePath, requestData)
-                    .then((response) => {
-                        console.log(response.data);  // Handle the response array
-                        let oFiltersModel = this.getView().getModel('oFiltersModel')
-                        // oFiltersModel.setData(
-                        //     {                           
-                        //         Contratto: this._sortStringArray(response.data.RECNNR),                          
-                        //         CostCenter: this._sortStringArray(response.data.CDC),                        
-                        //     }
-                        // )
-                        oFiltersModel.setProperty("/Contratto", this._sortStringArray(response.data.RECNNR))
-                        oFiltersModel.setProperty("/CostCenter", this._sortStringArray(response.data.CDC))
-
-                        oFiltersModel.refresh()
-                        console.log('Filters data: ', oFiltersModel.getData());
-                        return
-
-                    })
-                    .catch((error) => {
-                        console.error(error)
-                        if (error.response) {
-                            console.error("Server responded with error: ", error.response.status, error.response.data);
-                        } else if (error.request) {
-                            console.error("No response received from server: ", error.request);
-                        } else {
-                            console.error("Axios error: ", error.message);
-                        }
-                    });
-
-
-
-            } else {
-                this._getDataFilters()
+            switch (controlName) {
+                case "Entity":
+                    if(this.entityKeys == undefined){
+                        let aSelectedKeys = selectedControl.getSelectedKeys();
+                        this.entityKeys = aSelectedKeys.length
+                    } else{
+                        this.getView().byId("TipoContrattoBox").setSelectedKeys(null)
+                        this.getView().byId("ContrattoBox").setSelectedKeys(null)
+                        this.getView().byId("AnnoSelect").setSelectedKey(null)
+                        this.getView().byId("PeriodoSelect").setSelectedKey(null)
+                        this.getView().byId("CostCenterBox").setSelectedKeys(null)
+                        this.getView().byId("IdStoricoSelect").setSelectedKey(null)
+                    }
+                    break;
+        
+                case "TipoContratto":
+                    if(this.typeContractKeys == undefined){
+                        let aSelectedKeys = selectedControl.getSelectedKeys();
+                        this.typeContractKeys = aSelectedKeys.length
+                    } else{
+                        this.getView().byId("ContrattoBox").setSelectedKeys(null)
+                        this.getView().byId("AnnoSelect").setSelectedKey(null)
+                        this.getView().byId("PeriodoSelect").setSelectedKey(null)
+                        this.getView().byId("CostCenterBox").setSelectedKeys(null)
+                        this.getView().byId("IdStoricoSelect").setSelectedKey(null)
+                    }
+                     
+                    break;
+        
+                case "Contratto":                    
+                    if(this.contractKeys == undefined){
+                        let aSelectedKeys = selectedControl.getSelectedKeys();
+                        this.contractKeys = aSelectedKeys.length
+                    } else{
+                        this.getView().byId("AnnoSelect").setSelectedKey(null)
+                        this.getView().byId("PeriodoSelect").setSelectedKey(null)
+                        this.getView().byId("CostCenterBox").setSelectedKeys(null)
+                        this.getView().byId("IdStoricoSelect").setSelectedKey(null)
+                    }
+                        
+                    break;
+        
+                case "Anno":
+                    if(this.annoKey == undefined){
+                        let aSelectedKey = selectedControl.getSelectedKey();
+                        this.annoKey = aSelectedKey
+                    } else{
+                        this.getView().byId("PeriodoSelect").setSelectedKey(null)
+                        this.getView().byId("CostCenterBox").setSelectedKeys(null)
+                        this.getView().byId("IdStoricoSelect").setSelectedKey(null)
+                    }
+                     
+                    break;
+        
+                case "Periodo":
+                    if(this.periodoKey == undefined){
+                        let aSelectedKey = selectedControl.getSelectedKey();
+                        this.periodoKey = aSelectedKey
+                    } else{
+                        this.getView().byId("CostCenterBox").setSelectedKeys(null)
+                        this.getView().byId("IdStoricoSelect").setSelectedKey(null)
+                    }
+                           
+                    break;
+        
+                case "CostCenter":                    
+                    if(this.cdcKeys == undefined){
+                        let aSelectedKeys = selectedControl.getSelectedKeys();
+                        this.cdcKeys = aSelectedKeys.length
+                    } else{
+                        this.getView().byId("IdStoricoSelect").setSelectedKey(null)
+                    }
+                     
+                    break;  
+                
+                case "ID_STORICO":
+                break;
+                default:
+                    console.error("default, errore nello switch")
+                    break;
             }
+
+            this.assignReportResume(oEvent);
+            this.makeTitleObjAttrBold();
+        },
+
+
+
+        selectFiltering: function() {
+            
+            const servicePath = `${this.osUrl}applyFilters`;
+
+            let oSelectedFilters = this.getView().getModel('selectedFiltersModel').getData();
+
+            console.log(Object.values(oSelectedFilters.entity));
+            const requestData = {
+                entity: Object.values(oSelectedFilters.entity),
+                tipoContratto: oSelectedFilters.tipoContratto ? Object.values(oSelectedFilters.tipoContratto) : null,
+                contratto: oSelectedFilters.contratto ? Object.values(oSelectedFilters.contratto) : null, // Campo opzionale
+                year: oSelectedFilters.year,
+                period: oSelectedFilters.period,
+                costCenter: oSelectedFilters.costCenter ? Object.values(oSelectedFilters.costCenter) : null, // Campo opzionale
+                Id_storico: oSelectedFilters.ID_STORICO,
+            }
+
+            axios.post(servicePath, requestData)
+            .then((response) => {
+                console.log("dati filtrati test", response.data);  // Handle the response array
+                let oFiltersModel = this.getView().getModel('oFiltersModel')
+              
+                if(!requestData.tipoContratto || requestData.tipoContratto.length == 0){
+                oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
+                oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
+                oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
+                oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
+                oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                
+                }
+                
+                if(!requestData.contratto || requestData.contratto.length == 0){
+                    oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
+                    oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
+                    oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
+                    oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                    oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                    
+                    }
+
+                    if(!requestData.year){
+                        oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
+                        oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
+                        oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                        oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                        
+                        }
+
+                if(!requestData.period){
+                    oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
+                    oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                    oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                    
+                    }
+
+                if(!requestData.costCenter || requestData.costCenter.length == 0){
+                    oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                    oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                    
+                    }
+                if(!requestData.Id_storico){
+                    oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                    
+                    }
+                   
+                console.log(oFiltersModel.getData().Entity)
+
+
+                
+
+                console.log("Tipo Contratto",oFiltersModel.getData().TipoContratto)
+                
+                // {
+                //         Entity: this._elaborateEntities(response.data.BUKRS, response.data.BUTXT),
+                //         TipoContratto: this._sortStringArray(response.data.RECNTYPE),
+                //         Contratto: this._sortStringArray(response.data.RECNNR),
+                //         Periodo: this._elaboratedMonths(response.data.PERIODDUEDATE),
+                //         Anno: this._sortStringArray(response.data.YEARDUEDATE),
+                //         CostCenter: this._sortStringArray(response.data.CDC),
+                //         Id_storico: this._sortStringArray(response.data.ID_STORICO)
+                //     }
+        
+
+                oFiltersModel.refresh()
+                //oSelectedFilters.refresh()
+                console.log('Filters data: ', oFiltersModel.getData());
+                return
+
+            })
+            .catch((error) => {
+                console.error(error)
+                if (error.response) {
+                    console.error("Server responded with error: ", error.response.status, error.response.data);
+                } else if (error.request) {
+                    console.error("No response received from server: ", error.request);
+                } else {
+                    console.error("Axios error: ", error.message);
+                }
+            });
+
         },
 
 
