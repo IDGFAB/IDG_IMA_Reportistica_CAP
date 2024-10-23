@@ -348,172 +348,6 @@ GROUP BY "XMBEZ",
         throw error
     }
 }
-//   async CreateQuery(entity = [], tipoContratto = [], contratto = [], year = null, period = null, costCenter = []) {
-//     let whereClauses = [];
-
-// 	    // Controllo per il parametro Entity (obbligatorio e array)
-// 		if (Array.isArray(entity) && entity.length > 0) {
-// 			whereClauses.push('"BUKRS" IN (' + entity.map(e => `'${e}'`).join(', ') + ')');
-// 		} else {
-// 			throw new Error("Il parametro 'Entity' è obbligatorio e deve essere un array.");
-// 		}
-	
-// 		// Controllo per il parametro Tipo Contratto (obbligatorio e array)
-// 		if (Array.isArray(tipoContratto) && tipoContratto.length > 0) {
-// 			whereClauses.push('"RECNTYPE" IN (' + tipoContratto.map(tc => `'${tc}'`).join(', ') + ')');
-// 		} else {
-// 			throw new Error("Il parametro 'Tipo Contratto' è obbligatorio e deve essere un array.");
-// 		}
-	
-// 		// Controllo per il parametro Contratto (facoltativo e array)
-// 		if (contratto) {
-// 			if (Array.isArray(contratto)) {
-// 				whereClauses.push('"RECNNR" IN (' + contratto.map(c => `'${c}'`).join(', ') + ')');
-// 			} else {
-// 				whereClauses.push('"RECNNR" = \'' + contratto + '\'');
-// 			}
-// 		}
-	
-// 		// Controllo per il parametro Year (obbligatorio e non array)
-// 		if (year !== null && year !== undefined) {
-// 			whereClauses.push('"YEARDUEDATE" = \'' + year + '\'');
-// 		} else {
-// 			throw new Error("Il parametro 'Year' è obbligatorio.");
-// 		}
-	
-// 		// Controllo per il parametro Period (obbligatorio e non array)
-// 		if (period !== null && period !== undefined) {
-// 			whereClauses.push('TO_INT("PERIODDUEDATE") = ' + period);
-// 		} else {
-// 			throw new Error("Il parametro 'Period' è obbligatorio.");
-// 		}
-	
-// 		// Controllo per il parametro Cost Center (facoltativo e array)
-// 		if (Array.isArray(costCenter) && costCenter.length > 0) {
-// 			whereClauses.push('"IDENTOBJNR" IN (' + costCenter.map(cc => `'${cc}'`).join(', ') + ')');
-// 		} else if (costCenter) {
-// 			whereClauses.push('"IDENTOBJNR" = \'' + costCenter + '\'');
-// 		}
-	
-// 		// Costruzione della query finale
-// 		let sqlQuery = ''; // Sostituisci con il nome della tua tabella
-// 		if (whereClauses.length > 0) {
-// 			sqlQuery += ' WHERE ' + whereClauses.join(' AND ');
-// 		}
-	
-// 		return sqlQuery;
-// 	}
-
-
-// async GetTabellaFiltrata(entity = [], tipoContratto = [], contratto = null, year = null, period = null, costCenter = []) {
-
-// 	let query = this.CreateQuery(entity, tipoContratto, contratto, year, period, costCenter)
-
-// 	this.log.info(query)
-
-//     try{
-//         const filteredTable = await cds.db.run(`SELECT "TXK20" AS "ASSET CLASS",
-// 	"INTERCOMPANY",
-// 	"IDENTOBJNR" AS "CDC",
-// 	"KTEXT" AS "CDC CODE",
-// 	"RECNTXTOLD" AS "LEASE N",
-// 	"RECNNR" AS "CONTRACT CODE",
-// 	"GSBER" AS "ACC SECTOR",
-// 	"RECNTXT" AS "CONTRACT DESCRIPTION",
-// 	"ZZSOCIETA" AS "MERGED ENTITY",
-// 	0 AS "Right of use",
-// 	SUM("ACCUMULATED DEPRECIATION") AS "ACCUMULATED DEPRECIATION",
-// 	SUM("NET RIGHT OF USE") AS "NET RIGHT OF USE",
-// 	SUM("CLOSING LEASES LIABILITIES") AS "CLOSING LEASES LIABILITIES",
-// 	SUM("LEASE LIABILITIES SHORT TERM") AS "LEASE LIABILITIES SHORT TERM",
-// 	SUM("LEASE LIABILITIES LONG TERM") AS "LEASE LIABILITIES LONG TERM",
-// 	SUM("YTD INTEREST") AS "YTD INTEREST",
-// 	SUM("LEASE COST") AS "LEASE COST",
-// 	SUM("DEPRECIATION") AS "DEPRECIATION",
-// 	0 AS "Gain Fx Rates",
-// 	0 AS "Loss Fx Rates"
-// FROM (
-// -- Prima query
-
-// 		SELECT "TXK20",
-// 			CASE WHEN "ZZPARTNER" = '' THEN 'NO' ELSE 'YES' END AS "INTERCOMPANY",
-// 			"IDENTOBJNR",
-// 			"KTEXT",
-// 			"RECNTXTOLD",
-// 			"RECNNR",
-// 			"GSBER",
-// 			"RECNTXT",
-// 			"ZZSOCIETA",
-// 			SUM("FONDO_AMM_CUM") AS "ACCUMULATED DEPRECIATION",
-// 			SUM("BBWHR_DEPRECIATION_SUM_END") AS "NET RIGHT OF USE",
-// 			SUM("BBWHR_LIABILITY_SUM_END") AS "CLOSING LEASES LIABILITIES",
-// 			SUM(DEBITO_BTERM) AS "LEASE LIABILITIES SHORT TERM",
-// 			SUM(DEBITO_LTERM) + SUM("DEBITO_MTERM") AS "LEASE LIABILITIES LONG TERM",
-// 			TO_DECIMAL('0') AS "YTD INTEREST",
-// 			TO_DECIMAL('0') AS "LEASE COST",
-// 			TO_DECIMAL('0') AS "DEPRECIATION"
-// 		FROM "CATALOGSERVICE_VIEW_ALL_DATA"
-// 		 WHERE "BUKRS" IN ('ATOP') AND "RECNNR" = '0000001500006' AND "YEARDUEDATE" = '2024' AND TO_INT("PERIODDUEDATE") = 12 AND "IDENTOBJNR" IN ('000175AT20')
-// 		GROUP BY "TXK20",
-// 			"ZZPARTNER",
-// 			"IDENTOBJNR",
-// 			"KTEXT",
-// 			"RECNTXTOLD",
-// 			"RECNNR",
-// 			"GSBER",
-// 			"RECNTXT",
-// 			"ZZSOCIETA"
-// 		UNION ALL 
-// -- Seconda query
-
-// 		SELECT "TXK20",
-// 			CASE WHEN "ZZPARTNER" = '' THEN 'NO' ELSE 'YES' END AS "INTERCOMPANY",
-// 			"IDENTOBJNR",
-// 			"KTEXT",
-// 			"RECNTXTOLD",
-// 			"RECNNR",
-// 			"GSBER",
-// 			"RECNTXT",
-// 			"ZZSOCIETA",
-// 			TO_DECIMAL('0') AS "ACCUMULATED DEPRECIATION",
-// 			TO_DECIMAL('0') AS "NET RIGHT OF USE",
-// 			TO_DECIMAL('0') AS "CLOSING LEASES LIABILITIES",
-// 			TO_DECIMAL('0') AS "LEASE LIABILITIES SHORT TERM",
-// 			TO_DECIMAL('0') AS "LEASE LIABILITIES LONG TERM",
-// 			SUM("BBWHR_INTEREST") AS "YTD INTEREST",
-// 			SUM("BBWHR_PAYMENT") AS "LEASE COST",
-// 			SUM("BBWHR_DEPRECIATION") AS "DEPRECIATION"
-// 		FROM "CATALOGSERVICE_VIEW_ALL_DATA"
-// 		 WHERE "BUKRS" IN ('ATOP') AND "RECNNR" = '0000001500006' AND "YEARDUEDATE" = '2024' AND TO_INT("PERIODDUEDATE") = 12 AND "IDENTOBJNR" IN ('000175AT20')
-// 		GROUP BY "TXK20",
-// 			"ZZPARTNER",
-// 			"IDENTOBJNR",
-// 			"KTEXT",
-// 			"RECNTXTOLD",
-// 			"RECNNR",
-// 			"GSBER",
-// 			"RECNTXT",
-// 			"ZZSOCIETA") AS combined_results
-// GROUP BY "TXK20",
-// 	"INTERCOMPANY",
-// 	"IDENTOBJNR",
-// 	"KTEXT",
-// 	"RECNTXTOLD",
-// 	"RECNNR",
-// 	"GSBER",
-// 	"RECNTXT",
-// 	"ZZSOCIETA";`);
-  
-
-// 			console.log(filteredTable);
-//             return filteredTable;
-
-//     }
-//     catch(error){
-//         this.log.error
-//         throw error
-//     }
-// }
 
 
 async Filters() {
@@ -705,6 +539,155 @@ async applyFilters(
         ID_STORICO: ID_STORICO
     };
 }
+
+
+async applyFilters23(
+    entity = [], 
+    contratto = [], 
+    year = null, 
+    period = null, 
+    Id_storico = null
+) {
+    // Definizione dei filtri progressivi
+    const whereClause = {};
+
+    //primo filtro: entity (BUTXT)
+    if (entity?.length > 0) {
+        whereClause.BUKRS = entity;
+    }
+
+    // Filtro per contratto (RECNNR), opzionale ma deve considerare i filtri precedenti
+    if (contratto?.length > 0) {
+        whereClause.RECNNR = contratto;
+    }
+
+    // Filtro per anno (YEARDUEDATE)
+    if (year) {
+        whereClause.YEARDUEDATE = year;
+    }
+
+    // Filtro per periodo (PERIODDUEDATE)
+    if (period) {
+        whereClause.PERIODDUEDATE = period;
+    }
+
+    // Filtro per storico (ID_STORICO), si sblocca dopo year e period
+    if (Id_storico) {
+        whereClause.ID_STORICO = Id_storico;
+    }
+
+    // Esegui la query di selezione con i filtri dinamici
+    const filteredData = await cds.run(
+        SELECT.distinct
+            .from('CATALOGSERVICE_GV_FILTRI_ID22')
+            .columns('BUTXT', 'RECNTYPE', 'RECNNR', 'YEARDUEDATE', 'PERIODDUEDATE', 'IDENTOBJNR', 'BUKRS', 'ID_STORICO')
+            .where(whereClause)  // Inserisci la clausola WHERE dinamica
+    );
+
+
+    this.log.info(filteredData)
+
+    // Usa Set per rimuovere automaticamente i duplicati dai risultati
+    const butxt = new Set();
+    const recntype = new Set();
+    const recnnr = new Set();
+    const yearduedate = new Set();
+    const periodduedate = new Set();
+    const cdc = new Set();
+    const bukrs = new Set();
+    const id_storico = new Set();
+
+    // Popola i set con i risultati filtrati
+    filteredData.forEach(row => {
+        butxt.add(row.BUTXT);
+        recntype.add(row.RECNTYPE);
+        recnnr.add(row.RECNNR);
+        yearduedate.add(row.YEARDUEDATE);
+        periodduedate.add(row.PERIODDUEDATE);
+        cdc.add(row.IDENTOBJNR);
+        bukrs.add(row.BUKRS);
+        id_storico.add(row.ID_STORICO);
+    });
+
+    // Converte i set in array
+    const BUTXT = Array.from(butxt);
+    const RECNTYPE = Array.from(recntype);
+    const RECNNR = Array.from(recnnr);
+    const YEARDUEDATE = Array.from(yearduedate);
+    const PERIODDUEDATE = Array.from(periodduedate);
+    const CDC = Array.from(cdc);
+    const BUKRS = Array.from(bukrs);
+    const ID_STORICO = Array.from(id_storico);
+
+    console.log("butxt array:", BUTXT);
+    console.log("recntype array:", RECNTYPE);
+    console.log("recnnr array:", RECNNR);
+    console.log("yearduedate array:", YEARDUEDATE);
+    console.log("periodduedate array:", PERIODDUEDATE);
+    console.log("cdc array:", CDC);
+    console.log("bukrs array:", BUKRS);
+    console.log("Id_storico array:", ID_STORICO);
+
+    // Ritorna gli array filtrati
+    return {
+        BUTXT: BUTXT,
+        RECNTYPE: RECNTYPE,
+        RECNNR: RECNNR,
+        YEARDUEDATE: YEARDUEDATE,
+        PERIODDUEDATE: PERIODDUEDATE,
+        CDC: CDC,
+        BUKRS: BUKRS,
+        ID_STORICO: ID_STORICO
+    };
+}
+
+
+async GetTabellaFiltrata23(entity = [], contratto = [], year = null, period = null, Id_storico = null){
+
+    var test = []
+    var test2=[]
+
+    let query =await this.CreateQuery(entity, test,  contratto, year, period, test2,  Id_storico)
+
+
+    try{
+    const filteredTable = await cds.db.run(`SELECT "JOURNAL_TYPE",
+    "ACCOUNT",
+    "IDENTOBJNR",
+    "RECNTXTOLD",
+    "XMBEZ",
+    "DEBIT",
+    "DEBITO_BTERM",
+    "RECNNR"
+FROM "View_Lease_Liabilities_Short_Term"
+${query}
+
+UNION ALL
+
+SELECT "JOURNAL_TYPE",
+    "ACCOUNT",
+    "IDENTOBJNR",
+    "RECNTXTOLD",
+    "XMBEZ",
+    "DEBIT",
+    "CREDIT",
+    "RECNNR"
+FROM "View_Lease_Liabilities_Long_Term"
+${query}`)
+
+console.log(filteredTable);
+return filteredTable
+
+}
+catch(error){
+this.log.error
+throw error
+}
+
+
+    
+}
+
 
 
 }

@@ -44,9 +44,7 @@ sap.ui.define([
             oSelectedFiltersModel.setProperty("/matchData", false);
 
             this.entityKeys;
-            this.typeContractKeys;
             this.contractKeys;
-            this.cdcKeys;
             this.annoKey;
             this.periodoKey;
         },
@@ -378,7 +376,7 @@ sap.ui.define([
 
         selectFiltering: function() {
             
-            const servicePath = `${this.osUrl}applyFilters`;
+            const servicePath = `${this.osUrl}applyFilters23`;
 
             let oSelectedFilters = this.getView().getModel('selectedFiltersModel').getData();
 

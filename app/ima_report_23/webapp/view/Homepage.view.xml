@@ -48,7 +48,7 @@
                             <!-- Contratto Filter -->
                             <fb:FilterGroupItem name="Contratto" label="Contract" groupName="Group1" visibleInFilterBar="true">
                                 <fb:control>
-                                    <MultiComboBox id="ContrattoBox" name="Contratto" showSelectAll="true" selectionChange=".onSelectionChange" items="{ path: 'oFiltersModel>/Contratto' }" selectedKeys="{selectedFiltersModel>/contratto}" showClearIcon="true" enabled="{= ${selectedFiltersModel>/tipoContratto} &amp;&amp; ${selectedFiltersModel>/tipoContratto}.length > 0 &amp;&amp; ${selectedFiltersModel>/entity} &amp;&amp; ${selectedFiltersModel>/entity}.length > 0 ? true : false }">
+                                    <MultiComboBox id="ContrattoBox" name="Contratto" showSelectAll="true" selectionChange=".onSelectionChange" items="{ path: 'oFiltersModel>/Contratto' }" selectedKeys="{selectedFiltersModel>/contratto}" showClearIcon="true" enabled="{= ${selectedFiltersModel>/entity} &amp;&amp; ${selectedFiltersModel>/entity}.length > 0 ? true : false }">
                                         <core:Item key="{oFiltersModel>}" text="{oFiltersModel>}" />
                                     </MultiComboBox>
                                 </fb:control>

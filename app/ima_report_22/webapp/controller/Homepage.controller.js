@@ -1104,46 +1104,12 @@ sap.ui.define([
         
 
         onDownloadPdfPress: function () {
-            // Ottieni il modello associato alla tabella
             var oTable = this.byId("table");
             var oBinding = oTable.getBinding("rows");
-        
-            // Estrai i dati mappati per ogni riga
             var odata = oBinding.getContexts().map(function (oContext) {
                 return oContext.getObject();
             });
         
-            // Definisci la struttura del PDF
-            var docDefinition = {
-                pageSize: 'A4',
-                pageOrientation: 'landscape',
-                footer: { text: new Date().toLocaleString(), style: ['footerStyle'] },
-                content: [],
-                styles: {
-                    headerStyle: {
-                        fontSize: 20,
-                        bold: true,
-                        alignment: 'center',
-                        margin: [0, 10, 0, 25]
-                    },
-                    columnStyle: {
-                        fontSize: 13,
-                        bold: true,
-                        alignment: 'center',
-                        margin: [0, 10, 0, 0]
-                    },
-                    cellStyle: {
-                        fontSize: 10,
-                    },
-                    footerStyle: {
-                        fontSize: 7,
-                        alignment: 'right',
-                        margin: [0, 10, 10, 0]
-                    }
-                }
-            };
-        
-            // Suddivisione delle colonne in gruppi di massimo 5
             var columns = [
                 "ACC_SECTOR", "ACCUMULATED_DEPRECIATION", "RIGHT_OF_USE", "ASSET_CLASS", 
                 "BUKRS", "CONTRACT_CODE", "CONTRACT_DESCRIPTION", "DEPRECIATION", 
@@ -1152,42 +1118,49 @@ sap.ui.define([
                 "GAIN_FX_RATES", "LOSS_FX_RATES"
             ];
         
-            // Calcola quante sezioni (o pagine) con colonne divise sono necessarie
-            for (let i = 0; i < columns.length; i += 5) {
-                let pageColumns = columns.slice(i, i + 5);
-                
-                // Struttura la tabella per questa sezione
-                let tableBody = [];
+            var docDefinition = {
+                pageSize: 'A4',
+                pageOrientation: 'landscape',
+                pageMargins: [5, 5, 5, 5],  // Minimum margins
+                footer: { text: new Date().toLocaleString(), alignment: 'right', fontSize: 6 },
+                content: []
+            };
         
-                // Aggiungi l'intestazione
-                let headerRow = pageColumns.map(col => ({ text: col, style: ['columnStyle'] }));
-                tableBody.push(headerRow);
+            // Create table data
+            let tableBody = [];
+            
+            // Add header row
+            tableBody.push(columns.map(col => ({
+                text: col.substring(0, 10),
+                style: { fontSize: 8, bold: true, alignment: 'center' },
+                noWrap: true  // Prevent text wrapping in headers
+            })));
         
-                // Popola i dati delle righe nel PDF, solo per le colonne di questa sezione
-                odata.forEach(function (rowData) {
-                    let row = [];
-                    pageColumns.forEach(col => {
-                        row.push({ text: rowData[col] || "-", style: ['cellStyle'] });
-                    });
-                    tableBody.push(row);
-                });
+            // Add data rows
+            odata.forEach(function (rowData) {
+                let row = columns.map(col => ({
+                    text: String(rowData[col] || "-").substring(0, 20), // Limit text length
+                    style: { fontSize: 8 },
+                    noWrap: true  // Prevent text wrapping in cells
+                }));
+                tableBody.push(row);
+            });
         
-                // Aggiungi la tabella della sezione al contenuto del PDF come nuova pagina
-                docDefinition.content.push({
-                    table: {
-                        widths: Array(pageColumns.length).fill('auto'),
-                        body: tableBody
-                    },
-                    pageBreak: 'after' // Imposta un'interruzione di pagina dopo ogni tabella
-                });
-            }
+            // Add table to document
+            docDefinition.content.push({
+                table: {
+                    headerRows: 1,
+                    widths: Array(columns.length).fill(43),  // Fixed width for all columns
+                    body: tableBody
+                },
+                layout: {
+                    paddingLeft: function() { return 2; },
+                    paddingRight: function() { return 2; },
+                    paddingTop: function() { return 2; },
+                    paddingBottom: function() { return 2; }
+                }
+            });
         
-            // Rimuove l'ultima interruzione di pagina per evitare una pagina vuota alla fine
-            if (docDefinition.content.length > 0) {
-                delete docDefinition.content[docDefinition.content.length - 1].pageBreak;
-            }
-        
-            // Crea e scarica il PDF
             pdfMake.createPdf(docDefinition).download();
         },
         
