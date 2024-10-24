@@ -264,7 +264,7 @@ sap.ui.define([
         },
 
 
-        clearFilter: function(oEvent) {
+       clearFilter: function(oEvent) {
 
             let oSelectedFiltersModel = this.getView().getModel('selectedFiltersModel');
             let filtriSelezionati = oSelectedFiltersModel.getData();
@@ -472,7 +472,7 @@ sap.ui.define([
                     break;
             }
 
-        },
+        }, 
 
 
 
