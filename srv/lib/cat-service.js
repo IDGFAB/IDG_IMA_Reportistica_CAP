@@ -709,7 +709,7 @@ async GetTabellaFiltrata23(entity = [], contratto = [], year = null, period = nu
     "RECNTXTOLD",
     "XMBEZ",
     "DEBIT",
-    "DEBITO_BTERM",
+    "CREDIT",
     "RECNNR"
 FROM "CATALOGSERVICE_VIEW_LEASE_LIABILITIES__SHORT__TERM"
 ${query}

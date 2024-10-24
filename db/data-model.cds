@@ -151,7 +151,7 @@ entity View_Lease_Liabilities__Short__Term {
         RECNTXTOLD                 : String(20);
         XMBEZ                      : String(30);
         DEBIT                      : Decimal(10, 2);
-        DEBITO_BTERM               : Decimal(28, 2);
+        CREDIT                     : Decimal(28, 2);
     key YEARDUEDATE                : String(4);
     key PERIODDUEDATE              : String(3);
         RECNNR                     : String(13);
