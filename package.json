@@ -26,7 +26,8 @@
     "build": "rimraf resources mta_archives && mbt build --mtar archive",
     "deploy": "cf deploy mta_archives/archive.mtar --retries 1",
     "hybrid": "cds watch --profile hybrid",
-    "watch-ima_report_23": "cds watch --open ima_report_23/webapp/index.html?sap-ui-xx-viewCache=false"
+    "watch-ima_report_23": "cds watch --open ima_report_23/webapp/index.html?sap-ui-xx-viewCache=false",
+    "watch-ima_report_9": "cds watch --open ima_report_9/webapp/index.html?sap-ui-xx-viewCache=false"
   },
   "cds": {
     "requires": {

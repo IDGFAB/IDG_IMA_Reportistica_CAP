@@ -76,6 +76,10 @@ modules:
       - imareport23.zip
       name: imareport23
       target-path: resources/
+    - artifacts:
+      - imareport9.zip
+      name: imareport9
+      target-path: resources/
 - name: imareport22
   type: html5
   path: app/ima_report_22
@@ -89,6 +93,16 @@ modules:
 - name: imareport23
   type: html5
   path: app/ima_report_23
+  build-parameters:
+    build-result: dist
+    builder: custom
+    commands:
+    - npm install
+    - npm run build:cf
+    supported-platforms: []
+- name: imareport9
+  type: html5
+  path: app/ima_report_9
   build-parameters:
     build-result: dist
     builder: custom
