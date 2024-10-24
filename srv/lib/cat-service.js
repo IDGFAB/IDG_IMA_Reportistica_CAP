@@ -642,12 +642,64 @@ async applyFilters23(
 }
 
 
+async CreateQuery23(entity = [], contratto = [], year = null, period = null, Id_storico = null) {
+    let whereClauses = [];
+
+	    // Controllo per il parametro Entity (obbligatorio e array)
+		if (Array.isArray(entity) && entity.length > 0) {
+			whereClauses.push('"BUKRS" IN (' + entity.map(e => `'${e}'`).join(', ') + ')');
+		} else {
+			throw new Error("Il parametro 'Entity' è obbligatorio e deve essere un array.");
+		}
+	
+		// Controllo per il parametro Contratto (facoltativo e array)
+		if (contratto) {
+			if (Array.isArray(contratto)) {
+				if(contratto.length > 0){
+					whereClauses.push('"RECNNR" IN (' + contratto.map(c => `'${c}'`).join(', ') + ')');
+				}
+			} else {
+				whereClauses.push('"RECNNR" = \'' + contratto + '\'');
+			}
+		}
+	
+		// Controllo per il parametro Year (obbligatorio e non array)
+		if (year !== null && year !== undefined) {
+			whereClauses.push('"YEARDUEDATE" = \'' + year + '\'');
+		} else {
+			throw new Error("Il parametro 'Year' è obbligatorio.");
+		}
+	
+		// Controllo per il parametro Period (obbligatorio e non array)
+		if (period !== null && period !== undefined) {
+			whereClauses.push('TO_INT("PERIODDUEDATE") = ' + period);
+		} else {
+			throw new Error("Il parametro 'Period' è obbligatorio.");
+		}
+
+		// Controllo per il parametro Year (obbligatorio e non array)
+		if (Id_storico !== null && Id_storico !== undefined) {
+			whereClauses.push('"ID_STORICO" = \'' + Id_storico + '\'');
+		} else {
+			throw new Error("Il parametro 'Id_storico' è obbligatorio.");
+		}
+	
+		// Costruzione della query finale
+		let sqlQuery = ''; // Sostituisci con il nome della tua tabella
+		if (whereClauses.length > 0) {
+			sqlQuery += 'WHERE ' + whereClauses.join(' AND ');
+		}
+	
+		return sqlQuery;
+	}
+
+
 async GetTabellaFiltrata23(entity = [], contratto = [], year = null, period = null, Id_storico = null){
 
     var test = []
     var test2=[]
 
-    let query =await this.CreateQuery(entity, test,  contratto, year, period, test2,  Id_storico)
+    let query =await this.CreateQuery23(entity,  contratto, year, period, Id_storico)
 
 
     try{
@@ -659,7 +711,7 @@ async GetTabellaFiltrata23(entity = [], contratto = [], year = null, period = nu
     "DEBIT",
     "DEBITO_BTERM",
     "RECNNR"
-FROM "View_Lease_Liabilities_Short_Term"
+FROM "CATALOGSERVICE_VIEW_LEASE_LIABILITIES__SHORT__TERM"
 ${query}
 
 UNION ALL
@@ -672,7 +724,7 @@ SELECT "JOURNAL_TYPE",
     "DEBIT",
     "CREDIT",
     "RECNNR"
-FROM "View_Lease_Liabilities_Long_Term"
+FROM "CATALOGSERVICE_VIEW_LEASE_LIABILITIES__LONG__TERM"
 ${query}`)
 
 console.log(filteredTable);

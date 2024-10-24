@@ -141,3 +141,48 @@ entity View_IMA_Lettura {
         RECNTXTOLD                 : String(20);
     key ID_STORICO                 : String(20);
 }
+
+
+@cds.persistence.exists
+entity View_Lease_Liabilities__Short__Term {
+        JOURNAL_TYPE               : String(20);
+        ACCOUNT                    : String(27);
+        IDENTOBJNR                 : String(10);
+        RECNTXTOLD                 : String(20);
+        XMBEZ                      : String(30);
+        DEBIT                      : Decimal(10, 2);
+        DEBITO_BTERM               : Decimal(28, 2);
+    key YEARDUEDATE                : String(4);
+    key PERIODDUEDATE              : String(3);
+        RECNNR                     : String(13);
+    key BUKRS                      : String(4);
+        CERULE                     : String(10);
+        RECNTYPE                   : String(4);
+        ZZPARTNER                  : String(6);
+    key ID_STORICO                 : String(20);
+    key INTRENO                    : String(13);
+        DEBIT_CURR                 : Decimal(5, 2);
+        CREDIT_CURR                : Decimal(5, 2);
+}
+
+@cds.persistence.exists
+entity View_Lease_Liabilities__Long__Term {
+        JOURNAL_TYPE               : String(20);
+        ACCOUNT                    : String(27);
+        IDENTOBJNR                 : String(10);
+        RECNTXTOLD                 : String(20);
+        XMBEZ                      : String(30);
+        DEBIT                      : Decimal(10, 2);
+        CREDIT                     : Decimal(28, 2);
+    key YEARDUEDATE                : String(4);
+    key PERIODDUEDATE              : String(3);
+        RECNNR                     : String(13);
+    key BUKRS                      : String(4);
+        CERULE                     : String(10);
+        RECNTYPE                   : String(4);
+        ZZPARTNER                  : String(6);
+    key ID_STORICO                 : String(20);
+    key INTRENO                    : String(13);
+        DEBIT_CURR                 : Decimal(5, 2);
+        CREDIT_CURR                : Decimal(5, 2);
+}

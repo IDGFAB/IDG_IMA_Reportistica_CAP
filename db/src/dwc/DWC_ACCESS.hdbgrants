@@ -31,6 +31,20 @@
                     "privileges_with_grant_option": [
                         "SELECT"
                     ]
+                },
+                {
+                    "type": "VIEW",
+                    "name": "View_Lease_Liabilities__Short__Term",
+                    "privileges_with_grant_option": [
+                        "SELECT"
+                    ]
+                },
+                {
+                    "type": "VIEW",
+                    "name": "View_Lease_Liabilities__Long__Term",
+                    "privileges_with_grant_option": [
+                        "SELECT"
+                    ]
                 }
             ]
         }

@@ -8,6 +8,8 @@ service CatalogService {
     entity GV_FILTRI_ID22 as projection on my.GV_FILTRI_ID22;
     entity View_All_Data_v2 as projection on my.View_All_Data_v2;
     entity View_IMA_Lettura as projection on my.View_IMA_Lettura;
+    entity View_Lease_Liabilities__Long__Term as projection on my.View_Lease_Liabilities__Long__Term;
+    entity View_Lease_Liabilities__Short__Term as projection on my.View_Lease_Liabilities__Short__Term;
     action GetTabellaFiltrata(entity: array of String , tipoContratto: array of String, contratto: array of String, year: String, period:String, costCenter: array of String, Id_storico: String) returns array of String;
     action GetTabellaFiltrata23(entity: array of String, contratto: array of String, year: String, period:String, Id_storico: String) returns array of String;
     action applyFilters(entity: array of String , tipoContratto: array of String, contratto: array of String, year: String, period:String, costCenter: array of String, Id_storico: String) returns type.Filters;

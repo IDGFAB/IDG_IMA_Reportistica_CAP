@@ -22,6 +22,18 @@
             "schema": "IMA_TEST_SPACE",
             "object": "View_IMA_Lettura"
         }
+    },
+    "IMA_REPORT_VIEW_LEASE_LIABILITIES__SHORT__TERM": {
+        "target": {
+            "schema": "IMA_TEST_SPACE",
+            "object": "View_Lease_Liabilities__Short__Term"
+        }
+    },
+    "IMA_REPORT_VIEW_LEASE_LIABILITIES__LONG__TERM": {
+        "target": {
+            "schema": "IMA_TEST_SPACE",
+            "object": "View_Lease_Liabilities__Long__Term"
+        }
     }
 
 }

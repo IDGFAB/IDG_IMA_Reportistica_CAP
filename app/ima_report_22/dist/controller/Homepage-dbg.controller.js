@@ -29,6 +29,13 @@ sap.ui.define([
             let oSelectedFiltersModel = this.getView().getModel('selectedFiltersModel');
 
             oSelectedFiltersModel.setProperty("/matchData", false);
+
+            this.entityKeys;
+            this.typeContractKeys;
+            this.contractKeys;
+            this.cdcKeys;
+            this.annoKey;
+            this.periodoKey;
         },
 
         createSorter: function() {
@@ -213,6 +220,8 @@ sap.ui.define([
 
             const selectedControl = oEvent.getSource();
             const controlName = selectedControl.getName();
+            console.log("selected control", selectedControl)
+            console.log("control name", controlName)
 
             // Update the specific filter in the model
             if (selectedControl.getMetadata().getName() === "sap.m.MultiComboBox") {
@@ -237,6 +246,14 @@ sap.ui.define([
             // Update allSelected property
             oSelectedFiltersModel.setProperty("/allSelected", allSelected);
 
+
+
+            this.clearFilter(oEvent)
+
+
+
+            this.selectFiltering();
+
             // this._bindToolbarText(); // Update toolbar text
 
             // if (allSelected) {
@@ -244,6 +261,322 @@ sap.ui.define([
             // } else {
             //     this.setEnabledDownload(false);
             // }
+        },
+
+
+        clearFilter: function(oEvent) {
+
+            let oSelectedFiltersModel = this.getView().getModel('selectedFiltersModel');
+            let filtriSelezionati = oSelectedFiltersModel.getData();
+
+            const selectedControl = oEvent.getSource();
+            const controlName = selectedControl.getName();
+
+            let aPreviousSelectedKeys = filtriSelezionati[controlName] || [];
+            console.log("vecchie chiavi", aPreviousSelectedKeys)
+
+            switch (controlName) {
+                case "Entity":
+                    if(this.entityKeys == undefined){
+                        let aSelectedKeys = selectedControl.getSelectedKeys();
+                        this.entityKeys = aSelectedKeys.length
+                    } else {
+                        const els = [
+                            this.getView().byId("TipoContrattoBox"),
+                            this.getView().byId("ContrattoBox"),
+                            this.getView().byId("AnnoSelect"),
+                            this.getView().byId("PeriodoSelect"),
+                            this.getView().byId("CostCenterBox"),
+                            this.getView().byId("IdStoricoSelect")
+                        ]
+
+                        els.forEach(el => {
+                            if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
+                                // Handle MultiComboBox
+                                el.setSelectedKeys(null)
+                            } else if (el.getMetadata().getName() === "sap.m.Select") {
+                                // Handle Select
+                                el.setSelectedKey(null)
+                            } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
+                                // Handle ComboBox
+                                el.setSelectedKey(null)
+                            }
+
+                            // Checking each label's concatenation to empty it
+                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
+                            this.makeTitleObjAttrBold();
+                        })
+                    }
+                    break;
+        
+                case "TipoContratto":
+                    if(this.typeContractKeys == undefined){
+                        let aSelectedKeys = selectedControl.getSelectedKeys();
+                        this.typeContractKeys = aSelectedKeys.length
+
+                    } else {
+                        const els = [
+                            this.getView().byId("ContrattoBox"),
+                            this.getView().byId("AnnoSelect"),
+                            this.getView().byId("PeriodoSelect"),
+                            this.getView().byId("CostCenterBox"),
+                            this.getView().byId("IdStoricoSelect")
+                        ]
+
+                        els.forEach(el => {
+                            if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
+                                // Handle MultiComboBox
+                                el.setSelectedKeys(null)
+                            } else if (el.getMetadata().getName() === "sap.m.Select") {
+                                // Handle Select
+                                el.setSelectedKey(null)
+                            } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
+                                // Handle ComboBox
+                                el.setSelectedKey(null)
+                            }
+
+                            // Checking each label's concatenation to empty it
+                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
+                            this.makeTitleObjAttrBold();
+                        })
+                    }
+                     
+                    break;
+        
+                case "Contratto":                    
+                    if(this.contractKeys == undefined){
+                        let aSelectedKeys = selectedControl.getSelectedKeys();
+                        this.contractKeys = aSelectedKeys.length
+                    } else {
+                        const els = [
+                            this.getView().byId("AnnoSelect"),
+                            this.getView().byId("PeriodoSelect"),
+                            this.getView().byId("CostCenterBox"),
+                            this.getView().byId("IdStoricoSelect")
+                        ]
+
+                        els.forEach(el => {
+                            if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
+                                // Handle MultiComboBox
+                                el.setSelectedKeys(null)
+                            } else if (el.getMetadata().getName() === "sap.m.Select") {
+                                // Handle Select
+                                el.setSelectedKey(null)
+                            } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
+                                // Handle ComboBox
+                                el.setSelectedKey(null)
+                            }
+
+                            // Checking each label's concatenation to empty it
+                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
+                            this.makeTitleObjAttrBold();
+                        })
+                    }
+                        
+                    break;
+        
+                case "Anno":
+                    if(this.annoKey == undefined){
+                        let aSelectedKey = selectedControl.getSelectedKey();
+                        this.annoKey = aSelectedKey
+                    } else {
+                        const els = [
+                            this.getView().byId("PeriodoSelect"),
+                            this.getView().byId("CostCenterBox"),
+                            this.getView().byId("IdStoricoSelect")
+                        ]
+
+                        els.forEach(el => {
+                            if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
+                                // Handle MultiComboBox
+                                el.setSelectedKeys(null)
+                            } else if (el.getMetadata().getName() === "sap.m.Select") {
+                                // Handle Select
+                                el.setSelectedKey(null)
+                            } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
+                                // Handle ComboBox
+                                el.setSelectedKey(null)
+                            }
+
+                            // Checking each label's concatenation to empty it
+                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
+                            this.makeTitleObjAttrBold();
+                        })
+                    }
+                     
+                    break;
+        
+                case "Periodo":
+                    if(this.periodoKey == undefined){
+                        let aSelectedKey = selectedControl.getSelectedKey();
+                        this.periodoKey = aSelectedKey
+                    } else {
+                        const els = [
+                            this.getView().byId("CostCenterBox"),
+                            this.getView().byId("IdStoricoSelect")
+                        ]
+
+                        els.forEach(el => {
+                            if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
+                                // Handle MultiComboBox
+                                el.setSelectedKeys(null)
+                            } else if (el.getMetadata().getName() === "sap.m.Select") {
+                                // Handle Select
+                                el.setSelectedKey(null)
+                            } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
+                                // Handle ComboBox
+                                el.setSelectedKey(null)
+                            }
+
+                            // Checking each label's concatenation to empty it
+                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
+                            this.makeTitleObjAttrBold();
+                        })
+                    }
+                           
+                    break;
+        
+                case "CostCenter":                    
+                    if(this.cdcKeys == undefined){
+                        let aSelectedKeys = selectedControl.getSelectedKeys();
+                        this.cdcKeys = aSelectedKeys.length
+                    } else {
+                        const els = [
+                            this.getView().byId("IdStoricoSelect")
+                        ]
+
+                        els.forEach(el => {
+                            if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
+                                // Handle MultiComboBox
+                                el.setSelectedKeys(null)
+                            } else if (el.getMetadata().getName() === "sap.m.Select") {
+                                // Handle Select
+                                el.setSelectedKey(null)
+                            } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
+                                // Handle ComboBox
+                                el.setSelectedKey(null)
+                            }
+
+                            // Checking each label's concatenation to empty it
+                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
+                            this.makeTitleObjAttrBold();
+                        })
+                    }
+                     
+                    break;  
+                
+                case "ID_STORICO":
+                break;
+                default:
+                    console.error("default, errore nello switch")
+                    break;
+            }
+
+        },
+
+
+
+        selectFiltering: function() {
+            
+            const servicePath = `${this.osUrl}applyFilters`;
+
+            let oSelectedFilters = this.getView().getModel('selectedFiltersModel').getData();
+
+            console.log(Object.values(oSelectedFilters.entity));
+            const requestData = {
+                entity: Object.values(oSelectedFilters.entity),
+                tipoContratto: oSelectedFilters.tipoContratto ? Object.values(oSelectedFilters.tipoContratto) : null,
+                contratto: oSelectedFilters.contratto ? Object.values(oSelectedFilters.contratto) : null, // Campo opzionale
+                year: oSelectedFilters.year,
+                period: oSelectedFilters.period,
+                costCenter: oSelectedFilters.costCenter ? Object.values(oSelectedFilters.costCenter) : null, // Campo opzionale
+                Id_storico: oSelectedFilters.ID_STORICO,
+            }
+
+            axios.post(servicePath, requestData)
+            .then((response) => {
+                console.log("dati filtrati test", response.data);  // Handle the response array
+                let oFiltersModel = this.getView().getModel('oFiltersModel')
+              
+                if(!requestData.tipoContratto || requestData.tipoContratto.length == 0){
+                oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
+                oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
+                oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
+                oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
+                oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                
+                }
+                
+                if(!requestData.contratto || requestData.contratto.length == 0){
+                    oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
+                    oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
+                    oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
+                    oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                    oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                    
+                    }
+
+                    if(!requestData.year){
+                        oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
+                        oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
+                        oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                        oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                        
+                        }
+
+                if(!requestData.period){
+                    oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
+                    oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                    oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                    
+                    }
+
+                if(!requestData.costCenter || requestData.costCenter.length == 0){
+                    oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                    oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                    
+                    }
+                if(!requestData.Id_storico){
+                    oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                    
+                    }
+                   
+                console.log(oFiltersModel.getData().Entity)
+
+
+                
+
+                console.log("Tipo Contratto",oFiltersModel.getData().TipoContratto)
+                
+                // {
+                //         Entity: this._elaborateEntities(response.data.BUKRS, response.data.BUTXT),
+                //         TipoContratto: this._sortStringArray(response.data.RECNTYPE),
+                //         Contratto: this._sortStringArray(response.data.RECNNR),
+                //         Periodo: this._elaboratedMonths(response.data.PERIODDUEDATE),
+                //         Anno: this._sortStringArray(response.data.YEARDUEDATE),
+                //         CostCenter: this._sortStringArray(response.data.CDC),
+                //         Id_storico: this._sortStringArray(response.data.ID_STORICO)
+                //     }
+        
+
+                oFiltersModel.refresh()
+                //oSelectedFilters.refresh()
+                console.log('Filters data: ', oFiltersModel.getData());
+                return
+
+            })
+            .catch((error) => {
+                console.error(error)
+                if (error.response) {
+                    console.error("Server responded with error: ", error.response.status, error.response.data);
+                } else if (error.request) {
+                    console.error("No response received from server: ", error.request);
+                } else {
+                    console.error("Axios error: ", error.message);
+                }
+            });
+
         },
 
 
@@ -289,24 +622,48 @@ sap.ui.define([
             })
         },
 
-        assignReportResume: function (oEvent) {
+        assignReportResume: function (oEvent, concatenatedElementLabel, concatenatedElementObj) {
             const selectedSelectObj = oEvent.getSource();
             const selectedNameString = selectedSelectObj ? selectedSelectObj.getLabels()[0].getText() : "";
             let selectedItemsText = "";
+            let concatedItemsText = "";
 
             if (selectedSelectObj.getMetadata().getName() === "sap.m.MultiComboBox") {
                 // Handle MultiComboBox
-                selectedItemsText = selectedSelectObj.getSelectedItems()
+                // Set the text for the selected item and the concatenated element
+                if (concatenatedElementObj !== undefined && concatenatedElementObj.getMetadata().getName() === "sap.m.MultiComboBox") {
+                    concatedItemsText = concatenatedElementObj.getSelectedKeys()
                     .map(item => item.getText())
                     .join(", ");
+                } else {
+                    selectedItemsText = selectedSelectObj.getSelectedItems()
+                        .map(item => item.getText())
+                        .join(", ");
+
+                }
+                
             } else if (selectedSelectObj.getMetadata().getName() === "sap.m.Select") {
                 // Handle Select
-                const selectedItem = selectedSelectObj.getSelectedItem();
-                selectedItemsText = selectedItem ? selectedItem.getText() : "";
+                if (concatenatedElementObj !== undefined && concatenatedElementObj.getMetadata().getName() === "sap.m.Select") {
+                    const selectedConcatenatedItem = concatenatedElementObj.getSelectedItem();
+                    concatedItemsText = selectedConcatenatedItem ? selectedConcatenatedItem.getText() : "";
+                } else {
+                    const selectedItem = selectedSelectObj.getSelectedItem();
+                    selectedItemsText = selectedItem ? selectedItem.getText() : "";
+
+                }
+
             } else if (selectedSelectObj.getMetadata().getName() === "sap.m.ComboBox") {
                 // Handle ComboBox
-                const selectedItem = selectedSelectObj.getSelectedItem();
-                selectedItemsText = selectedItem ? selectedItem.getText() : "";
+                if (concatenatedElementObj !== undefined && concatenatedElementObj.getMetadata().getName() === "sap.m.ComboBox") {
+                    const selectedConcatenatedItem = concatenatedElementObj.getSelectedItem();
+                    concatedItemsText = selectedConcatenatedItem ? selectedConcatenatedItem.getText() : "";
+                } else {
+                    const selectedItem = selectedSelectObj.getSelectedItem();
+                    selectedItemsText = selectedItem ? selectedItem.getText() : "";
+
+                }
+
             }
 
             // Entering in the elements of the resume in the header of the DynamicPage 
@@ -320,8 +677,14 @@ sap.ui.define([
                     if (objAttr instanceof ObjectAttribute) {
 
                         // Checks between the name of the ObjectAttribute {text:""} and the <Select label="">
-                        if (objAttr.getTitle().toLowerCase() === selectedNameString.toLowerCase()) {
+                        if (objAttr.getTitle().toLowerCase() === selectedNameString.toLowerCase() ) {
                             objAttr.setText(selectedItemsText);
+
+                            // This .rerender() forces the element to be rendered right away (try removing it)
+                            objAttr.rerender();
+
+                        } else if (objAttr.getTitle().toLowerCase() === concatenatedElementLabel) {
+                            objAttr.setText(concatedItemsText)
 
                             // This .rerender() forces the element to be rendered right away (try removing it)
                             objAttr.rerender();
@@ -741,46 +1104,12 @@ sap.ui.define([
         
 
         onDownloadPdfPress: function () {
-            // Ottieni il modello associato alla tabella
             var oTable = this.byId("table");
             var oBinding = oTable.getBinding("rows");
-        
-            // Estrai i dati mappati per ogni riga
             var odata = oBinding.getContexts().map(function (oContext) {
                 return oContext.getObject();
             });
         
-            // Definisci la struttura del PDF
-            var docDefinition = {
-                pageSize: 'A4',
-                pageOrientation: 'landscape',
-                footer: { text: new Date().toLocaleString(), style: ['footerStyle'] },
-                content: [],
-                styles: {
-                    headerStyle: {
-                        fontSize: 20,
-                        bold: true,
-                        alignment: 'center',
-                        margin: [0, 10, 0, 25]
-                    },
-                    columnStyle: {
-                        fontSize: 13,
-                        bold: true,
-                        alignment: 'center',
-                        margin: [0, 10, 0, 0]
-                    },
-                    cellStyle: {
-                        fontSize: 10,
-                    },
-                    footerStyle: {
-                        fontSize: 7,
-                        alignment: 'right',
-                        margin: [0, 10, 10, 0]
-                    }
-                }
-            };
-        
-            // Suddivisione delle colonne in gruppi di massimo 5
             var columns = [
                 "ACC_SECTOR", "ACCUMULATED_DEPRECIATION", "RIGHT_OF_USE", "ASSET_CLASS", 
                 "BUKRS", "CONTRACT_CODE", "CONTRACT_DESCRIPTION", "DEPRECIATION", 
@@ -789,42 +1118,49 @@ sap.ui.define([
                 "GAIN_FX_RATES", "LOSS_FX_RATES"
             ];
         
-            // Calcola quante sezioni (o pagine) con colonne divise sono necessarie
-            for (let i = 0; i < columns.length; i += 5) {
-                let pageColumns = columns.slice(i, i + 5);
-                
-                // Struttura la tabella per questa sezione
-                let tableBody = [];
+            var docDefinition = {
+                pageSize: 'A4',
+                pageOrientation: 'landscape',
+                pageMargins: [5, 5, 5, 5],  // Minimum margins
+                footer: { text: new Date().toLocaleString(), alignment: 'right', fontSize: 6 },
+                content: []
+            };
         
-                // Aggiungi l'intestazione
-                let headerRow = pageColumns.map(col => ({ text: col, style: ['columnStyle'] }));
-                tableBody.push(headerRow);
+            // Create table data
+            let tableBody = [];
+            
+            // Add header row
+            tableBody.push(columns.map(col => ({
+                text: col.substring(0, 10),
+                style: { fontSize: 8, bold: true, alignment: 'center' },
+                noWrap: true  // Prevent text wrapping in headers
+            })));
         
-                // Popola i dati delle righe nel PDF, solo per le colonne di questa sezione
-                odata.forEach(function (rowData) {
-                    let row = [];
-                    pageColumns.forEach(col => {
-                        row.push({ text: rowData[col] || "-", style: ['cellStyle'] });
-                    });
-                    tableBody.push(row);
-                });
+            // Add data rows
+            odata.forEach(function (rowData) {
+                let row = columns.map(col => ({
+                    text: String(rowData[col] || "-").substring(0, 20), // Limit text length
+                    style: { fontSize: 8 },
+                    noWrap: true  // Prevent text wrapping in cells
+                }));
+                tableBody.push(row);
+            });
         
-                // Aggiungi la tabella della sezione al contenuto del PDF come nuova pagina
-                docDefinition.content.push({
-                    table: {
-                        widths: Array(pageColumns.length).fill('auto'),
-                        body: tableBody
-                    },
-                    pageBreak: 'after' // Imposta un'interruzione di pagina dopo ogni tabella
-                });
-            }
+            // Add table to document
+            docDefinition.content.push({
+                table: {
+                    headerRows: 1,
+                    widths: Array(columns.length).fill(43),  // Fixed width for all columns
+                    body: tableBody
+                },
+                layout: {
+                    paddingLeft: function() { return 2; },
+                    paddingRight: function() { return 2; },
+                    paddingTop: function() { return 2; },
+                    paddingBottom: function() { return 2; }
+                }
+            });
         
-            // Rimuove l'ultima interruzione di pagina per evitare una pagina vuota alla fine
-            if (docDefinition.content.length > 0) {
-                delete docDefinition.content[docDefinition.content.length - 1].pageBreak;
-            }
-        
-            // Crea e scarica il PDF
             pdfMake.createPdf(docDefinition).download();
         },
         

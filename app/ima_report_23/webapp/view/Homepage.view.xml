@@ -129,55 +129,55 @@
                         <table:Column width="17rem">
                             <Label text="JOURNAL_TYPE" />
                             <table:template>
-                                <Text text="{DataIMA23>ASSET_CLASS}" />
+                                <Text text="{DataIMA23>JOURNAL_TYPE}" />
                             </table:template>
                         </table:Column>
                         <table:Column width="17rem">
                             <Label text="ACCOUNT" />
                             <table:template>
-                                <Text text="{DataIMA23>INTERCOMPANY}" />
+                                <Text text="{DataIMA23>ACCOUNT}" />
                             </table:template>
                         </table:Column>
                         <table:Column width="11rem">
                             <Label text="COST_CENTER" />
                             <table:template>
-                                <Text text="{DataIMA23>CDC}" />
+                                <Text text="{DataIMA23>IDENTOBJNR}" />
                             </table:template>
                         </table:Column>
                         <table:Column width="14rem">
                             <Label text="LEASE_N" />
                             <table:template>
-                                <Text text="{DataIMA23>CDC_CODE}" />
+                                <Text text="{DataIMA23>RECNTXTOLD}" />
                             </table:template>
                         </table:Column>
                         <table:Column width="14rem">
                             <Label text="ASSET_CATEGORY" />
                             <table:template>
-                                <Text text="{DataIMA23>LEASE_NUMBER}" />
+                                <Text text="{DataIMA23>XMBEZ}" />
                             </table:template>
                         </table:Column>
                         <table:Column width="10rem">
                             <Label text="DEBIT" />
                             <table:template>
-                                <Text text="{DataIMA23>CONTRACT_CODE}" />
+                                <Text text="{DataIMA23>DEBIT}" />
                             </table:template>
                         </table:Column>
                         <table:Column width="10rem">
                             <Label text="CREDIT" />
                             <table:template>
-                                <Text text="{DataIMA23>ACC_SECTOR}" />
+                                <Text text="{DataIMA23>DEBITO_BTERM}" />
                             </table:template>
                         </table:Column>
                         <table:Column width="10rem">
                             <Label text="DEBIT" />
                             <table:template>
-                                <Text text="{DataIMA23>CONTRACT_DESCRIPTION}" />
+                                <Text text="{DataIMA23>DEBIT_CURR}" />
                             </table:template>
                         </table:Column>
                         <table:Column width="11rem">
                             <Label text="CREDIT" />
                             <table:template>
-                                <Text text="{DataIMA23>MERGED_ENTITY}" />
+                                <Text text="{DataIMA23>CREDIT_CURR}" />
                             </table:template>
                         </table:Column>
                     </table:columns>
