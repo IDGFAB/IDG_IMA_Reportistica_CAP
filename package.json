@@ -32,7 +32,7 @@
     "requires": {
       "auth": "xsuaa",
       "[hybrid]": {
-        "auth": "xsuaa"
+        "auth": "dummy"
       },
       "[production]": {
         "auth": "xsuaa",
