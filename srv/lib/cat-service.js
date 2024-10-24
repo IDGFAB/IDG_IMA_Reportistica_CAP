@@ -484,7 +484,8 @@ async applyFilters(
     );
 
 
-    this.log.info(filteredData)
+    this.log.info("dati filtrati cascade", filteredData)
+    this.log.info("clausola where per cascade", whereClause)
 
     // Usa Set per rimuovere automaticamente i duplicati dai risultati
     const butxt = new Set();

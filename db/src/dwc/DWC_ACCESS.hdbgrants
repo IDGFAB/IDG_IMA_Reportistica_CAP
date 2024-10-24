@@ -45,6 +45,13 @@
                     "privileges_with_grant_option": [
                         "SELECT"
                     ]
+                },
+                {
+                    "type": "VIEW",
+                    "name": "VIEW_ALL_UNION_ID23",
+                    "privileges_with_grant_option": [
+                        "SELECT"
+                    ]
                 }
             ]
         }

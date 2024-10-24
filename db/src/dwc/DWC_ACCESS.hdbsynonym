@@ -34,6 +34,12 @@
             "schema": "IMA_TEST_SPACE",
             "object": "View_Lease_Liabilities__Long__Term"
         }
+    },
+    "IMA_REPORT_VIEW_ALL_UNION_ID23": {
+        "target": {
+            "schema": "IMA_TEST_SPACE",
+            "object": "VIEW_ALL_UNION_ID23"
+        }
     }
 
 }
