@@ -125,39 +125,54 @@
                 <table:Table id="table" selectionMode="None" visibleRowCountMode="Interactive" minAutoRowCount="8" enableBusyIndicator="true" enableColumnFreeze="true" width="100%" rows="{DataIMA23>/}">
                     <table:columns>
                         <table:Column width="17rem">
-                            <Label text="JOURNAL_TYPE" />
+                            <table:multiLabels>
+                                <Label text="" />
+                                <Label textAlign="Center" text="JOURNAL_TYPE" />
+                            </table:multiLabels>
                             <table:template>
                                 <Text text="{DataIMA23>JOURNAL_TYPE}" />
                             </table:template>
                         </table:Column>
                         <table:Column width="17rem">
-                            <Label text="ACCOUNT" />
+                            <table:multiLabels>
+                                <Label text="" />
+                                <Label textAlign="Center" text="ACCOUNT" />
+                            </table:multiLabels>
                             <table:template>
                                 <Text text="{DataIMA23>ACCOUNT}" />
                             </table:template>
                         </table:Column>
                         <table:Column width="11rem">
-                            <Label text="COST_CENTER" />
+                            <table:multiLabels>
+                                <Label text="" />
+                                <Label textAlign="Center" text="COST_CENTER" />
+                            </table:multiLabels>
                             <table:template>
                                 <Text text="{DataIMA23>IDENTOBJNR}" />
                             </table:template>
                         </table:Column>
                         <table:Column width="14rem">
-                            <Label text="LEASE_N" />
+                            <table:multiLabels>
+                                <Label text="" />
+                                <Label textAlign="Center" text="LEASE_N" />
+                            </table:multiLabels>
                             <table:template>
                                 <Text text="{DataIMA23>RECNTXTOLD}" />
                             </table:template>
                         </table:Column>
                         <table:Column width="14rem">
-                            <Label text="ASSET_CATEGORY" />
+                            <table:multiLabels>
+                                <Label text="" />
+                                <Label textAlign="Center" text="ASSET_CATEGORY" />
+                            </table:multiLabels>
                             <table:template>
                                 <Text text="{DataIMA23>XMBEZ}" />
                             </table:template>
                         </table:Column>
                         <table:Column width="10rem" headerSpan="2">
                             <table:multiLabels>
-                                <Label text="Entity Currency: EUR" textAlign="Center" width="100%" />
-                                <Label text="DEBIT" />
+                                <Label textAlign="Center" text="Entity Currency: EUR" width="100%" />
+                                <Label textAlign="Center" text="DEBIT" />
                             </table:multiLabels>
                             <table:template>
                                 <Text text="{DataIMA23>DEBIT}" />
@@ -165,8 +180,8 @@
                         </table:Column>
                         <table:Column width="10rem">
                             <table:multiLabels>
-                                <Label text="Entity Currency: EUR" />
-                            <Label text="CREDIT" />
+                                <Label textAlign="Center" text="Entity Currency: EUR" />
+                            <Label textAlign="Center" text="CREDIT" />
                             </table:multiLabels>
                             <table:template>
                                 <Text text="{DataIMA23>CREDIT}" />
@@ -174,8 +189,8 @@
                         </table:Column>
                         <table:Column width="10rem" headerSpan="2">
                             <table:multiLabels>
-                                <Label text="Contract Currency" textAlign="Center" width="100%"/>
-                                <Label text="DEBIT" />
+                                <Label textAlign="Center" text="Contract Currency" width="100%"/>
+                                <Label textAlign="Center" text="DEBIT" />
                             </table:multiLabels>
                             <table:template>
                                 <Text text="{DataIMA23>DEBIT_CURR}" />
@@ -183,8 +198,8 @@
                         </table:Column>
                         <table:Column width="11rem">
                             <table:multiLabels>
-                                <Label text="Contract Currency" />
-                                <Label text="CREDIT" />
+                                <Label textAlign="Center" text="Contract Currency" />
+                                <Label textAlign="Center" text="CREDIT" />
                             </table:multiLabels>
                             <table:template>
                                 <Text text="{DataIMA23>CREDIT_CURR}" />
