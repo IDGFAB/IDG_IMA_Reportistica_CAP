@@ -154,26 +154,38 @@
                                 <Text text="{DataIMA23>XMBEZ}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="10rem">
-                            <Label text="DEBIT" />
+                        <table:Column width="10rem" headerSpan="2">
+                            <table:multiLabels>
+                                <Label text="Entity Currency: EUR" textAlign="Center" width="100%" />
+                                <Label text="DEBIT" />
+                            </table:multiLabels>
                             <table:template>
                                 <Text text="{DataIMA23>DEBIT}" />
                             </table:template>
                         </table:Column>
                         <table:Column width="10rem">
+                            <table:multiLabels>
+                                <Label text="Entity Currency: EUR" />
                             <Label text="CREDIT" />
+                            </table:multiLabels>
                             <table:template>
                                 <Text text="{DataIMA23>DEBITO_BTERM}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="10rem">
-                            <Label text="DEBIT" />
+                        <table:Column width="10rem" headerSpan="2">
+                            <table:multiLabels>
+                                <Label text="Contract Currency" textAlign="Center" width="100%"/>
+                                <Label text="DEBIT" />
+                            </table:multiLabels>
                             <table:template>
                                 <Text text="{DataIMA23>DEBIT_CURR}" />
                             </table:template>
                         </table:Column>
                         <table:Column width="11rem">
-                            <Label text="CREDIT" />
+                            <table:multiLabels>
+                                <Label text="Contract Currency" />
+                                <Label text="CREDIT" />
+                            </table:multiLabels>
                             <table:template>
                                 <Text text="{DataIMA23>CREDIT_CURR}" />
                             </table:template>
