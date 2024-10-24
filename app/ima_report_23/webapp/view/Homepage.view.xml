@@ -21,13 +21,11 @@
                 <layout:HorizontalLayout id="hLayout" allowWrapping="true">
                     <layout:VerticalLayout id="vLayout" class="sapUiMediumMarginEnd">
                         <ObjectAttribute title="Entity" text="" />
-                        <ObjectAttribute title="Contract Type" text="" />
                         <ObjectAttribute title="Contract" text="" />
                     </layout:VerticalLayout>
                     <layout:VerticalLayout id="vLayout2">
                         <ObjectAttribute title="Period" text="" />
                         <ObjectAttribute title="Year" text="" />
-                        <ObjectAttribute title="Cost Center" text="" />
                         <ObjectAttribute title="ID Storico" text="" />
                     </layout:VerticalLayout>
                 </layout:HorizontalLayout>

@@ -293,7 +293,6 @@ sap.ui.define([
                         this.entityKeys = aSelectedKeys.length
                     } else {
                         const els = [
-                            this.getView().byId("TipoContrattoBox"),
                             this.getView().byId("ContrattoBox"),
                             this.getView().byId("AnnoSelect"),
                             this.getView().byId("PeriodoSelect"),
