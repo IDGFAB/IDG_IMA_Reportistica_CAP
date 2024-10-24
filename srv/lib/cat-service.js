@@ -437,6 +437,23 @@ async applyFilters(
     costCenter = [], 
     Id_storico = null
 ) {
+
+
+    // Array che conterrà i valori
+    let arrayNumeri = [];
+
+    // Convertiamo il numero in intero
+    let numero = parseInt(period);
+
+    // Ciclo for che riempe l'array
+    for (let i = numero; i >= 1; i--) {
+        // Convertiamo il numero di nuovo in stringa e aggiungiamo gli zeri iniziali
+        let stringaNumero = i.toString().padStart(3, '0');
+        // Aggiungiamo la stringa all'array
+        arrayNumeri.push(stringaNumero);
+    }
+
+
     // Definizione dei filtri progressivi
     const whereClause = {};
 
@@ -462,7 +479,7 @@ async applyFilters(
 
     // Filtro per periodo (PERIODDUEDATE)
     if (period) {
-        whereClause.PERIODDUEDATE = period;
+        whereClause.PERIODDUEDATE = arrayNumeri;
     }
 
     // Filtro per centro di costo (IDENTOBJNR), si sblocca solo dopo year e period
@@ -484,7 +501,7 @@ async applyFilters(
     );
 
 
-    this.log.info("dati filtrati cascade", filteredData)
+    this.log.info("dati filtrati", filteredData)
     this.log.info("clausola where per cascade", whereClause)
 
     // Usa Set per rimuovere automaticamente i duplicati dai risultati

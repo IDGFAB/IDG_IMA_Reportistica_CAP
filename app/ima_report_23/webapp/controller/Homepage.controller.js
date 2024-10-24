@@ -518,14 +518,17 @@ sap.ui.define([
                 
                 // }
                 
-                if(!requestData.contratto || requestData.contratto.length == 0){
+                if(!requestData.contratto || requestData.contratto.length == 0)
+                    if(!requestData.year){
+                    {
                     oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
                     oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
                     oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
-               //     oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                    //oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
                     oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
                     
                     }
+                }
 
                     if(!requestData.year){
                         oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
