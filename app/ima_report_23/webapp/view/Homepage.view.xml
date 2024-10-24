@@ -169,7 +169,7 @@
                             <Label text="CREDIT" />
                             </table:multiLabels>
                             <table:template>
-                                <Text text="{DataIMA23>DEBITO_BTERM}" />
+                                <Text text="{DataIMA23>CREDIT}" />
                             </table:template>
                         </table:Column>
                         <table:Column width="10rem" headerSpan="2">
