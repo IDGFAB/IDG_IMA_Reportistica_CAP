@@ -155,7 +155,7 @@
                                 <Label textAlign="Center" />
                                 <Label text="Asset Category">
                                     <customData>
-                                        <core:CustomData value="ASSET_CATEGORY" />
+                                        <core:CustomData value="XMBEZ" />
                                     </customData>
                                 </Label>
                             </table:multiLabels>
@@ -181,7 +181,7 @@
                                 <Label textAlign="Center" />
                                 <Label text="Cost Center">
                                     <customData>
-                                        <core:CustomData value="COST_CENTER" />
+                                        <core:CustomData value="IDENTOBJNR" />
                                     </customData>
                                 </Label>
                             </table:multiLabels>
@@ -192,7 +192,7 @@
                         <table:Column width="10rem" headerSpan="2">
                             <table:multiLabels>
                                 <Label textAlign="Center" text="Entity Currency: EUR" />
-                                <Label text="DEBIT" textAlign="Center">
+                                <Label textAlign="Center" text="Debit" >
                                     <customData>
                                         <core:CustomData value="DEBIT" />
                                     </customData>
@@ -205,7 +205,7 @@
                         <table:Column width="10rem">
                             <table:multiLabels>
                                 <Label textAlign="Center" text="Entity Currency: EUR" />
-                                <Label textAlign="Center" text="CREDIT">
+                                <Label textAlign="Center" text="Credit">
                                     <customData>
                                         <core:CustomData value="CREDIT" />
                                     </customData>
@@ -218,7 +218,7 @@
                         <table:Column width="10rem" headerSpan="2">
                             <table:multiLabels>
                                 <Label textAlign="Center" text="Contract Currency" width="100%"/>
-                                <Label textAlign="Center" text="DEBIT">
+                                <Label textAlign="Center" text="Debit">
                                     <customData>
                                         <core:CustomData value="DEBIT_CURR" />
                                     </customData>
@@ -231,7 +231,7 @@
                         <table:Column width="11rem">
                             <table:multiLabels>
                                 <Label textAlign="Center" text="Contract Currency" />
-                                <Label textAlign="Center" text="CREDIT">
+                                <Label textAlign="Center" text="Credit">
                                     <customData>
                                         <core:CustomData value="CREDIT_CURR" />
                                     </customData>
