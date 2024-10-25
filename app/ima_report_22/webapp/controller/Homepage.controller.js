@@ -36,6 +36,7 @@ sap.ui.define([
             this.cdcKeys;
             this.annoKey;
             this.periodoKey;
+            this.idStoricoKey;
         },
 
         createSorter: function() {
@@ -276,6 +277,108 @@ sap.ui.define([
             console.log("vecchie chiavi", aPreviousSelectedKeys)
 
             switch (controlName) {
+                case "ID_STORICO":
+                    if(this.idStoricoKey == undefined){
+                        let aSelectedKey = selectedControl.getSelectedKey();
+                        this.idStoricoKey = aSelectedKey
+                    } else {
+                        const els = [
+                            this.getView().byId("TipoContrattoBox"),
+                            this.getView().byId("ContrattoBox"),
+                            this.getView().byId("AnnoSelect"),
+                            this.getView().byId("PeriodoSelect"),
+                            this.getView().byId("CostCenterBox"),
+                            this.getView().byId("EntityBox")
+                        ]
+
+                        els.forEach(el => {
+                            if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
+                                // Handle MultiComboBox
+                                el.setSelectedKeys(null)
+                            } else if (el.getMetadata().getName() === "sap.m.Select") {
+                                // Handle Select
+                                el.setSelectedKey(null)
+                            } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
+                                // Handle ComboBox
+                                el.setSelectedKey(null)
+                            }
+
+                            // Checking each label's concatenation to empty it
+                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
+                            this.makeTitleObjAttrBold();
+                        })
+                        oSelectedFiltersModel.setProperty("/allSelected", false);
+                    }
+                    break;
+        
+                case "Anno":
+                    if(this.annoKey == undefined){
+                        let aSelectedKey = selectedControl.getSelectedKey();
+                        this.annoKey = aSelectedKey
+
+                    } else {
+                        const els = [
+                            this.getView().byId("TipoContrattoBox"),
+                            this.getView().byId("ContrattoBox"),
+                            this.getView().byId("PeriodoSelect"),
+                            this.getView().byId("CostCenterBox"),
+                            this.getView().byId("EntityBox")
+                        ]
+
+                        els.forEach(el => {
+                            if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
+                                // Handle MultiComboBox
+                                el.setSelectedKeys(null)
+                            } else if (el.getMetadata().getName() === "sap.m.Select") {
+                                // Handle Select
+                                el.setSelectedKey(null)
+                            } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
+                                // Handle ComboBox
+                                el.setSelectedKey(null)
+                            }
+
+                            // Checking each label's concatenation to empty it
+                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
+                            this.makeTitleObjAttrBold();
+                            oSelectedFiltersModel.setProperty("/allSelected", false);
+                        })
+                    }
+                     
+                    break;
+        
+                case "Periodo":                    
+                    if(this.periodoKey == undefined){
+                        let aSelectedKey = selectedControl.getSelectedKey();
+                        this.periodoKey = aSelectedKey
+                    } else {
+                        const els = [
+                            this.getView().byId("TipoContrattoBox"),
+                            this.getView().byId("ContrattoBox"),
+                            this.getView().byId("CostCenterBox"),
+                            this.getView().byId("EntityBox")
+                        ]
+
+                        els.forEach(el => {
+                            if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
+                                // Handle MultiComboBox
+                                el.setSelectedKeys(null)
+                            } else if (el.getMetadata().getName() === "sap.m.Select") {
+                                // Handle Select
+                                el.setSelectedKey(null)
+                            } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
+                                // Handle ComboBox
+                                el.setSelectedKey(null)
+                            }
+
+                            // Checking each label's concatenation to empty it
+                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
+                            this.makeTitleObjAttrBold();
+                            oSelectedFiltersModel.setProperty("/allSelected", false);
+                        })
+                    }
+                        
+                    break;
+        
                 case "Entity":
                     if(this.entityKeys == undefined){
                         let aSelectedKeys = selectedControl.getSelectedKeys();
@@ -284,10 +387,7 @@ sap.ui.define([
                         const els = [
                             this.getView().byId("TipoContrattoBox"),
                             this.getView().byId("ContrattoBox"),
-                            this.getView().byId("AnnoSelect"),
-                            this.getView().byId("PeriodoSelect"),
                             this.getView().byId("CostCenterBox"),
-                            this.getView().byId("IdStoricoSelect")
                         ]
 
                         els.forEach(el => {
@@ -305,144 +405,20 @@ sap.ui.define([
                             // Checking each label's concatenation to empty it
                             this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
                             this.makeTitleObjAttrBold();
-                        })
-                    }
-                    break;
-        
-                case "TipoContratto":
-                    if(this.typeContractKeys == undefined){
-                        let aSelectedKeys = selectedControl.getSelectedKeys();
-                        this.typeContractKeys = aSelectedKeys.length
-
-                    } else {
-                        const els = [
-                            this.getView().byId("ContrattoBox"),
-                            this.getView().byId("AnnoSelect"),
-                            this.getView().byId("PeriodoSelect"),
-                            this.getView().byId("CostCenterBox"),
-                            this.getView().byId("IdStoricoSelect")
-                        ]
-
-                        els.forEach(el => {
-                            if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
-                                // Handle MultiComboBox
-                                el.setSelectedKeys(null)
-                            } else if (el.getMetadata().getName() === "sap.m.Select") {
-                                // Handle Select
-                                el.setSelectedKey(null)
-                            } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
-                                // Handle ComboBox
-                                el.setSelectedKey(null)
-                            }
-
-                            // Checking each label's concatenation to empty it
-                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
-                            this.makeTitleObjAttrBold();
+                            oSelectedFiltersModel.setProperty("/allSelected", false);
                         })
                     }
                      
                     break;
         
-                case "Contratto":                    
-                    if(this.contractKeys == undefined){
-                        let aSelectedKeys = selectedControl.getSelectedKeys();
-                        this.contractKeys = aSelectedKeys.length
-                    } else {
-                        const els = [
-                            this.getView().byId("AnnoSelect"),
-                            this.getView().byId("PeriodoSelect"),
-                            this.getView().byId("CostCenterBox"),
-                            this.getView().byId("IdStoricoSelect")
-                        ]
-
-                        els.forEach(el => {
-                            if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
-                                // Handle MultiComboBox
-                                el.setSelectedKeys(null)
-                            } else if (el.getMetadata().getName() === "sap.m.Select") {
-                                // Handle Select
-                                el.setSelectedKey(null)
-                            } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
-                                // Handle ComboBox
-                                el.setSelectedKey(null)
-                            }
-
-                            // Checking each label's concatenation to empty it
-                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
-                            this.makeTitleObjAttrBold();
-                        })
-                    }
-                        
-                    break;
-        
-                case "Anno":
-                    if(this.annoKey == undefined){
-                        let aSelectedKey = selectedControl.getSelectedKey();
-                        this.annoKey = aSelectedKey
-                    } else {
-                        const els = [
-                            this.getView().byId("PeriodoSelect"),
-                            this.getView().byId("CostCenterBox"),
-                            this.getView().byId("IdStoricoSelect")
-                        ]
-
-                        els.forEach(el => {
-                            if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
-                                // Handle MultiComboBox
-                                el.setSelectedKeys(null)
-                            } else if (el.getMetadata().getName() === "sap.m.Select") {
-                                // Handle Select
-                                el.setSelectedKey(null)
-                            } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
-                                // Handle ComboBox
-                                el.setSelectedKey(null)
-                            }
-
-                            // Checking each label's concatenation to empty it
-                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
-                            this.makeTitleObjAttrBold();
-                        })
-                    }
-                     
-                    break;
-        
-                case "Periodo":
-                    if(this.periodoKey == undefined){
-                        let aSelectedKey = selectedControl.getSelectedKey();
-                        this.periodoKey = aSelectedKey
-                    } else {
-                        const els = [
-                            this.getView().byId("CostCenterBox"),
-                            this.getView().byId("IdStoricoSelect")
-                        ]
-
-                        els.forEach(el => {
-                            if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
-                                // Handle MultiComboBox
-                                el.setSelectedKeys(null)
-                            } else if (el.getMetadata().getName() === "sap.m.Select") {
-                                // Handle Select
-                                el.setSelectedKey(null)
-                            } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
-                                // Handle ComboBox
-                                el.setSelectedKey(null)
-                            }
-
-                            // Checking each label's concatenation to empty it
-                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
-                            this.makeTitleObjAttrBold();
-                        })
-                    }
-                           
-                    break;
-        
-                case "CostCenter":                    
+                case "CostCenter":
                     if(this.cdcKeys == undefined){
                         let aSelectedKeys = selectedControl.getSelectedKeys();
                         this.cdcKeys = aSelectedKeys.length
                     } else {
                         const els = [
-                            this.getView().byId("IdStoricoSelect")
+                            this.getView().byId("TipoContrattoBox"),
+                            this.getView().byId("ContrattoBox"),
                         ]
 
                         els.forEach(el => {
@@ -460,12 +436,43 @@ sap.ui.define([
                             // Checking each label's concatenation to empty it
                             this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
                             this.makeTitleObjAttrBold();
+                            oSelectedFiltersModel.setProperty("/allSelected", false);
+                        })
+                    }
+                           
+                    break;
+        
+                case "TipoContratto":                    
+                    if(this.typeContractKeys == undefined){
+                        let aSelectedKeys = selectedControl.getSelectedKeys();
+                        this.typeContractKeys = aSelectedKeys.length
+                    } else {
+                        const els = [
+                            this.getView().byId("ContrattoBox"),
+                        ]
+
+                        els.forEach(el => {
+                            if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
+                                // Handle MultiComboBox
+                                el.setSelectedKeys(null)
+                            } else if (el.getMetadata().getName() === "sap.m.Select") {
+                                // Handle Select
+                                el.setSelectedKey(null)
+                            } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
+                                // Handle ComboBox
+                                el.setSelectedKey(null)
+                            }
+
+                            // Checking each label's concatenation to empty it
+                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
+                            this.makeTitleObjAttrBold();
+                            oSelectedFiltersModel.setProperty("/allSelected", false);
                         })
                     }
                      
                     break;  
                 
-                case "ID_STORICO":
+                case "Contratto":
                 break;
                 default:
                     console.error("default, errore nello switch")
@@ -482,15 +489,15 @@ sap.ui.define([
 
             let oSelectedFilters = this.getView().getModel('selectedFiltersModel').getData();
 
-            console.log(Object.values(oSelectedFilters.entity));
+          //  console.log(Object.values(oSelectedFilters.entity));
             const requestData = {
-                entity: Object.values(oSelectedFilters.entity),
-                tipoContratto: oSelectedFilters.tipoContratto ? Object.values(oSelectedFilters.tipoContratto) : null,
-                contratto: oSelectedFilters.contratto ? Object.values(oSelectedFilters.contratto) : null, // Campo opzionale
+                Id_storico: oSelectedFilters.ID_STORICO,
                 year: oSelectedFilters.year,
                 period: oSelectedFilters.period,
+                entity: oSelectedFilters.entity ? Object.values(oSelectedFilters.entity) : null,
                 costCenter: oSelectedFilters.costCenter ? Object.values(oSelectedFilters.costCenter) : null, // Campo opzionale
-                Id_storico: oSelectedFilters.ID_STORICO,
+                tipoContratto: oSelectedFilters.tipoContratto ? Object.values(oSelectedFilters.tipoContratto) : null,
+                contratto: oSelectedFilters.contratto ? Object.values(oSelectedFilters.contratto) : null, // Campo opzionale
             }
 
             axios.post(servicePath, requestData)
@@ -498,51 +505,44 @@ sap.ui.define([
                 console.log("dati filtrati test", response.data);  // Handle the response array
                 let oFiltersModel = this.getView().getModel('oFiltersModel')
               
-                if(!requestData.tipoContratto || requestData.tipoContratto.length == 0){
-                oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
-                oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
+                if(!requestData.year){
                 oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
                 oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
+                oFiltersModel.getData().Entity = this._elaborateEntities(response.data.BUKRS, response.data.BUTXT)
                 oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
-                
+                oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
+                oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)                
                 }
                 
-                if(!requestData.contratto || requestData.contratto.length == 0)
-                    if(!requestData.year){
-                    {
-                    oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
-                    oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
-                    oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
-                    oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                    oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
-                    
-                    }
-                }
-
-                    if(!requestData.year){
-                        oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
-                        oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
-                        oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                        oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
-                        
-                        }
-
                 if(!requestData.period){
                     oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
+                    oFiltersModel.getData().Entity = this._elaborateEntities(response.data.BUKRS, response.data.BUTXT)
                     oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                    oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
-                    
+                    oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
+                    oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR) 
                     }
+
+                    if(!requestData.entity || requestData.entity.length == 0){
+                        oFiltersModel.getData().Entity = this._elaborateEntities(response.data.BUKRS, response.data.BUTXT)
+                        oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                        oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
+                        oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR) 
+                        }
 
                 if(!requestData.costCenter || requestData.costCenter.length == 0){
                     oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                    oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                    oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
+                    oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR) 
+                    }
+
+                if(!requestData.tipoContratto || requestData.tipoContratto.length == 0){
+                    oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
+                    oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR) 
                     
                     }
-                if(!requestData.Id_storico){
-                    oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
-                    
+                if(!requestData.contratto || requestData.contratto.length == 0){
+                    oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
+                    oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR) 
                     }
                    
                 console.log(oFiltersModel.getData().Entity)

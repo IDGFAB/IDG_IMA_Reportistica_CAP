@@ -429,13 +429,13 @@ async Filters() {
 
 
 async applyFilters(
-    entity = [], 
-    tipoContratto = [], 
-    contratto = [], 
+    Id_storico = null,
     year = null, 
     period = null, 
+    entity = [], 
     costCenter = [], 
-    Id_storico = null
+    tipoContratto = [], 
+    contratto = [], 
 ) {
 
 
