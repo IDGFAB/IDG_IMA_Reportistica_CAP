@@ -303,7 +303,10 @@ sap.ui.define([
                             }
 
                             // Checking each label's concatenation to empty it
-                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
+                            const labelText = el.getLabels()[0].getText().toLowerCase();
+                            this.assignReportResume({
+                                getSource: () => el
+                            }, labelText, null);
                             this.makeTitleObjAttrBold();
                         })
                     }
@@ -336,7 +339,10 @@ sap.ui.define([
                             }
 
                             // Checking each label's concatenation to empty it
-                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
+                            const labelText = el.getLabels()[0].getText().toLowerCase();
+                            this.assignReportResume({
+                                getSource: () => el
+                            }, labelText, null);
                             this.makeTitleObjAttrBold();
                         })
                     }
@@ -368,7 +374,10 @@ sap.ui.define([
                             }
 
                             // Checking each label's concatenation to empty it
-                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
+                            const labelText = el.getLabels()[0].getText().toLowerCase();
+                            this.assignReportResume({
+                                getSource: () => el
+                            }, labelText, null);
                             this.makeTitleObjAttrBold();
                         })
                     }
@@ -399,7 +408,10 @@ sap.ui.define([
                             }
 
                             // Checking each label's concatenation to empty it
-                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
+                            const labelText = el.getLabels()[0].getText().toLowerCase();
+                            this.assignReportResume({
+                                getSource: () => el
+                            }, labelText, null);
                             this.makeTitleObjAttrBold();
                         })
                     }
@@ -429,7 +441,10 @@ sap.ui.define([
                             }
 
                             // Checking each label's concatenation to empty it
-                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
+                            const labelText = el.getLabels()[0].getText().toLowerCase();
+                            this.assignReportResume({
+                                getSource: () => el
+                            }, labelText, null);
                             this.makeTitleObjAttrBold();
                         })
                     }
@@ -458,7 +473,10 @@ sap.ui.define([
                             }
 
                             // Checking each label's concatenation to empty it
-                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
+                            const labelText = el.getLabels()[0].getText().toLowerCase();
+                            this.assignReportResume({
+                                getSource: () => el
+                            }, labelText, null);
                             this.makeTitleObjAttrBold();
                         })
                     }
@@ -625,79 +643,51 @@ sap.ui.define([
             })
         },
 
-        assignReportResume: function (oEvent, concatenatedElementLabel, concatenatedElementObj) {
+        assignReportResume: function(oEvent, concatenatedElementLabel, concatenatedElementObj) {
             const selectedSelectObj = oEvent.getSource();
             const selectedNameString = selectedSelectObj ? selectedSelectObj.getLabels()[0].getText() : "";
-            let selectedItemsText = "";
-            let concatedItemsText = "";
-
-            if (selectedSelectObj.getMetadata().getName() === "sap.m.MultiComboBox") {
-                // Handle MultiComboBox
-                // Set the text for the selected item and the concatenated element
-                if (concatenatedElementObj !== undefined && concatenatedElementObj.getMetadata().getName() === "sap.m.MultiComboBox") {
-                    concatedItemsText = concatenatedElementObj.getSelectedKeys()
-                    .map(item => item.getText())
-                    .join(", ");
-                } else {
-                    selectedItemsText = selectedSelectObj.getSelectedItems()
-                        .map(item => item.getText())
-                        .join(", ");
-
-                }
+            
+            // Helper function to get text based on control type
+            const getSelectedText = (control) => {
+                if (!control) return "";
                 
-            } else if (selectedSelectObj.getMetadata().getName() === "sap.m.Select") {
-                // Handle Select
-                if (concatenatedElementObj !== undefined && concatenatedElementObj.getMetadata().getName() === "sap.m.Select") {
-                    const selectedConcatenatedItem = concatenatedElementObj.getSelectedItem();
-                    concatedItemsText = selectedConcatenatedItem ? selectedConcatenatedItem.getText() : "";
-                } else {
-                    const selectedItem = selectedSelectObj.getSelectedItem();
-                    selectedItemsText = selectedItem ? selectedItem.getText() : "";
-
+                switch (control.getMetadata().getName()) {
+                    case "sap.m.MultiComboBox":
+                        return control.getSelectedKeys()
+                            .map(item => typeof item === 'object' ? item.getText() : item)
+                            .join(", ");
+                            
+                    case "sap.m.Select":
+                    case "sap.m.ComboBox":
+                        const selectedItem = control.getSelectedItem();
+                        return selectedItem ? selectedItem.getText() : "";
+                        
+                    default:
+                        return "";
                 }
-
-            } else if (selectedSelectObj.getMetadata().getName() === "sap.m.ComboBox") {
-                // Handle ComboBox
-                if (concatenatedElementObj !== undefined && concatenatedElementObj.getMetadata().getName() === "sap.m.ComboBox") {
-                    const selectedConcatenatedItem = concatenatedElementObj.getSelectedItem();
-                    concatedItemsText = selectedConcatenatedItem ? selectedConcatenatedItem.getText() : "";
-                } else {
-                    const selectedItem = selectedSelectObj.getSelectedItem();
-                    selectedItemsText = selectedItem ? selectedItem.getText() : "";
-
-                }
-
-            }
-
-            // Entering in the elements of the resume in the header of the DynamicPage 
+            };
+        
+            // Get text values
+            const selectedItemsText = concatenatedElementObj ? 
+                getSelectedText(concatenatedElementObj) : 
+                getSelectedText(selectedSelectObj);
+        
+            // Update attributes
             const resumeAttributesWrapperElements = this.getView().byId("hLayout");
-            const attributesContent = resumeAttributesWrapperElements.getContent();
-
-            attributesContent.forEach(content => {
-                const objectAttributes = content.getContent();
-
-                objectAttributes.forEach(objAttr => {
-                    if (objAttr instanceof ObjectAttribute) {
-
-                        // Checks between the name of the ObjectAttribute {text:""} and the <Select label="">
-                        if (objAttr.getTitle().toLowerCase() === selectedNameString.toLowerCase() ) {
-                            objAttr.setText(selectedItemsText);
-
-                            // This .rerender() forces the element to be rendered right away (try removing it)
-                            objAttr.rerender();
-
-                        } else if (objAttr.getTitle().toLowerCase() === concatenatedElementLabel) {
-                            objAttr.setText(concatedItemsText)
-
-                            // This .rerender() forces the element to be rendered right away (try removing it)
-                            objAttr.rerender();
-                        }
-
+            resumeAttributesWrapperElements.getContent().forEach(content => {
+                content.getContent().forEach(objAttr => {
+                    if (!(objAttr instanceof ObjectAttribute)) return;
+        
+                    const attrTitle = objAttr.getTitle().toLowerCase();
+                    const isTargetAttribute = attrTitle === selectedNameString.toLowerCase() ||
+                                            attrTitle === concatenatedElementLabel;
+        
+                    if (isTargetAttribute && selectedItemsText !== undefined) {
+                        objAttr.setText(selectedItemsText);
+                        objAttr.rerender();
                     }
-                })
-
-            })
-
+                });
+            });
         },
 
         onCloseLegend: function (oEvent) {
@@ -1170,14 +1160,31 @@ sap.ui.define([
         
 
 
-        _createColumnConfig: function () {
-            var oTable = this.byId("table");
-            var aColumns = oTable.getColumns();
-            return aColumns.map(oColumn => ({
-                label: oColumn.getLabel().getText(),
-                property: oColumn.getLabel().getText(),
-                type: 'string'
-            }));
+        _createColumnConfig: function() {
+            return this.byId("table").getColumns().map(function(oColumn) {
+                const labels = oColumn.getMultiLabels();
+                
+                // Default values
+                let columnConfig = {
+                    label: "",
+                    property: "",
+                    type: 'string'
+                };
+        
+                // Handle different label scenarios
+                if (!labels || !labels.length) {
+                    const singleLabel = oColumn.getLabel();
+                    const text = singleLabel ? singleLabel.getText() : "";
+                    columnConfig.label = text;
+                    columnConfig.property = text;
+                } else {
+                    const targetLabel = labels.length > 1 ? labels[1] : labels[0];
+                    columnConfig.label = targetLabel.getText();
+                    columnConfig.property = targetLabel.getCustomData()[0]?.getValue() || targetLabel.getText();
+                }
+        
+                return columnConfig;
+            });
         },
         // getDataMock: function () {
         //     // Set JSON data to the model
