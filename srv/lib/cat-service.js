@@ -437,6 +437,23 @@ async applyFilters(
     costCenter = [], 
     Id_storico = null
 ) {
+
+
+    // Array che conterrà i valori
+    let arrayNumeri = [];
+
+    // Convertiamo il numero in intero
+    let numero = parseInt(period);
+
+    // Ciclo for che riempe l'array
+    for (let i = numero; i >= 1; i--) {
+        // Convertiamo il numero di nuovo in stringa e aggiungiamo gli zeri iniziali
+        let stringaNumero = i.toString().padStart(3, '0');
+        // Aggiungiamo la stringa all'array
+        arrayNumeri.push(stringaNumero);
+    }
+
+
     // Definizione dei filtri progressivi
     const whereClause = {};
 
@@ -462,7 +479,7 @@ async applyFilters(
 
     // Filtro per periodo (PERIODDUEDATE)
     if (period) {
-        whereClause.PERIODDUEDATE = period;
+        whereClause.PERIODDUEDATE = arrayNumeri;
     }
 
     // Filtro per centro di costo (IDENTOBJNR), si sblocca solo dopo year e period
@@ -704,29 +721,39 @@ async GetTabellaFiltrata23(entity = [], contratto = [], year = null, period = nu
 
 
     try{
-    const filteredTable = await cds.db.run(`SELECT "JOURNAL_TYPE",
-    "ACCOUNT",
-    "IDENTOBJNR",
-    "RECNTXTOLD",
-    "XMBEZ",
-    "DEBIT",
-    "CREDIT",
-    "RECNNR"
-FROM "CATALOGSERVICE_VIEW_LEASE_LIABILITIES__SHORT__TERM"
+    const filteredTable = await cds.db.run(`SELECT 'Reclass Liab. Current Portion' "JOURNAL_TYPE",
+	'Lease Liabilities Short Term' "ACCOUNT",
+	"RECNTXTOLD" "RECNTXTOLD",
+	"IDENTOBJNR" "IDENTOBJNR", --CDC
+    "XMBEZ" "XMBEZ", --ASSET CATEGORY
+	0 "DEBIT",
+	SUM("DEBITO_BTERM") "CREDIT",
+	"BUKRS", --COMPANY CODE
+	"RECNTYPE", --CONTRACT TYPE
+	"RECNNR", -- CONTRACT NUMBER
+	"YEARDUEDATE", --YEAR
+	"PERIODDUEDATE", --PERIOD
+	"ID_STORICO",
+	"ZZPARTNER", --ICP
+	"INTRENO",
+	"CERULE" "CERULE", --VALUATION CERULE
+	0 "DEBIT_CURR",
+	0 "CREDIT_CURR"
+FROM "CATALOGSERVICE_VIEW_ALL_DATA_V2"
 ${query}
-
-UNION ALL
-
-SELECT "JOURNAL_TYPE",
-    "ACCOUNT",
-    "IDENTOBJNR",
-    "RECNTXTOLD",
-    "XMBEZ",
-    "DEBIT",
-    "CREDIT",
-    "RECNNR"
-FROM "CATALOGSERVICE_VIEW_LEASE_LIABILITIES__LONG__TERM"
-${query}`)
+GROUP BY "RECNNR",
+	"IDENTOBJNR",
+	"RECNTXTOLD",
+	"XMBEZ",
+	"BUKRS",
+	"RECNTYPE",
+	"RECNNR",
+	"YEARDUEDATE",
+	"PERIODDUEDATE",
+	"ID_STORICO",
+	"ZZPARTNER",
+	"INTRENO",
+	"CERULE"`)
 
 console.log(filteredTable);
 return filteredTable

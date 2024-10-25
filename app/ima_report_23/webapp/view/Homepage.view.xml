@@ -142,13 +142,13 @@
                                 <Text text="{DataIMA23>ACCOUNT}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="11rem">
+                        <table:Column width="14rem">
                             <table:multiLabels>
                                 <Label text="" />
-                                <Label textAlign="Center" text="COST_CENTER" />
+                                <Label textAlign="Center" text="ASSET_CATEGORY" />
                             </table:multiLabels>
                             <table:template>
-                                <Text text="{DataIMA23>IDENTOBJNR}" />
+                                <Text text="{DataIMA23>XMBEZ}" />
                             </table:template>
                         </table:Column>
                         <table:Column width="14rem">
@@ -160,13 +160,13 @@
                                 <Text text="{DataIMA23>RECNTXTOLD}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="14rem">
+                        <table:Column width="11rem">
                             <table:multiLabels>
                                 <Label text="" />
-                                <Label textAlign="Center" text="ASSET_CATEGORY" />
+                                <Label textAlign="Center" text="COST_CENTER" />
                             </table:multiLabels>
                             <table:template>
-                                <Text text="{DataIMA23>XMBEZ}" />
+                                <Text text="{DataIMA23>IDENTOBJNR}" />
                             </table:template>
                         </table:Column>
                         <table:Column width="10rem" headerSpan="2">
