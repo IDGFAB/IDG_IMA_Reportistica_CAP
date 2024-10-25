@@ -43,7 +43,7 @@ sap.ui.define([
             this.disableFilterStart();
             
             // ENABLE ONLY FOR DEBUGGING PURPOSES
-            this.onDownloadPdfPress()
+            // this.onDownloadPdfPress()
         },
 
         createSorter: function() {
@@ -1104,58 +1104,35 @@ sap.ui.define([
             });
             
             // ENABLE AND UPDATE THE FOLLOWING CODE LINE ONLY FOR DEBUGGING PURPOSES
-            odata = [{ "ASSET_CLASS": "Guest quarters in benefit", "INTERCOMPANY": "NO", "CDC": "000175AT00", "CDC_CODE": null, "LEASE_N": "", "CONTRACT_CODE": "0000000400001", "ACC_SECTOR": "ATOP", "CONTRACT_DESCRIPTION": "x", "MERGED_ENTITY": "", "RIGHT_OF_USE": "0e+0", "ACCUMULATED_DEPRECIATION": "3.286478e+4", "NET_RIGHT_OF_USE": "0e+0", "CLOSING_LEASES_LIABILITIES": "0e+0", "LEASE_LIABILITIES_SHORT_TERM": "0e+0", "LEASE_LIABILITIES_LONG_TERM": "0e+0", "YTD_INTEREST": "3.331e+1", "LEASE_COST": "3.6e+3", "DEPRECIATION": "3.24323e+3", "GAIN_FX_RATES": 0, "LOSS_FX_RATES": 0}]
-
-            const columns = [
-                "Asset Class",
-                "Intercompany",
-                "Cost Centre",
-                "CC Description",
-                "Lease Number",
-                "Contract Code",
-                "Business Area",
-                "Contract Description",
-                "Merged Entity",
-                "Right of Use",
-                "Accumulated Depr.",
-                "Net Right of Use",
-                "Closing Leases Liabilities",
-                "Lease Liabilities Short Term",
-                "Lease Liabilities Long Term",
-                "YTD Interest",
-                "Lease Cost",
-                "Depreciation",
-                "Gain FX Rates",
-                "Loss FX Rates",
-            ];
-        
-            const rowsTechnicalName = [
-                "ASSET_CLASS",
-                "INTERCOMPANY",
-                "CDC",
-                "CDC_CODE",
-                "LEASE_N",
-                "CONTRACT_CODE",
-                "ACC_SECTOR",
-                "CONTRACT_DESCRIPTION",
-                "MERGED_ENTITY",
-                "RIGHT_OF_USE",
-                "ACCUMULATED_DEPRECIATION",
-                "NET_RIGHT_OF_USE",
-                "CLOSING_LEASES_LIABILITIES",
-                "LEASE_LIABILITIES_SHORT_TERM",
-                "LEASE_LIABILITIES_LONG_TERM",
-                "YTD_INTEREST",
-                "LEASE_COST",
-                "DEPRECIATION",
-                "GAIN_FX_RATES",
-                "LOSS_FX_RATES",
+            // odata = [{ "ASSET_CLASS": "Guest quarters in benefit", "INTERCOMPANY": "NO", "CDC": "000175AT00", "CDC_CODE": null, "LEASE_N": "", "CONTRACT_CODE": "0000000400001", "ACC_SECTOR": "ATOP", "CONTRACT_DESCRIPTION": "x", "MERGED_ENTITY": "", "RIGHT_OF_USE": "0e+0", "ACCUMULATED_DEPRECIATION": "3.286478e+4", "NET_RIGHT_OF_USE": "0e+0", "CLOSING_LEASES_LIABILITIES": "0e+0", "LEASE_LIABILITIES_SHORT_TERM": "0e+0", "LEASE_LIABILITIES_LONG_TERM": "0e+0", "YTD_INTEREST": "3.331e+1", "LEASE_COST": "3.6e+3", "DEPRECIATION": "3.24323e+3", "GAIN_FX_RATES": 0, "LOSS_FX_RATES": 0}];
+            
+            const columnsConfig = [
+                { name: "Asset Class", width: 60, technical: "ASSET_CLASS" },
+                { name: "Intercompany", width: 40, technical: "INTERCOMPANY" },
+                { name: "Cost Centre", width: 45, technical: "CDC" },
+                { name: "CC Description", width: 60, technical: "CDC_CODE" },
+                { name: "Lease Number", width: 45, technical: "LEASE_N" },
+                { name: "Contract Code", width: 50, technical: "CONTRACT_CODE" },
+                { name: "Business Area", width: 45, technical: "ACC_SECTOR" },
+                { name: "Contract Description", width: 80, technical: "CONTRACT_DESCRIPTION" },
+                { name: "Merged Entity", width: 45, technical: "MERGED_ENTITY" },
+                { name: "Right of Use", width: 50, technical: "RIGHT_OF_USE" },
+                { name: "Accumulated Depr.", width: 55, technical: "ACCUMULATED_DEPRECIATION" },
+                { name: "Net Right of Use", width: 50, technical: "NET_RIGHT_OF_USE" },
+                { name: "Closing Leases Liabilities", width: 60, technical: "CLOSING_LEASES_LIABILITIES" },
+                { name: "Lease Liabilities Short Term", width: 60, technical: "LEASE_LIABILITIES_SHORT_TERM" },
+                { name: "Lease Liabilities Long Term", width: 60, technical: "LEASE_LIABILITIES_LONG_TERM" },
+                { name: "YTD Interest", width: 45, technical: "YTD_INTEREST" },
+                { name: "Lease Cost", width: 45, technical: "LEASE_COST" },
+                { name: "Depreciation", width: 45, technical: "DEPRECIATION" },
+                { name: "Gain FX Rates", width: 45, technical: "GAIN_FX_RATES" },
+                { name: "Loss FX Rates", width: 45, technical: "LOSS_FX_RATES" }
             ];
         
             var docDefinition = {
                 pageSize: 'A3',
                 pageOrientation: 'landscape',
-                pageMargins: [5, 5, 5, 5],  // Minimum margins
+                pageMargins: [5, 5, 5, 5],
                 footer: { text: new Date().toLocaleString(), alignment: 'right', fontSize: 6 },
                 content: []
             };
@@ -1164,18 +1141,20 @@ sap.ui.define([
             let tableBody = [];
             
             // Add header row
-            tableBody.push(columns.map(col => ({
-                text: col.substring(0, 20),
+            tableBody.push(columnsConfig.map(col => ({
+                text: col.name.substring(0, 20),
                 style: { fontSize: 6, bold: true, alignment: 'center' },
-                noWrap: true  // Prevent text wrapping in headers
+                noWrap: true,
+                fillColor: '#d9d9d9',
+                border: [true, false, true, true],
             })));
         
             // Add data rows
             odata.forEach(function (rowData) {
-                let row = rowsTechnicalName.map(col => ({
-                    text: String(rowData[col] || "-").substring(0, 20), // Limit text length
+                let row = columnsConfig.map(col => ({
+                    text: String(rowData[col.technical] || "-").substring(0, 60),
                     style: { fontSize: 6 },
-                    noWrap: true  // Prevent text wrapping in cells
+                    noWrap: false
                 }));
                 tableBody.push(row);
             });
@@ -1184,10 +1163,13 @@ sap.ui.define([
             docDefinition.content.push({
                 table: {
                     headerRows: 1,
-                    widths: Array(columns.length).fill(53),  // Fixed width for all columns
+                    widths: columnsConfig.map(col => col.width), // Use the custom widths
                     body: tableBody
                 },
                 layout: {
+                    // No float accepted
+                    hLineWidth: function() { return 1; },
+                    vLineWidth: function() { return 1; },
                     paddingLeft: function() { return 2; },
                     paddingRight: function() { return 2; },
                     paddingTop: function() { return 2; },
@@ -1195,7 +1177,7 @@ sap.ui.define([
                 }
             });
         
-            pdfMake.createPdf(docDefinition).open(); // PUT DOWNLOAD LATER
+            pdfMake.createPdf(docDefinition).download();
         },
         
         
