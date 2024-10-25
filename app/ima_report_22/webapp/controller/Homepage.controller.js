@@ -1154,7 +1154,8 @@ sap.ui.define([
                 let row = columnsConfig.map(col => ({
                     text: String(rowData[col.technical] || "-").substring(0, 60),
                     style: { fontSize: 6 },
-                    noWrap: false
+                    noWrap: false,
+                    border: [true, false, true, false],
                 }));
                 tableBody.push(row);
             });
