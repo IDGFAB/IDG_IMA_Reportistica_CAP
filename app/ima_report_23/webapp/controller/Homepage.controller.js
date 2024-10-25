@@ -7,12 +7,13 @@ sap.ui.define([
     "sap/ui/table/Column",
     "sap/m/Text",
     "sap/ui/core/Item",
+    "sap/ui/export/Spreadsheet",
     "sap/m/ObjectAttribute",
     "sap/ui/model/Filter",
     "sap/ui/model/FilterOperator",
     "sap/m/MessageBox",
 ],
-    function (Controller, CustomData, JSONModel, Table, RowSettings, Column, Text, Item, ObjectAttribute, Filter, FilterOperator, MessageBox) {
+    function (Controller, CustomData, JSONModel, Table, RowSettings, Column, Text, Item, Spreadsheet, ObjectAttribute, Filter, FilterOperator, MessageBox) {
         "use strict";
 
         return Controller.extend("imareport23.controller.Homepage", {
@@ -1207,15 +1208,33 @@ sap.ui.define([
         
 
 
-        _createColumnConfig: function () {
-            var oTable = this.byId("table");
-            var aColumns = oTable.getColumns();
-            return aColumns.map(oColumn => ({
-                label: oColumn.getLabel().getText(),
-                property: oColumn.getLabel().getText(),
-                type: 'string'
-            }));
+        _createColumnConfig: function() {
+            return this.byId("table").getColumns().map(function(oColumn) {
+                const labels = oColumn.getMultiLabels();
+                
+                // Default values
+                let columnConfig = {
+                    label: "",
+                    property: "",
+                    type: 'string'
+                };
+        
+                // Handle different label scenarios
+                if (!labels || !labels.length) {
+                    const singleLabel = oColumn.getLabel();
+                    const text = singleLabel ? singleLabel.getText() : "";
+                    columnConfig.label = text;
+                    columnConfig.property = text;
+                } else {
+                    const targetLabel = labels.length > 1 ? labels[1] : labels[0];
+                    columnConfig.label = targetLabel.getText();
+                    columnConfig.property = targetLabel.getCustomData()[0]?.getValue() || targetLabel.getText();
+                }
+        
+                return columnConfig;
+            });
         },
+
         // getDataMock: function () {
         //     // Set JSON data to the model
         //     let oData = {

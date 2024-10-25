@@ -126,8 +126,12 @@
                     <table:columns>
                         <table:Column width="17rem">
                             <table:multiLabels>
-                                <Label text="" />
-                                <Label textAlign="Center" text="JOURNAL_TYPE" />
+                                <Label textAlign="Center" />
+                                <Label text="Journal Type">
+                                    <customData>
+                                        <core:CustomData value="JOURNAL_TYPE" />
+                                    </customData>
+                                </Label>
                             </table:multiLabels>
                             <table:template>
                                 <Text text="{DataIMA23>JOURNAL_TYPE}" />
@@ -135,8 +139,12 @@
                         </table:Column>
                         <table:Column width="17rem">
                             <table:multiLabels>
-                                <Label text="" />
-                                <Label textAlign="Center" text="ACCOUNT" />
+                                <Label textAlign="Center" />
+                                <Label  text="Account">
+                                    <customData>
+                                        <core:CustomData value="ACCOUNT" />
+                                    </customData>
+                                </Label>
                             </table:multiLabels>
                             <table:template>
                                 <Text text="{DataIMA23>ACCOUNT}" />
@@ -144,8 +152,12 @@
                         </table:Column>
                         <table:Column width="14rem">
                             <table:multiLabels>
-                                <Label text="" />
-                                <Label textAlign="Center" text="ASSET_CATEGORY" />
+                                <Label textAlign="Center" />
+                                <Label text="Asset Category">
+                                    <customData>
+                                        <core:CustomData value="ASSET_CATEGORY" />
+                                    </customData>
+                                </Label>
                             </table:multiLabels>
                             <table:template>
                                 <Text text="{DataIMA23>XMBEZ}" />
@@ -153,8 +165,12 @@
                         </table:Column>
                         <table:Column width="14rem">
                             <table:multiLabels>
-                                <Label text="" />
-                                <Label textAlign="Center" text="LEASE_N" />
+                                <Label textAlign="Center" />
+                                <Label text="Lease N">
+                                    <customData>
+                                        <core:CustomData value="RECNTXTOLD" />
+                                    </customData>
+                                </Label>
                             </table:multiLabels>
                             <table:template>
                                 <Text text="{DataIMA23>RECNTXTOLD}" />
@@ -162,8 +178,12 @@
                         </table:Column>
                         <table:Column width="11rem">
                             <table:multiLabels>
-                                <Label text="" />
-                                <Label textAlign="Center" text="COST_CENTER" />
+                                <Label textAlign="Center" />
+                                <Label text="Cost Center">
+                                    <customData>
+                                        <core:CustomData value="COST_CENTER" />
+                                    </customData>
+                                </Label>
                             </table:multiLabels>
                             <table:template>
                                 <Text text="{DataIMA23>IDENTOBJNR}" />
@@ -171,8 +191,12 @@
                         </table:Column>
                         <table:Column width="10rem" headerSpan="2">
                             <table:multiLabels>
-                                <Label textAlign="Center" text="Entity Currency: EUR" width="100%" />
-                                <Label textAlign="Center" text="DEBIT" />
+                                <Label textAlign="Center" text="Entity Currency: EUR" />
+                                <Label text="DEBIT" textAlign="Center">
+                                    <customData>
+                                        <core:CustomData value="DEBIT" />
+                                    </customData>
+                                </Label>
                             </table:multiLabels>
                             <table:template>
                                 <Text text="{DataIMA23>DEBIT}" />
@@ -181,7 +205,11 @@
                         <table:Column width="10rem">
                             <table:multiLabels>
                                 <Label textAlign="Center" text="Entity Currency: EUR" />
-                            <Label textAlign="Center" text="CREDIT" />
+                                <Label textAlign="Center" text="CREDIT">
+                                    <customData>
+                                        <core:CustomData value="CREDIT" />
+                                    </customData>
+                                </Label>
                             </table:multiLabels>
                             <table:template>
                                 <Text text="{DataIMA23>CREDIT}" />
@@ -190,7 +218,11 @@
                         <table:Column width="10rem" headerSpan="2">
                             <table:multiLabels>
                                 <Label textAlign="Center" text="Contract Currency" width="100%"/>
-                                <Label textAlign="Center" text="DEBIT" />
+                                <Label textAlign="Center" text="DEBIT">
+                                    <customData>
+                                        <core:CustomData value="DEBIT_CURR" />
+                                    </customData>
+                                </Label>
                             </table:multiLabels>
                             <table:template>
                                 <Text text="{DataIMA23>DEBIT_CURR}" />
@@ -199,7 +231,11 @@
                         <table:Column width="11rem">
                             <table:multiLabels>
                                 <Label textAlign="Center" text="Contract Currency" />
-                                <Label textAlign="Center" text="CREDIT" />
+                                <Label textAlign="Center" text="CREDIT">
+                                    <customData>
+                                        <core:CustomData value="CREDIT_CURR" />
+                                    </customData>
+                                </Label>
                             </table:multiLabels>
                             <table:template>
                                 <Text text="{DataIMA23>CREDIT_CURR}" />
