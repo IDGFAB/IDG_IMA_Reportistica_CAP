@@ -125,7 +125,8 @@
                 <table:Table id="table" selectionMode="None" visibleRowCountMode="Interactive" minAutoRowCount="8" enableBusyIndicator="true" enableColumnFreeze="true" width="100%" rows="{DataIMA23>/}">
                     <table:columns>
                         <table:Column width="17rem">
-                            <Label text="JOURNAL_TYPE" />
+                            <Label text="JOURNAL_TYPE
+                            " />
                             <table:template>
                                 <Text text="{DataIMA23>JOURNAL_TYPE}" />
                             </table:template>
@@ -136,10 +137,10 @@
                                 <Text text="{DataIMA23>ACCOUNT}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="11rem">
-                            <Label text="COST_CENTER" />
+                        <table:Column width="14rem">
+                            <Label text="ASSET_CATEGORY" />
                             <table:template>
-                                <Text text="{DataIMA23>IDENTOBJNR}" />
+                                <Text text="{DataIMA23>XMBEZ}" />
                             </table:template>
                         </table:Column>
                         <table:Column width="14rem">
@@ -148,10 +149,10 @@
                                 <Text text="{DataIMA23>RECNTXTOLD}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="14rem">
-                            <Label text="ASSET_CATEGORY" />
+                        <table:Column width="11rem">
+                            <Label text="COST_CENTER" />
                             <table:template>
-                                <Text text="{DataIMA23>XMBEZ}" />
+                                <Text text="{DataIMA23>IDENTOBJNR}" />
                             </table:template>
                         </table:Column>
                         <table:Column width="10rem" headerSpan="2">

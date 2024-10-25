@@ -721,29 +721,39 @@ async GetTabellaFiltrata23(entity = [], contratto = [], year = null, period = nu
 
 
     try{
-    const filteredTable = await cds.db.run(`SELECT "JOURNAL_TYPE",
-    "ACCOUNT",
-    "IDENTOBJNR",
-    "RECNTXTOLD",
-    "XMBEZ",
-    "DEBIT",
-    "CREDIT",
-    "RECNNR"
-FROM "CATALOGSERVICE_VIEW_LEASE_LIABILITIES__SHORT__TERM"
+    const filteredTable = await cds.db.run(`SELECT 'Reclass Liab. Current Portion' "JOURNAL_TYPE",
+	'Lease Liabilities Short Term' "ACCOUNT",
+	"RECNTXTOLD" "RECNTXTOLD",
+	"IDENTOBJNR" "IDENTOBJNR", --CDC
+    "XMBEZ" "XMBEZ", --ASSET CATEGORY
+	0 "DEBIT",
+	SUM("DEBITO_BTERM") "CREDIT",
+	"BUKRS", --COMPANY CODE
+	"RECNTYPE", --CONTRACT TYPE
+	"RECNNR", -- CONTRACT NUMBER
+	"YEARDUEDATE", --YEAR
+	"PERIODDUEDATE", --PERIOD
+	"ID_STORICO",
+	"ZZPARTNER", --ICP
+	"INTRENO",
+	"CERULE" "CERULE", --VALUATION CERULE
+	0 "DEBIT_CURR",
+	0 "CREDIT_CURR"
+FROM "CATALOGSERVICE_VIEW_ALL_DATA_V2"
 ${query}
-
-UNION ALL
-
-SELECT "JOURNAL_TYPE",
-    "ACCOUNT",
-    "IDENTOBJNR",
-    "RECNTXTOLD",
-    "XMBEZ",
-    "DEBIT",
-    "CREDIT",
-    "RECNNR"
-FROM "CATALOGSERVICE_VIEW_LEASE_LIABILITIES__LONG__TERM"
-${query}`)
+GROUP BY "RECNNR",
+	"IDENTOBJNR",
+	"RECNTXTOLD",
+	"XMBEZ",
+	"BUKRS",
+	"RECNTYPE",
+	"RECNNR",
+	"YEARDUEDATE",
+	"PERIODDUEDATE",
+	"ID_STORICO",
+	"ZZPARTNER",
+	"INTRENO",
+	"CERULE"`)
 
 console.log(filteredTable);
 return filteredTable
