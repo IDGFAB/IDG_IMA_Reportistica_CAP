@@ -89,6 +89,15 @@ entity View_All_Data_v2 {
     key BUKRS                      : String(4);
         BUTXT                      : String(25);
         IDENTASSET                 : String(12);
+    key BELNR                      : String(10);
+    key GJAHR                      : String(4);
+        SHKZG                      : String(1);
+        ZUONR                      : String(13);
+        DMBTR                      : Decimal(13, 2);
+        BUZEI                      : String(3);
+        MANDT                      : String(3);
+        BUDAT                      : String(8);
+        HKONT                      : String(10);
 }
 
 @cds.persistence.exists
