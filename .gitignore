@@ -22,6 +22,8 @@ mta_archives/
 .DS_Store
 *.orig
 *.log
+resources/*
+*.zip
 
 *.iml
 *.flattened-pom.xml
