@@ -240,7 +240,7 @@ sap.ui.define([
             oSelectedFiltersModel.refresh();
 
             this.clearFilter(oEvent)
-            this.selectFiltering();
+            
 
 
             // Check if all required filters are selected
@@ -254,13 +254,7 @@ sap.ui.define([
             // Update allSelected property
             oSelectedFiltersModel.setProperty("/allSelected", allSelected);
 
-            // this._bindToolbarText(); // Update toolbar text
-
-            // if (allSelected) {
-            //     this.setEnabledDownload(true);
-            // } else {
-            //     this.setEnabledDownload(false);
-            // }
+            this.selectFiltering();
         },
 
 
@@ -273,10 +267,14 @@ sap.ui.define([
             const controlName = selectedControl.getName();
 
             let aPreviousSelectedKeys = filtriSelezionati[controlName] || [];
+            let isItemSelectedFilled
 
             switch (controlName) {
                 case "Entity":
-                        if(selectedControl.getSelectedKeys().length){
+                        isItemSelectedFilled = selectedControl.getSelectedKeys().length;
+                        isItemSelectedFilled = true // Deselect to make optional fields upon deletion filterable based on the selected filters
+                       
+                        if(isItemSelectedFilled){
                             
                         const els = [
                             this.getView().byId("ContrattoBox"),
@@ -306,9 +304,11 @@ sap.ui.define([
                     break;
         
                 case "TipoContratto":
-                        if(selectedControl.getSelectedKeys()){
-                            
-                    } else {
+                    isItemSelectedFilled = selectedControl.getSelectedKeys();
+                    isItemSelectedFilled = true // Deselect to make optional fields upon deletion filterable based on the selected filters
+                    
+                    if(isItemSelectedFilled) {
+                        
                         const els = [
                             this.getView().byId("ContrattoBox"),
                             this.getView().byId("AnnoSelect"),
@@ -338,7 +338,10 @@ sap.ui.define([
                     break;
         
                 case "Contratto":                    
-                    if(selectedControl.getSelectedKeys().length){
+                    isItemSelectedFilled = selectedControl.getSelectedKeys().length;
+                    isItemSelectedFilled = true // Deselect to make optional fields upon deletion filterable based on the selected filters
+                    
+                    if(isItemSelectedFilled){
                         
                         const els = [
                             this.getView().byId("AnnoSelect"),
@@ -368,7 +371,10 @@ sap.ui.define([
                     break;
         
                 case "Anno":
-                        if(selectedControl.getSelectedKey().length){
+                        isItemSelectedFilled = selectedControl.getSelectedKey().length;
+                        isItemSelectedFilled = true // Deselect to make optional fields upon deletion filterable based on the selected filters
+                       
+                        if(isItemSelectedFilled){
                             
                         const els = [
                             this.getView().byId("PeriodoSelect"),
@@ -397,7 +403,10 @@ sap.ui.define([
                     break;
         
                 case "Periodo":
-                        if(selectedControl.getSelectedKey().length){
+                        isItemSelectedFilled = selectedControl.getSelectedKey().length;
+                        isItemSelectedFilled = true // Deselect to make optional fields upon deletion filterable based on the selected filters
+                       
+                        if(isItemSelectedFilled){
                             
                         const els = [
                             // this.getView().byId("CostCenterBox"),
@@ -425,7 +434,10 @@ sap.ui.define([
                     break;
         
                 case "CostCenter":                    
-                    if(selectedControl.getSelectedKeys().length){
+                    isItemSelectedFilled = selectedControl.getSelectedKeys().length;
+                    isItemSelectedFilled = true // Deselect to make optional fields upon deletion filterable based on the selected filters
+                    
+                    if(isItemSelectedFilled){
                         
                         const els = [
                             this.getView().byId("IdStoricoSelect")
