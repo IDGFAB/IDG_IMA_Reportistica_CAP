@@ -100,9 +100,6 @@
                 },
                 {
                     "uri": "utils/vfs_fonts.js"
-                },
-                {
-                    "uri": "libs/xlsx.full.min.js"
                 }
             ]
         },

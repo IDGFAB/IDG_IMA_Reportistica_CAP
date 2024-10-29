@@ -89,6 +89,7 @@ entity View_All_Data_v2 {
     key BUKRS                      : String(4);
         BUTXT                      : String(25);
         IDENTASSET                 : String(12);
+
 }
 
 @cds.persistence.exists
@@ -189,6 +190,51 @@ entity View_Lease_Liabilities__Long__Term {
 
 @cds.persistence.exists
 entity VIEW_ALL_UNION_ID23 {
+        JOURNAL_TYPE               : String(29);
+        ACCOUNT                    : String(27);
+        IDENTOBJNR                 : String(10);
+        RECNTXTOLD                 : String(20);
+        XMBEZ                      : String(30);
+        DEBIT                      : Decimal(23, 2);
+        CREDIT                     : Decimal(10, 2);
+    key YEARDUEDATE                : String(4);
+    key PERIODDUEDATE              : String(3);
+        RECNNR                     : String(13);
+    key BUKRS                      : String(4);
+        CERULE                     : String(10);
+        RECNTYPE                   : String(4);
+        ZZPARTNER                  : String(6);
+    key ID_STORICO                 : String(20);
+    key INTRENO                    : String(13);
+        DEBIT_CURR                 : Decimal(5, 2);
+        CREDIT_CURR                : Decimal(5, 2);
+}
+
+
+@cds.persistence.exists
+entity View_CAP_REPORT_23_EQ {
+        JOURNAL_TYPE               : String(29);
+        ACCOUNT                    : String(27);
+        IDENTOBJNR                 : String(10);
+        RECNTXTOLD                 : String(20);
+        XMBEZ                      : String(30);
+        DEBIT                      : Decimal(23, 2);
+        CREDIT                     : Decimal(10, 2);
+    key YEARDUEDATE                : String(4);
+    key PERIODDUEDATE              : String(3);
+        RECNNR                     : String(13);
+    key BUKRS                      : String(4);
+        CERULE                     : String(10);
+        RECNTYPE                   : String(4);
+        ZZPARTNER                  : String(6);
+    key ID_STORICO                 : String(20);
+    key INTRENO                    : String(13);
+        DEBIT_CURR                 : Decimal(5, 2);
+        CREDIT_CURR                : Decimal(5, 2);
+}
+
+@cds.persistence.exists
+entity View_CAP_REPORT23_LT {
         JOURNAL_TYPE               : String(29);
         ACCOUNT                    : String(27);
         IDENTOBJNR                 : String(10);
