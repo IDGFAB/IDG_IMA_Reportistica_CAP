@@ -144,129 +144,26 @@
             <!-- ScrollContainer to allow horizontal scrolling -->
             <ScrollContainer horizontal="true" width="100%">
                 <!-- Table Definition -->
-                <table:Table id="table" selectionMode="None" visibleRowCountMode="Interactive" minAutoRowCount="8" enableBusyIndicator="true" enableColumnFreeze="true" width="100%" rows="{DataIMA9>/}">
-                    <table:columns>
-                        <table:Column width="11rem">
-                            <Label text="ASSET_CLASS" />
-                            <table:template>
-                                <Text text="{DataIMA9>ASSET_CLASS}" />
-                            </table:template>
-                        </table:Column>
-                        <table:Column width="11rem">
-                            <Label text="INTERCOMPANY" />
-                            <table:template>
-                                <Text text="{DataIMA9>INTERCOMPANY}" />
-                            </table:template>
-                        </table:Column>
-                        <table:Column width="11rem">
-                            <Label text="CDC" />
-                            <table:template>
-                                <Text text="{DataIMA9>CDC}" />
-                            </table:template>
-                        </table:Column>
-                        <table:Column width="11rem">
-                            <Label text="CDC_CODE" />
-                            <table:template>
-                                <Text text="{DataIMA9>CDC_CODE}" />
-                            </table:template>
-                        </table:Column>
-                        <table:Column width="11rem">
-                            <Label text="LEASE_NUMBER" />
-                            <table:template>
-                                <Text text="{DataIMA9>LEASE_NUMBER}" />
-                            </table:template>
-                        </table:Column>
-                        <table:Column width="11rem">
-                            <Label text="CONTRACT_CODE" />
-                            <table:template>
-                                <Text text="{DataIMA9>CONTRACT_CODE}" />
-                            </table:template>
-                        </table:Column>
-                        <table:Column width="11rem">
-                            <Label text="ACC_SECTOR" />
-                            <table:template>
-                                <Text text="{DataIMA9>ACC_SECTOR}" />
-                            </table:template>
-                        </table:Column>
-                        <table:Column width="11rem">
-                            <Label text="CONTRACT_DESCRIPTION" />
-                            <table:template>
-                                <Text text="{DataIMA9>CONTRACT_DESCRIPTION}" />
-                            </table:template>
-                        </table:Column>
-                        <table:Column width="11rem">
-                            <Label text="MERGED_ENTITY" />
-                            <table:template>
-                                <Text text="{DataIMA9>MERGED_ENTITY}" />
-                            </table:template>
-                        </table:Column>
-                        <table:Column width="11rem">
-                            <Label text="RIGHT_OF_USE" />
-                            <table:template>
-                                <Text text="{DataIMA9>RIGHT_OF_USE}" />
-                            </table:template>
-                        </table:Column>
-                        <table:Column width="11rem">
-                            <Label text="ACCUMULATED_DEPRECIATION" />
-                            <table:template>
-                                <Text text="{DataIMA9>ACCUMULATED_DEPRECIATION}" />
-                            </table:template>
-                        </table:Column>
-                        <table:Column width="11rem">
-                            <Label text="NET_RIGHT_OF_USE" />
-                            <table:template>
-                                <Text text="{DataIMA9>NET_RIGHT_OF_USE}" />
-                            </table:template>
-                        </table:Column>
-                        <table:Column width="11rem">
-                            <Label text="CLOSING_LEASES_LIABILITIES" />
-                            <table:template>
-                                <Text text="{DataIMA9>CLOSING_LEASES_LIABILITIES}" />
-                            </table:template>
-                        </table:Column>
-                        <table:Column width="11rem">
-                            <Label text="LEASE_LIABILITIES_SHORT_TERM" />
-                            <table:template>
-                                <Text text="{DataIMA9>LEASE_LIABILITIES_SHORT_TERM}" />
-                            </table:template>
-                        </table:Column>
-                        <table:Column width="11rem">
-                            <Label text="LEASE_LIABILITIES_LONG_TERM" />
-                            <table:template>
-                                <Text text="{DataIMA9>LEASE_LIABILITIES_LONG_TERM}" />
-                            </table:template>
-                        </table:Column>
-                        <table:Column width="11rem">
-                            <Label text="YTD_INTEREST" />
-                            <table:template>
-                                <Text text="{DataIMA9>YTD_INTEREST}" />
-                            </table:template>
-                        </table:Column>
-                        <table:Column width="11rem">
-                            <Label text="LEASE_COST" />
-                            <table:template>
-                                <Text text="{DataIMA9>LEASE_COST}" />
-                            </table:template>
-                        </table:Column>
-                        <table:Column width="11rem">
-                            <Label text="DEPRECIATION" />
-                            <table:template>
-                                <Text text="{DataIMA9>DEPRECIATION}" />
-                            </table:template>
-                        </table:Column>
-                        <table:Column width="11rem">
-                            <Label text="GAIN_FX_RATES" />
-                            <table:template>
-                                <Text text="{DataIMA9>GAIN_FX_RATES}" />
-                            </table:template>
-                        </table:Column>
-                        <table:Column width="11rem">
-                            <Label text="LOSS_FX_RATES" />
-                            <table:template>
-                                <Text text="{DataIMA9>LOSS_FX_RATES}" />
-                            </table:template>
-                        </table:Column>
-                    </table:columns>
+                <table:Table
+                id="table"
+                selectionMode="None"
+                enableColumnReordering="true"
+                enableColumnFreeze="true"
+                fixedColumnCount="2"
+                width="100%"
+                visibleRowCountMode="Interactive"
+                minAutoRowCount="5"
+                >
+                    <!-- Header Toolbar -->
+
+                    <!-- Use RowSettings to apply custom styles to rows -->
+                    <table:rowSettingsTemplate>
+                        <table:RowSettings
+                            highlight="{path: 'Account', formatter: '.formatter.setRowHighlight'}"
+                        />
+                    </table:rowSettingsTemplate>
+
+                    <!-- Columns will be dynamically added by the controller -->
                 </table:Table>
 
 
