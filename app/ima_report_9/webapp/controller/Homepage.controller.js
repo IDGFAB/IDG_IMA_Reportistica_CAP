@@ -1180,7 +1180,7 @@ sap.ui.define([
             // Define columns
             const columns = [
                 { key: "Section", label: "Section", width: "150px", freeze: true },
-                { key: "Description", label: "Description", width: "200px", freeze: true },
+                { key: "Description", label: "Description", width: "350px", freeze: true },
                 { key: "Total", label: "Total", width: "150px" },
                 { key: "Building", label: "Building", width: "150px" },
                 { key: "Cars in pool", label: "Cars in pool", width: "150px" },
