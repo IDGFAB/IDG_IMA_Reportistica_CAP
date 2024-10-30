@@ -42,6 +42,7 @@ sap.ui.define([
         onAfterRendering: function () {
             this.makeTitleObjAttrBold();
             this.disableFilterStart();
+            console.clear()
             
             // ENABLE ONLY FOR DEBUGGING PURPOSES
             // this.onDownloadPdfPress()
@@ -100,7 +101,6 @@ sap.ui.define([
 
             axios.post(servicePath)
                 .then((response) => {
-                    console.log(response.data);  // Handle the response array
                     let oFiltersModel = this.getView().getModel('oFiltersModel')
                     oFiltersModel.setData(
                         {
@@ -113,7 +113,6 @@ sap.ui.define([
                             Id_storico: this._sortStringArray(response.data.ID_STORICO)
                         }
                     )
-                    console.log('Filters data: ', oFiltersModel.getData());
                     return
 
                 })
@@ -139,7 +138,6 @@ sap.ui.define([
 
 
 
-            console.log(Object.values(oSelectedFilters.entity));
             const requestData = {
                 entity: Object.values(oSelectedFilters.entity),
                 tipoContratto: Object.values(oSelectedFilters.tipoContratto),
@@ -155,7 +153,6 @@ sap.ui.define([
                 .then((response) => {
                     this.getView().byId("table").setBusy(false)
                     oSelectedFiltersModel.setProperty("/matchData", true);
-                    console.log(response.data);  // Handle the response array
                     let dataFiltered = this.getView().getModel('DataIMA22');
                     if(typeof response.data === 'object'){
                         let dataArray = []
@@ -221,8 +218,6 @@ sap.ui.define([
 
             const selectedControl = oEvent.getSource();
             const controlName = selectedControl.getName();
-            console.log("selected control", selectedControl)
-            console.log("control name", controlName)
 
             // Update the specific filter in the model
             if (selectedControl.getMetadata().getName() === "sap.m.MultiComboBox") {
@@ -233,8 +228,11 @@ sap.ui.define([
                 oSelectedFilters[controlName] = selectedControl.getSelectedKey();
             }
 
+            this.clearFilter(oEvent);
+            
             // Update the model with new data
             oSelectedFiltersModel.setData(oSelectedFilters);
+            oSelectedFiltersModel.refresh();
 
             // Check if all required filters are selected
             let allSelected =
@@ -247,21 +245,9 @@ sap.ui.define([
             // Update allSelected property
             oSelectedFiltersModel.setProperty("/allSelected", allSelected);
 
-
-
-            this.clearFilter(oEvent)
-
-
-
+            
             this.selectFiltering();
 
-            // this._bindToolbarText(); // Update toolbar text
-
-            // if (allSelected) {
-            //     this.setEnabledDownload(true);
-            // } else {
-            //     this.setEnabledDownload(false);
-            // }
         },
 
 
@@ -274,14 +260,24 @@ sap.ui.define([
             const controlName = selectedControl.getName();
 
             let aPreviousSelectedKeys = filtriSelezionati[controlName] || [];
-            console.log("vecchie chiavi", aPreviousSelectedKeys)
+
+            let isSelectedItemFilled
 
             switch (controlName) {
                 case "ID_STORICO":
-                    if(this.idStoricoKey == undefined){
-                        let aSelectedKey = selectedControl.getSelectedKey();
-                        this.idStoricoKey = aSelectedKey
-                    } else {
+                    isSelectedItemFilled = selectedControl.getSelectedKey().length
+                    isSelectedItemFilled = true // Deselect to make optional fields upon deletion filterable based on the selected filters
+                    
+                    if(isSelectedItemFilled){
+                        
+                        // Resetting the chained models
+                        filtriSelezionati.Periodo = null
+                        filtriSelezionati.CostCenter = null
+                        filtriSelezionati.Entity = null
+                        filtriSelezionati.TipoContratto = null
+                        filtriSelezionati.Contratto = null
+                        oSelectedFiltersModel.refresh();
+                        
                         const els = [
                             this.getView().byId("TipoContrattoBox"),
                             this.getView().byId("ContrattoBox"),
@@ -315,11 +311,19 @@ sap.ui.define([
                     break;
         
                 case "Anno":
-                    if(this.annoKey == undefined){
-                        let aSelectedKey = selectedControl.getSelectedKey();
-                        this.annoKey = aSelectedKey
+                    isSelectedItemFilled = selectedControl.getSelectedKey().length
+                    isSelectedItemFilled = true // Deselect to make optional fields upon deletion filterable based on the selected filters
+                    
+                    if(isSelectedItemFilled){
 
-                    } else {
+                        // Resetting the chained models
+                        filtriSelezionati.Periodo = null
+                        filtriSelezionati.CostCenter = null
+                        filtriSelezionati.Entity = null
+                        filtriSelezionati.TipoContratto = null
+                        filtriSelezionati.Contratto = null
+                        oSelectedFiltersModel.refresh();
+                        
                         const els = [
                             this.getView().byId("TipoContrattoBox"),
                             this.getView().byId("ContrattoBox"),
@@ -353,10 +357,18 @@ sap.ui.define([
                     break;
         
                 case "Periodo":                    
-                    if(this.periodoKey == undefined){
-                        let aSelectedKey = selectedControl.getSelectedKey();
-                        this.periodoKey = aSelectedKey
-                    } else {
+                    isSelectedItemFilled = selectedControl.getSelectedKey().length
+                    isSelectedItemFilled = true // Deselect to make optional fields upon deletion filterable based on the selected filters
+                
+                    if(isSelectedItemFilled){
+
+                        // Resetting the chained models
+                        filtriSelezionati.CostCenter = null
+                        filtriSelezionati.Entity = null
+                        filtriSelezionati.TipoContratto = null
+                        filtriSelezionati.Contratto = null
+                        oSelectedFiltersModel.refresh();
+                        
                         const els = [
                             this.getView().byId("TipoContrattoBox"),
                             this.getView().byId("ContrattoBox"),
@@ -389,10 +401,17 @@ sap.ui.define([
                     break;
         
                 case "Entity":
-                    if(this.entityKeys == undefined){
-                        let aSelectedKeys = selectedControl.getSelectedKeys();
-                        this.entityKeys = aSelectedKeys.length
-                    } else {
+                    isSelectedItemFilled = selectedControl.getSelectedKeys().length
+                    isSelectedItemFilled = true // Deselect to make optional fields upon deletion filterable based on the selected filters
+                    
+                    if(isSelectedItemFilled){
+
+                        // Resetting the chained models
+                        filtriSelezionati.TipoContratto = null
+                        filtriSelezionati.Contratto = null
+                        filtriSelezionati.CostCenter = null
+                        oSelectedFiltersModel.refresh();
+                        
                         const els = [
                             this.getView().byId("TipoContrattoBox"),
                             this.getView().byId("ContrattoBox"),
@@ -424,10 +443,16 @@ sap.ui.define([
                     break;
         
                 case "CostCenter":
-                    if(this.cdcKeys == undefined){
-                        let aSelectedKeys = selectedControl.getSelectedKeys();
-                        this.cdcKeys = aSelectedKeys.length
-                    } else {
+                    isSelectedItemFilled = selectedControl.getSelectedKeys().length
+                    isSelectedItemFilled = true // Deselect to make optional fields upon deletion filterable based on the selected filters
+                    
+                    if(isSelectedItemFilled){
+                        
+                        // Resetting the chained models
+                        filtriSelezionati.TipoContratto = null
+                        filtriSelezionati.Contratto = null
+                        oSelectedFiltersModel.refresh();
+
                         const els = [
                             this.getView().byId("TipoContrattoBox"),
                             this.getView().byId("ContrattoBox"),
@@ -458,10 +483,11 @@ sap.ui.define([
                     break;
         
                 case "TipoContratto":                    
-                    if(this.typeContractKeys == undefined){
-                        let aSelectedKeys = selectedControl.getSelectedKeys();
-                        this.typeContractKeys = aSelectedKeys.length
-                    } else {
+                    isSelectedItemFilled = selectedControl.getSelectedKeys().length
+                    isSelectedItemFilled = true // Deselect to make optional fields upon deletion filterable based on the selected filters
+                
+                    if(isSelectedItemFilled){
+                        
                         const els = [
                             this.getView().byId("ContrattoBox"),
                         ]
@@ -520,7 +546,6 @@ sap.ui.define([
 
             axios.post(servicePath, requestData)
             .then((response) => {
-                console.log("dati filtrati test", response.data);  // Handle the response array
                 let oFiltersModel = this.getView().getModel('oFiltersModel')
               
                 if(!requestData.year){
@@ -583,7 +608,6 @@ sap.ui.define([
 
                 oFiltersModel.refresh()
                 //oSelectedFilters.refresh()
-                console.log('Filters data: ', oFiltersModel.getData());
                 return
 
             })
@@ -696,9 +720,6 @@ sap.ui.define([
         },
 
         _initializeFilters: function () {
-            console.log("Filters data: ", this.getView().getModel('oFiltersModel'));
-
-
 
             /* var url = "https://port4004-workspaces-ws-54xj8.eu20.applicationstudio.cloud.sap/odata/v4/catalog/View_All_Data";
              var urlBase= "https://port4004-workspaces-ws-54xj8.eu20.applicationstudio.cloud.sap/odata/v4/catalog/"
@@ -718,7 +739,6 @@ sap.ui.define([
          
                      // Controlla se esiste un '@odata.nextLink' per continuare la paginazione
                      if (response.data['@odata.nextLink']) {
-                         console.log("Next link for pagination: ", response.data['@odata.nextLink']);
  
                          var urlGetSuccessive = urlBase + response.data['@odata.nextLink'];
                          fetchAllData(urlGetSuccessive, allData);
@@ -729,7 +749,6 @@ sap.ui.define([
                              that.getView().setModel(tableModel, 'tableModel');
                          }
                          tableModel.setData({ allTableData: allData });
-                         console.log("All records fetched: ", allData.length); 
          
                          
                          var dati = tableModel.getProperty("/allTableData");
@@ -776,7 +795,7 @@ sap.ui.define([
                              that.getView().setModel(oFilterModel, 'filterModel');
                              
                          } else {
-                             console.log("No data available in tableModel to populate filterModel.");
+                             console.error("No data available in tableModel to populate filterModel.");
                          }
  
                      }
@@ -806,7 +825,6 @@ sap.ui.define([
             let dataFilter = this.getView().getModel('selectedFiltersModel').getData();
             // let dataFromJSON = this.getView().getModel('tableModel').getData();
 
-            // console.log(dataFilter, dataFromJSON);
             this.getView().setModel(new JSONModel(), "DataIMA22");
             var arrayFiltrato = []
 
@@ -820,7 +838,6 @@ sap.ui.define([
             //     });
             this.getView().getModel("DataIMA22").setData(arrayFiltrato)
             this.getView().getModel("DataIMA22").refresh()
-            console.log(this.getView().getModel("DataIMA22"))
 
             // const keyMapping = {e
             //     entity: "Entity",

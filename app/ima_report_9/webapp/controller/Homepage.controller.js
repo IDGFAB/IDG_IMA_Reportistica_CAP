@@ -38,6 +38,398 @@ sap.ui.define([
             this.periodoKey;
         },
 
+        onAfterRendering: function () {
+            this.makeTitleObjAttrBold();
+            this.disableFilterStart();
+
+            const oDataMocked = [{ "ASSET_CLASS": "Guest quarters in benefit", "INTERCOMPANY": "NO", "CDC": "000175AT00", "CDC_CODE": null, "LEASE_N": "", "CONTRACT_CODE": "0000000400001", "ACC_SECTOR": "ATOP", "CONTRACT_DESCRIPTION": "x", "MERGED_ENTITY": "", "RIGHT_OF_USE": "0e+0", "ACCUMULATED_DEPRECIATION": "3.286478e+4", "NET_RIGHT_OF_USE": "0e+0", "CLOSING_LEASES_LIABILITIES": "0e+0", "LEASE_LIABILITIES_SHORT_TERM": "0e+0", "LEASE_LIABILITIES_LONG_TERM": "0e+0", "YTD_INTEREST": "3.331e+1", "LEASE_COST": "3.6e+3", "DEPRECIATION": "3.24323e+3", "GAIN_FX_RATES": 0, "LOSS_FX_RATES": 0}];
+        },
+
+        getTableMockData: function() {
+            return [
+                {
+                  "Data": {
+                    "Entity": "ILAPAK INTERNATIONAL SA",
+                    "Scenario": "Actua",
+                    "Period": "December",
+                    "Year": 2023,
+                    "Currency": "EUR",
+                    "Opening": {
+                      "Right of Use": {
+                        "Total": 99999999,
+                        "Building": 17910324,
+                        "Cars in pool": 278436,
+                        "Cars in benefit": 450944
+                      },
+                      "Accumulated Depreciation": {
+                        "Total": 6560981,
+                        "Building": 6097132,
+                        "Cars in pool": 223233,
+                        "Cars in benefit": 240616
+                      },
+                      "Net Right of Use": {
+                        "Total": 12078722,
+                        "Building": 11813193,
+                        "Cars in pool": 55203,
+                        "Cars in benefit": 210327
+                      }
+                    },
+                    "Movements": {
+                      "Amount at transition date": {
+                        "Total": null,
+                        "Building": null,
+                        "Cars in pool": null,
+                        "Cars in benefit": null
+                      },
+                      "Increase for new contract": {
+                        "Total": 28901,
+                        "Building": null,
+                        "Cars in pool": null,
+                        "Cars in benefit": 28901
+                      },
+                      "Revaluation (increase for remeasurement)": {
+                        "Total": 39253,
+                        "Building": null,
+                        "Cars in pool": 39047,
+                        "Cars in benefit": 205
+                      },
+                      "Decrease - Right of Use": {
+                        "Total": 58949,
+                        "Building": null,
+                        "Cars in pool": 14984,
+                        "Cars in benefit": 43965
+                      },
+                      "Decrease - Accumulated Depreciation": {
+                        "Total": 58949,
+                        "Building": null,
+                        "Cars in pool": 14984,
+                        "Cars in benefit": 43965
+                      },
+                      "Depreciation": {
+                        "Total": 1695290,
+                        "Building": 1524283,
+                        "Cars in pool": 64381,
+                        "Cars in benefit": 106626
+                      }
+                    },
+                    "Totale": {
+                      "Totale": {
+                        "Total": 1627137,
+                        "Building": 1524283,
+                        "Cars in pool": 25334,
+                        "Cars in benefit": 77520
+                      }
+                    },
+                    "Closing": {
+                      "Right of Use": {
+                        "Total": 18648908,
+                        "Building": 17910324,
+                        "Cars in pool": 302499,
+                        "Cars in benefit": 436085
+                      },
+                      "Accumulated Depreciation": {
+                        "Total": 8197322,
+                        "Building": 7621415,
+                        "Cars in pool": 272631,
+                        "Cars in benefit": 303277
+                      },
+                      "Net Right of Use": {
+                        "Total": 10451586,
+                        "Building": 10288910,
+                        "Cars in pool": 29869,
+                        "Cars in benefit": 132807
+                      }
+                    }
+                  }
+                },
+                {
+                  "Data": {
+                    "Entity": "prova 1",
+                    "Scenario": "Prova 1",
+                    "Period": "November",
+                    "Year": 2022,
+                    "Currency": "EUR",
+                    "Opening": {
+                      "Right of Use": {
+                        "Total": 888888888,
+                        "Building": 345678987678,
+                        "Cars in pool": 567617200,
+                        "Cars in benefit": 32422322
+                      },
+                      "Accumulated Depreciation": {
+                        "Total": 6560981,
+                        "Building": 6097132,
+                        "Cars in pool": 999999999,
+                        "Cars in benefit": 111111111
+                      },
+                      "Net Right of Use": {
+                        "Total": 12078722,
+                        "Building": 11813193,
+                        "Cars in pool": 899999,
+                        "Cars in benefit": 210327
+                      }
+                    },
+                    "Movements": {
+                      "Amount at transition date": {
+                        "Total": null,
+                        "Building": null,
+                        "Cars in pool": null,
+                        "Cars in benefit": null
+                      },
+                      "Increase for new contract": {
+                        "Total": 28901,
+                        "Building": null,
+                        "Cars in pool": null,
+                        "Cars in benefit": 28901
+                      },
+                      "Revaluation (increase for remeasurement)": {
+                        "Total": 39253,
+                        "Building": null,
+                        "Cars in pool": 39047,
+                        "Cars in benefit": 205
+                      },
+                      "Decrease - Right of Use": {
+                        "Total": 58949,
+                        "Building": null,
+                        "Cars in pool": 14984,
+                        "Cars in benefit": 43965
+                      },
+                      "Decrease - Accumulated Depreciation": {
+                        "Total": 58949,
+                        "Building": null,
+                        "Cars in pool": 55555555555555,
+                        "Cars in benefit": 43965
+                      },
+                      "Depreciation": {
+                        "Total": 1695290,
+                        "Building": 999999999999,
+                        "Cars in pool": 64381,
+                        "Cars in benefit": 106626
+                      }
+                    },
+                    "Totale": {
+                      "Totale": {
+                        "Total": 1627137,
+                        "Building": 1524283,
+                        "Cars in pool": 25334,
+                        "Cars in benefit": 77520
+                      }
+                    },
+                    "Closing": {
+                      "Right of Use": {
+                        "Total": 18648908,
+                        "Building": 17910324,
+                        "Cars in pool": 302499,
+                        "Cars in benefit": 436085
+                      },
+                      "Accumulated Depreciation": {
+                        "Total": 8197322,
+                        "Building": 7621415,
+                        "Cars in pool": 272631,
+                        "Cars in benefit": 303277
+                      },
+                      "Net Right of Use": {
+                        "Total": 10451586,
+                        "Building": 10288910,
+                        "Cars in pool": 29869,
+                        "Cars in benefit": 132807
+                      }
+                    }
+                  }
+                },
+                {
+                  "Data": {
+                    "Entity": "prova 2",
+                    "Scenario": "prova 2",
+                    "Period": "June",
+                    "Year": 2021,
+                    "Currency": "EUR",
+                    "Opening": {
+                      "Right of Use": {
+                        "Total": 77777777777,
+                        "Building": 17910324,
+                        "Cars in pool": 278436,
+                        "Cars in benefit": 450944
+                      },
+                      "Accumulated Depreciation": {
+                        "Total": 6560981,
+                        "Building": 6097132,
+                        "Cars in pool": 223233,
+                        "Cars in benefit": 240616
+                      },
+                      "Net Right of Use": {
+                        "Total": 12078722,
+                        "Building": 11813193,
+                        "Cars in pool": 55203,
+                        "Cars in benefit": 210327
+                      }
+                    },
+                    "Movements": {
+                      "Amount at transition date": {
+                        "Total": null,
+                        "Building": null,
+                        "Cars in pool": null,
+                        "Cars in benefit": null
+                      },
+                      "Increase for new contract": {
+                        "Total": 28901,
+                        "Building": null,
+                        "Cars in pool": null,
+                        "Cars in benefit": 28901
+                      },
+                      "Revaluation (increase for remeasurement)": {
+                        "Total": 39253,
+                        "Building": null,
+                        "Cars in pool": 39047,
+                        "Cars in benefit": 205
+                      },
+                      "Decrease - Right of Use": {
+                        "Total": 58949,
+                        "Building": null,
+                        "Cars in pool": 14984,
+                        "Cars in benefit": 43965
+                      },
+                      "Decrease - Accumulated Depreciation": {
+                        "Total": 58949,
+                        "Building": null,
+                        "Cars in pool": 14984,
+                        "Cars in benefit": 43965
+                      },
+                      "Depreciation": {
+                        "Total": 1695290,
+                        "Building": 1524283,
+                        "Cars in pool": 64381,
+                        "Cars in benefit": 106626
+                      }
+                    },
+                    "Totale": {
+                      "Totale": {
+                        "Total": 1627137,
+                        "Building": 1524283,
+                        "Cars in pool": 25334,
+                        "Cars in benefit": 77520
+                      }
+                    },
+                    "Closing": {
+                      "Right of Use": {
+                        "Total": 18648908,
+                        "Building": 17910324,
+                        "Cars in pool": 302499,
+                        "Cars in benefit": 436085
+                      },
+                      "Accumulated Depreciation": {
+                        "Total": 8197322,
+                        "Building": 7621415,
+                        "Cars in pool": 272631,
+                        "Cars in benefit": 303277
+                      },
+                      "Net Right of Use": {
+                        "Total": 10451586,
+                        "Building": 10288910,
+                        "Cars in pool": 29869,
+                        "Cars in benefit": 132807
+                      }
+                    }
+                  }
+                },
+                {
+                  "Data": {
+                    "Entity": "prova 3",
+                    "Scenario": "prova 3",
+                    "Period": "Febrary",
+                    "Year": 2020,
+                    "Currency": "EUR",
+                    "Opening": {
+                      "Right of Use": {
+                        "Total": 6666666666,
+                        "Building": 17910324,
+                        "Cars in pool": 278436,
+                        "Cars in benefit": 450944
+                      },
+                      "Accumulated Depreciation": {
+                        "Total": 6560981,
+                        "Building": 6097132,
+                        "Cars in pool": 223233,
+                        "Cars in benefit": 240616
+                      },
+                      "Net Right of Use": {
+                        "Total": 12078722,
+                        "Building": 11813193,
+                        "Cars in pool": 55203,
+                        "Cars in benefit": 210327
+                      }
+                    },
+                    "Movements": {
+                      "Amount at transition date": {
+                        "Total": null,
+                        "Building": null,
+                        "Cars in pool": null,
+                        "Cars in benefit": null
+                      },
+                      "Increase for new contract": {
+                        "Total": 28901,
+                        "Building": null,
+                        "Cars in pool": null,
+                        "Cars in benefit": 28901
+                      },
+                      "Revaluation (increase for remeasurement)": {
+                        "Total": 39253,
+                        "Building": null,
+                        "Cars in pool": 39047,
+                        "Cars in benefit": 205
+                      },
+                      "Decrease - Right of Use": {
+                        "Total": 58949,
+                        "Building": null,
+                        "Cars in pool": 14984,
+                        "Cars in benefit": 43965
+                      },
+                      "Decrease - Accumulated Depreciation": {
+                        "Total": 58949,
+                        "Building": null,
+                        "Cars in pool": 14984,
+                        "Cars in benefit": 43965
+                      },
+                      "Depreciation": {
+                        "Total": 1695290,
+                        "Building": 1524283,
+                        "Cars in pool": 64381,
+                        "Cars in benefit": 106626
+                      }
+                    },
+                    "Totale": {
+                      "Totale": {
+                        "Total": 1627137,
+                        "Building": 1524283,
+                        "Cars in pool": 25334,
+                        "Cars in benefit": 77520
+                      }
+                    },
+                    "Closing": {
+                      "Right of Use": {
+                        "Total": 18648908,
+                        "Building": 17910324,
+                        "Cars in pool": 302499,
+                        "Cars in benefit": 436085
+                      },
+                      "Accumulated Depreciation": {
+                        "Total": 8197322,
+                        "Building": 7621415,
+                        "Cars in pool": 272631,
+                        "Cars in benefit": 303277
+                      },
+                      "Net Right of Use": {
+                        "Total": 10451586,
+                        "Building": 10288910,
+                        "Cars in pool": 29869,
+                        "Cars in benefit": 132807
+                      }
+                    }
+                  }
+                }
+              ];
+        },
+
         createSorter: function() {
             return new Sorter("description", false); // false for ascending order
         },
@@ -200,11 +592,6 @@ sap.ui.define([
                 }
             }
             return obj;
-        },
-
-        onAfterRendering: function () {
-            this.makeTitleObjAttrBold();
-            this.disableFilterStart();
         },
 
         onSelectionChange: function (oEvent) {
@@ -763,62 +1150,132 @@ sap.ui.define([
             // }
 
 
-            this.getTableData()
-        },
-
-        _loadData: function (oModel) {
+            // TOBE re-enabled later with actual data comes
+            this.getTableData();
+            
+            const oData = this.getTableMockData(); // Getting the array of the mock data
+            
+            // To print  checks if the filters are being filled
+            const areFiltersFilled = this.getView().getModel("selectedFiltersModel").getData().allSelected
             var oTable = this.byId("table");
-            if (oModel) {
-                var aData = this._prepareData(oModel.getData().Leases);
-                var oTableModel = new JSONModel({ rows: aData });
-                oTable.setModel(oTableModel);
+            
+            if (areFiltersFilled) {
+                this.makeGeneratedTableMockData(oData);
+                this.setTableHeight(null, oTable);
+            } else {
+                var oEmptyModel = new JSONModel({ rows: [] });
+                oTable.setModel(oEmptyModel);
                 oTable.bindRows("/rows");
-                this._createColumns(aData);
-                this._colorTotalRows();
-                this.setTableHeight(null, oTable)
+
             }
         },
 
-        _prepareData: function (leasesData) {
+        makeGeneratedTableMockData: function(oData) {
+            var oTable = this.byId("table");
+            const objData = this._prepareData(oData[0].Data);
+            
+            // Clear existing columns
+            oTable.removeAllColumns();
+            
+            // Define columns
+            const columns = [
+                { key: "Section", label: "Section", width: "150px", freeze: true },
+                { key: "Description", label: "Description", width: "350px", freeze: true },
+                { key: "Total", label: "Total", width: "150px" },
+                { key: "Building", label: "Building", width: "150px" },
+                { key: "Cars in pool", label: "Cars in pool", width: "150px" },
+                { key: "Cars in benefit", label: "Cars in benefit", width: "150px" }
+            ];
+        
+            // Add columns
+            columns.forEach(column => {
+                oTable.addColumn(new sap.ui.table.Column({
+                    label: new sap.m.Label({ text: column.label }),
+                    template: new sap.m.Text({ text: "{" + column.key + "}" }),
+                    width: column.width,
+                    sorted: false,
+                    filtered: false,
+                    freezed: column.freeze
+                }));
+            });
+        
+            // Create and set model
+            const oTableModel = new JSONModel({
+                rows: objData
+            });
+            
+            // Set size limit to handle all rows
+            oTableModel.setSizeLimit(objData.length + 100);
+            
+            oTable.setModel(oTableModel);
+            oTable.bindRows("/rows");
+            
+            // Adjust visible row count based on data
+            const visibleRowCount = Math.min(objData.length, 20); // Maximum 20 rows visible
+            oTable.setVisibleRowCount(visibleRowCount);
+            
+            this.getView().getModel("selectedFiltersModel").setProperty("/matchData", true);
+            this._colorTotalRows();
+
+            console.log("Table found:", !!oTable, "Table ID:", oTable?.getId());
+        },
+        
+        _prepareData: function (oData) {
             var aRows = [];
-            var lastCategory = "";  // Per tenere traccia dell'ultima categoria usata
-
-            // Loop attraverso tutte le categorie di leases
-            for (const category in leasesData) {
-                if (Array.isArray(leasesData[category])) {
-                    // Gestisci categorie non-Summary (es: Buildings, Cars in pool)
-                    leasesData[category].forEach(item => {
-                        let oRowData = { "Category": category === lastCategory ? "" : category };  // Evita di ripetere la categoria
-
-                        // Aggiorna lastCategory per le prossime iterazioni
-                        lastCategory = category;
-
-                        // Aggiungi gli altri dati
-                        for (let key in item) {
-                            oRowData[key] = item[key] === null ? "-" : item[key];
+            var lastSection = "";
+        
+            var sectionsMap = {
+                "Opening": ["Right of Use", "Accumulated Depreciation", "Net Right of Use", ""],
+                "Movements": [
+                    "Amount at transition date", "Increase for new contract", 
+                    "Revaluation (increase for remeasurement)",
+                    "Decrease - Right of Use", "Decrease - Accumulated Depreciation",
+                    "Increase for Mergers - Right of Use", 
+                    "Increase for Mergers - Accumulated Depreciation",
+                    "Decrease for Mergers - Right of Use", 
+                    "Decrease for Mergers - Accumulated Depreciation",
+                    "Reverse for Change CDC - Right of Use", 
+                    "Recognition for Change CDC - Right of Use",
+                    "Reverse for Change CDC - Accumulated Depreciation",
+                    "Recognition for Change CDC - Accumulated Depreciation", 
+                    "Depreciation"
+                ],
+                "Totale": ["Totale", ""],
+                "Closing": ["Right of Use", "Accumulated Depreciation", "Net Right of Use"]
+            };
+        
+            // Process sections
+            Object.keys(sectionsMap).forEach(function (section) {
+                sectionsMap[section].forEach(function (description) {
+                    // Safely access nested properties
+                    var sectionData = oData[section] || {};
+                    var descriptionData = sectionData[description] || {};
+        
+                    // Format number function
+                    const formatNumber = (value) => {
+                        if (value === undefined || value === null) return "-";
+                        if (typeof value === 'number') {
+                            return value.toLocaleString('en-US', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2
+                            });
                         }
-                        aRows.push(oRowData);
+                        return value;
+                    };
+        
+                    aRows.push({
+                        "Section": section === lastSection ? "" : section,
+                        "Description": description,
+                        "Total": formatNumber(descriptionData.Total),
+                        "Building": formatNumber(descriptionData.Building),
+                        "Cars in pool": formatNumber(descriptionData["Cars in pool"]),
+                        "Cars in benefit": formatNumber(descriptionData["Cars in benefit"])
                     });
-                } else if (category === "Summary") {
-                    // Gestisci la sezione Summary separatamente
-                    let summaryData = leasesData[category];
-                    for (const subCategory in summaryData) {
-                        let summaryRow = { "Category": subCategory === lastCategory ? "" : subCategory };
-                        let summaryValues = summaryData[subCategory];
-
-                        // Aggiorna lastCategory per evitare ripetizioni
-                        lastCategory = subCategory;
-
-                        for (let key in summaryValues) {
-                            summaryRow[key] = summaryValues[key] === null ? "-" : summaryValues[key];
-                        }
-                        // Marca questa riga come riga di riepilogo
-                        summaryRow["_isTotal"] = true;
-                        aRows.push(summaryRow);
-                    }
-                }
-            }
-
+                    
+                    lastSection = section;
+                });
+            });
+        
             return aRows;
         },
 
@@ -857,37 +1314,41 @@ sap.ui.define([
 
         _colorTotalRows: function () {
             var oTable = this.byId("table");
-            var fnApplyStyles = function () {
-                var aRows = oTable.getRows(); // Get all visible rows
-
+            
+            // Separate event handler
+            var fnEventHandler = function(oEvent) {
+                applyRowStyles();
+            };
+        
+            // Separate styling function
+            var applyRowStyles = function() {
+                var aRows = oTable.getRows();
                 aRows.forEach(function (oRow) {
-                    var oContext = oRow.getBindingContext(); // Get row context (data)
-                    var $rowDom = oRow._mDomRefs.jQuery.row[1]; // Get DOM reference of row
-                    var $rowDomFix = oRow._mDomRefs.jQuery.row[0]; // Get fixed column DOM reference
-
+                    var oContext = oRow.getBindingContext();
+                    var $rowDom = oRow._mDomRefs.jQuery.row[1];
+                    var $rowDomFix = oRow._mDomRefs.jQuery.row[0];
+                    
                     if (oContext && ($rowDom || $rowDomFix)) {
-                        // Fetch the row data (e.g., Category and _isTotal)
-                        var sCategory = oContext.getProperty("Category");
-                        var bIsTotal = oContext.getProperty("_isTotal");
-
-                        // Check if the row belongs to the 'Total' category and is marked as a total row
-                        if (sCategory === "Total" && bIsTotal === true) {
-                            // Add the CSS class to highlight the total row
+                        var sAssetCategory = oContext.getProperty("Description");
+                        var bIsTotalCategory = sAssetCategory === "";
+                        
+                        if (bIsTotalCategory) {
                             $($rowDom).addClass("highlightRow");
                             $($rowDomFix).addClass("highlightRow");
                         } else {
-                            // Remove the CSS class in case it was previously added
                             $($rowDom).removeClass("highlightRow");
                             $($rowDomFix).removeClass("highlightRow");
                         }
                     }
                 });
             };
-
-            // Attach the event handler to the rowsUpdated event to ensure styles are applied after rendering
-            oTable.attachEvent("rowsUpdated", fnApplyStyles);
-            // Apply styles initially as well
-            fnApplyStyles();
+        
+            // Attach event handler
+            oTable.attachEvent("rowsUpdated", fnEventHandler);
+            
+            // Initial styling
+            applyRowStyles();
+            this.getView().byId("table").setBusy(false)
         },
 
         _bindToolbarText: function () {
