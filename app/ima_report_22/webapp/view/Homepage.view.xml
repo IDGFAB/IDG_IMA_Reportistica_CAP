@@ -61,7 +61,7 @@
                                 </fb:control>
                             </fb:FilterGroupItem>
                             <!-- Entity Filter -->
-                            <fb:FilterGroupItem  name="Company" label="Entity" groupName="Group1" visibleInFilterBar="true">
+                            <fb:FilterGroupItem  name="Entity" label="Company" groupName="Group1" visibleInFilterBar="true">
                                 <fb:control>
                                     <MultiComboBox id="EntityBox" name="Entity" enabled="{= ${selectedFiltersModel>/period} &amp;&amp; ${selectedFiltersModel>/period}.length > 0 ? true : false }" showSelectAll="true" selectionChange=".onSelectionChange" items="{ path: 'oFiltersModel>/Entity', sorter: { path: 'description' }
                                             }" selectedKeys="{selectedFiltersModel>/entity}" required="true" showClearIcon="true">
