@@ -265,10 +265,19 @@ sap.ui.define([
 
             switch (controlName) {
                 case "ID_STORICO":
-                    if(this.idStoricoKey == undefined){
-                        let aSelectedKey = selectedControl.getSelectedKey();
-                        this.idStoricoKey = aSelectedKey
-                    } else {
+                    isSelectedItemFilled = selectedControl.getSelectedKey().length
+                    isSelectedItemFilled = true // Deselect to make optional fields upon deletion filterable based on the selected filters
+                    
+                    if(isSelectedItemFilled){
+                        
+                        // Resetting the chained models
+                        filtriSelezionati.Periodo = null
+                        filtriSelezionati.CostCenter = null
+                        filtriSelezionati.Entity = null
+                        filtriSelezionati.TipoContratto = null
+                        filtriSelezionati.Contratto = null
+                        oSelectedFiltersModel.refresh();
+                        
                         const els = [
                             this.getView().byId("TipoContrattoBox"),
                             this.getView().byId("ContrattoBox"),
@@ -302,11 +311,19 @@ sap.ui.define([
                     break;
         
                 case "Anno":
-                    if(this.annoKey == undefined){
-                        let aSelectedKey = selectedControl.getSelectedKey();
-                        this.annoKey = aSelectedKey
+                    isSelectedItemFilled = selectedControl.getSelectedKey().length
+                    isSelectedItemFilled = true // Deselect to make optional fields upon deletion filterable based on the selected filters
+                    
+                    if(isSelectedItemFilled){
 
-                    } else {
+                        // Resetting the chained models
+                        filtriSelezionati.Periodo = null
+                        filtriSelezionati.CostCenter = null
+                        filtriSelezionati.Entity = null
+                        filtriSelezionati.TipoContratto = null
+                        filtriSelezionati.Contratto = null
+                        oSelectedFiltersModel.refresh();
+                        
                         const els = [
                             this.getView().byId("TipoContrattoBox"),
                             this.getView().byId("ContrattoBox"),
@@ -340,10 +357,18 @@ sap.ui.define([
                     break;
         
                 case "Periodo":                    
-                    if(this.periodoKey == undefined){
-                        let aSelectedKey = selectedControl.getSelectedKey();
-                        this.periodoKey = aSelectedKey
-                    } else {
+                    isSelectedItemFilled = selectedControl.getSelectedKey().length
+                    isSelectedItemFilled = true // Deselect to make optional fields upon deletion filterable based on the selected filters
+                
+                    if(isSelectedItemFilled){
+
+                        // Resetting the chained models
+                        filtriSelezionati.CostCenter = null
+                        filtriSelezionati.Entity = null
+                        filtriSelezionati.TipoContratto = null
+                        filtriSelezionati.Contratto = null
+                        oSelectedFiltersModel.refresh();
+                        
                         const els = [
                             this.getView().byId("TipoContrattoBox"),
                             this.getView().byId("ContrattoBox"),
@@ -376,10 +401,17 @@ sap.ui.define([
                     break;
         
                 case "Entity":
-                    if(this.entityKeys == undefined){
-                        let aSelectedKeys = selectedControl.getSelectedKeys();
-                        this.entityKeys = aSelectedKeys.length
-                    } else {
+                    isSelectedItemFilled = selectedControl.getSelectedKeys().length
+                    isSelectedItemFilled = true // Deselect to make optional fields upon deletion filterable based on the selected filters
+                    
+                    if(isSelectedItemFilled){
+
+                        // Resetting the chained models
+                        filtriSelezionati.TipoContratto = null
+                        filtriSelezionati.Contratto = null
+                        filtriSelezionati.CostCenter = null
+                        oSelectedFiltersModel.refresh();
+                        
                         const els = [
                             this.getView().byId("TipoContrattoBox"),
                             this.getView().byId("ContrattoBox"),
@@ -411,10 +443,16 @@ sap.ui.define([
                     break;
         
                 case "CostCenter":
-                    if(this.cdcKeys == undefined){
-                        let aSelectedKeys = selectedControl.getSelectedKeys();
-                        this.cdcKeys = aSelectedKeys.length
-                    } else {
+                    isSelectedItemFilled = selectedControl.getSelectedKeys().length
+                    isSelectedItemFilled = true // Deselect to make optional fields upon deletion filterable based on the selected filters
+                    
+                    if(isSelectedItemFilled){
+                        
+                        // Resetting the chained models
+                        filtriSelezionati.TipoContratto = null
+                        filtriSelezionati.Contratto = null
+                        oSelectedFiltersModel.refresh();
+
                         const els = [
                             this.getView().byId("TipoContrattoBox"),
                             this.getView().byId("ContrattoBox"),
@@ -445,10 +483,11 @@ sap.ui.define([
                     break;
         
                 case "TipoContratto":                    
-                    if(this.typeContractKeys == undefined){
-                        let aSelectedKeys = selectedControl.getSelectedKeys();
-                        this.typeContractKeys = aSelectedKeys.length
-                    } else {
+                    isSelectedItemFilled = selectedControl.getSelectedKeys().length
+                    isSelectedItemFilled = true // Deselect to make optional fields upon deletion filterable based on the selected filters
+                
+                    if(isSelectedItemFilled){
+                        
                         const els = [
                             this.getView().byId("ContrattoBox"),
                         ]
