@@ -89,6 +89,13 @@ entity View_All_Data_v2 {
     key BUKRS                      : String(4);
         BUTXT                      : String(25);
         IDENTASSET                 : String(12);
+        BBWHR_REPAYMENT_DIF        : Decimal(23, 2);
+        RECNNOTPER                 : String(8);
+        GJAHR                      : String(4);
+        PERIODO                    : String(2);
+        BELNR                      : String(10);
+        GAIN                       : Decimal(18, 2);
+        LOSS                       : Decimal(18, 2);
 
 }
 
