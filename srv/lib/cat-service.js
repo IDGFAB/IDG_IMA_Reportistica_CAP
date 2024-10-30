@@ -832,6 +832,177 @@ throw error
     
 }
 
+async applyFilters9(
+    entity = [], 
+    year = null, 
+    period = null, 
+) {
+    // Definizione dei filtri progressivi
+    const whereClause = {};
+
+    //primo filtro: entity (BUTXT)
+    if (entity?.length > 0) {
+        whereClause.BUKRS = entity;
+    }
+
+    // Filtro per anno (YEARDUEDATE)
+    if (year) {
+        whereClause.YEARDUEDATE = year;
+    }
+
+    // Filtro per periodo (PERIODDUEDATE)
+    if (period) {
+        whereClause.PERIODDUEDATE = period;
+    }
+
+    // Esegui la query di selezione con i filtri dinamici
+    const filteredData = await cds.run(
+        SELECT.distinct
+            .from('CATALOGSERVICE_GV_FILTRI_ID22')
+            .columns('BUTXT', 'RECNTYPE', 'RECNNR', 'YEARDUEDATE', 'PERIODDUEDATE', 'IDENTOBJNR', 'BUKRS', 'ID_STORICO')
+            .where(whereClause)  // Inserisci la clausola WHERE dinamica
+    );
+
+
+    this.log.info(filteredData)
+
+    // Usa Set per rimuovere automaticamente i duplicati dai risultati
+    const butxt = new Set();
+    const yearduedate = new Set();
+    const periodduedate = new Set();
+    const bukrs = new Set();
+
+    // Popola i set con i risultati filtrati
+    filteredData.forEach(row => {
+        butxt.add(row.BUTXT);
+        yearduedate.add(row.YEARDUEDATE);
+        periodduedate.add(row.PERIODDUEDATE);
+        bukrs.add(row.BUKRS);
+    });
+
+    // Converte i set in array
+    const BUTXT = Array.from(butxt);
+    const YEARDUEDATE = Array.from(yearduedate);
+    const PERIODDUEDATE = Array.from(periodduedate);
+    const BUKRS = Array.from(bukrs);
+
+    console.log("butxt array:", BUTXT);
+    console.log("yearduedate array:", YEARDUEDATE);
+    console.log("periodduedate array:", PERIODDUEDATE);
+    console.log("bukrs array:", BUKRS);
+
+    // Ritorna gli array filtrati
+    return {
+        BUTXT: BUTXT,
+        YEARDUEDATE: YEARDUEDATE,
+        PERIODDUEDATE: PERIODDUEDATE,
+        BUKRS: BUKRS,
+    };
+}
+
+
+async CreateQuery9(entity = [], year = null, period = null) {
+    let whereClauses = [];
+
+	    // Controllo per il parametro Entity (obbligatorio e array)
+		if (Array.isArray(entity) && entity.length > 0) {
+			whereClauses.push('"BUKRS" IN (' + entity.map(e => `'${e}'`).join(', ') + ')');
+		} else {
+			throw new Error("Il parametro 'Entity' è obbligatorio e deve essere un array.");
+		}
+	
+		// Controllo per il parametro Year (obbligatorio e non array)
+		if (year !== null && year !== undefined) {
+			whereClauses.push('"YEARDUEDATE" = \'' + year + '\'');
+		} else {
+			throw new Error("Il parametro 'Year' è obbligatorio.");
+		}
+	
+		// Controllo per il parametro Period (obbligatorio e non array)
+		if (period !== null && period !== undefined) {
+			whereClauses.push('TO_INT("PERIODDUEDATE") = ' + period);
+		} else {
+			throw new Error("Il parametro 'Period' è obbligatorio.");
+		}
+	
+		// Costruzione della query finale
+		let sqlQuery = ''; // Sostituisci con il nome della tua tabella
+		if (whereClauses.length > 0) {
+			sqlQuery += 'WHERE ' + whereClauses.join(' AND ');
+		}
+	
+		return sqlQuery;
+	}
+
+
+    async GetTabellaFiltrata9(entity = [], year = null, period = null){
+    
+        let query9 =await this.CreateQuery9(entity, year, period)
+       
+    
+    
+        try{
+        const filteredTable = await cds.db.run(`SELECT "JOURNAL_TYPE",
+        "ACCOUNT",
+        "IDENTOBJNR",
+        "RECNTXTOLD",
+        "XMBEZ",
+        "DEBIT",
+        "CREDIT",
+        "DEBIT_CURR",
+        "CREDIT_CURR"
+    FROM (
+            SELECT UPPER("JOURNAL_TYPE") "JOURNAL_TYPE",
+                UPPER("ACCOUNT") "ACCOUNT",
+                "IDENTOBJNR",
+                "RECNTXTOLD",
+                "XMBEZ",
+                SUM("DEBIT") "DEBIT",
+                SUM("CREDIT") "CREDIT",
+                SUM("DEBIT_CURR") "DEBIT_CURR",
+                SUM("CREDIT_CURR") "CREDIT_CURR"
+            FROM "CATALOGSERVICE_VIEW_CAP_REPORT_23_EQ"
+            ${query9}
+            GROUP BY "JOURNAL_TYPE",
+                "ACCOUNT",
+                "IDENTOBJNR",
+                "RECNTXTOLD",
+                "XMBEZ"
+            UNION ALL
+            SELECT UPPER("JOURNAL_TYPE") "JOURNAL_TYPE",
+                UPPER("ACCOUNT") "ACCOUNT",
+                "IDENTOBJNR",
+                "RECNTXTOLD",
+                "XMBEZ",
+                SUM("DEBIT") "DEBIT",
+                SUM("CREDIT") "CREDIT",
+                SUM("DEBIT_CURR") "DEBIT_CURR",
+                SUM("CREDIT_CURR") "CREDIT_CURR"
+            FROM "CATALOGSERVICE_VIEW_CAP_REPORT23_LT"
+            ${query9}
+            GROUP BY "JOURNAL_TYPE",
+                "ACCOUNT",
+                "IDENTOBJNR",
+                "RECNTXTOLD",
+                "XMBEZ")
+    ORDER BY "JOURNAL_TYPE",
+        "ACCOUNT"`)
+    
+    console.log(filteredTable);
+    return filteredTable
+    
+    }
+    catch(error){
+    this.log.error
+    throw error
+    }
+    
+    
+        
+    }
+
+  
+
 
 
 }

@@ -140,7 +140,7 @@ sap.ui.define([
               //  Id_storico: oSelectedFilters.ID_STORICO,
             }
 
-            const servicePath = `${this.osUrl}GetTabellaFiltrata`;  // Append the action name with a trailing slash
+            const servicePath = `${this.osUrl}GetTabellaFiltrata9`;  // Append the action name with a trailing slash
             axios.post(servicePath,  requestData)
                 .then((response) => {
                     this.getView().byId("table").setBusy(false)
@@ -471,7 +471,7 @@ sap.ui.define([
 
         selectFiltering: function() {
             
-            const servicePath = `${this.osUrl}applyFilters`;
+            const servicePath = `${this.osUrl}applyFilters9`;
 
             let oSelectedFilters = this.getView().getModel('selectedFiltersModel').getData();
 
