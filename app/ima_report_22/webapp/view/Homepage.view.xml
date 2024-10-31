@@ -144,7 +144,7 @@
             <!-- ScrollContainer to allow horizontal scrolling -->
             <ScrollContainer horizontal="true" width="100%">
                 <!-- Table Definition -->
-                <table:Table id="table" selectionMode="None" visibleRowCountMode="Interactive" minAutoRowCount="8" enableBusyIndicator="true" enableColumnFreeze="true" width="100%" rows="{DataIMA22>/}">
+                <table:Table id="table" sort=".onTableSort" selectionMode="None" visibleRowCountMode="Interactive" minAutoRowCount="8" enableBusyIndicator="true" enableColumnFreeze="true" width="100%" rows="{DataIMA22>/}">
                     <table:columns>
                         <table:Column width="11rem">
                             <table:multiLabels>

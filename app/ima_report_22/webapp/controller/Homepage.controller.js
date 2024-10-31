@@ -71,6 +71,66 @@ sap.ui.define([
                 }));
         },
 
+        onTableSort: function(oEvent) {
+            const oColumn = oEvent.getParameter("column");
+            const sSortProperty = oColumn.getSortProperty();
+            const bDescending = oEvent.getParameter("sortOrder") === "Descending";
+         
+            // Function to clean numeric values (remove dots and convert to float)
+            const cleanNumber = (value) => {
+                return parseFloat(String(value).replace(/\./g, ''));
+            };
+         
+            // Create sorter based on column type
+            const oSorter = new sap.ui.model.Sorter(sSortProperty, bDescending, false, function(a, b) {
+                switch(sSortProperty) {
+                    // Numeric columns
+                    case "LEASE_N":
+                    case "RIGHT_OF_USE":
+                    case "ACCUMULATED_DEPRECIATION":
+                    case "NET_RIGHT_OF_USE":
+                    case "CLOSING_LEASES_LIABILITIES":
+                    case "LEASE_LIABILITIES_SHORT_TERM":
+                    case "LEASE_LIABILITIES_LONG_TERM":
+                    case "YTD_INTEREST":
+                    case "LEASE_COST":
+                    case "DEPRECIATION":
+                    case "GAIN_FX_RATES":
+                    case "LOSS_FX_RATES":
+                        const valueA = cleanNumber(a);
+                        const valueB = cleanNumber(b);
+                        
+                        if (isNaN(valueA)) return 1;
+                        if (isNaN(valueB)) return -1;
+                        
+                        return valueA - valueB;
+         
+                    // String columns - case insensitive comparison
+                    case "ASSET_CLASS":
+                    case "INTERCOMPANY":
+                    case "CDC":
+                    case "CDC_CODE":
+                    case "CONTRACT_CODE":
+                    case "ACC_SECTOR":
+                    case "CONTRACT_DESCRIPTION":
+                    case "MERGED_ENTITY":
+                        return String(a).toLowerCase().localeCompare(String(b).toLowerCase());
+                        
+                    // Default case if property is not listed
+                    default:
+                        // Try numeric first, fall back to string if not a valid number
+                        const numA = cleanNumber(a);
+                        const numB = cleanNumber(b);
+                        
+                        if (!isNaN(numA) && !isNaN(numB)) {
+                            return numA - numB;
+                        }
+                        return String(a).toLowerCase().localeCompare(String(b).toLowerCase());
+                }
+            });
+         
+            this.byId("table").getBinding("rows").sort(oSorter);
+        },
 
         _sortEntitiesByDescription: function(entities) {
             return entities.sort((a, b) => a.description.localeCompare(b.description));
