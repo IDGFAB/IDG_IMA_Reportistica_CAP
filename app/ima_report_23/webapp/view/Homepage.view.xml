@@ -10,7 +10,7 @@
         <f:title>
             <f:DynamicPageTitle id="pageTitleWrapper">
                 <f:heading>
-                    <Title id="pageTitle" text="Reportistica 23" />
+                    <Title id="pageTitle" text="23 - Summary" />
                 </f:heading>
             </f:DynamicPageTitle>
         </f:title>

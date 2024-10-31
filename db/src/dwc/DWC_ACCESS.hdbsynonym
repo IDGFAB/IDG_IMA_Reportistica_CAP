@@ -40,6 +40,18 @@
             "schema": "IMA_TEST_SPACE",
             "object": "VIEW_ALL_UNION_ID23"
         }
+    },
+    "IMA_REPORT_VIEW_CAP_REPORT23_LT": {
+        "target": {
+            "schema": "IMA_TEST_SPACE",
+            "object": "View_CAP_REPORT23_LT"
+        }
+    },
+    "IMA_REPORT_VIEW_CAP_REPORT_23_EQ": {
+        "target": {
+            "schema": "IMA_TEST_SPACE",
+            "object": "View_CAP_REPORT_23_EQ"
+        }
     }
 
 }

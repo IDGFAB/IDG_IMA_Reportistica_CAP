@@ -30,6 +30,13 @@ sap.ui.define([
 
             oSelectedFiltersModel.setProperty("/matchData", false);
 
+            this.entityKeys;
+            this.typeContractKeys;
+            this.contractKeys;
+            this.cdcKeys;
+            this.annoKey;
+            this.periodoKey;
+            this.idStoricoKey;
         },
 
         onAfterRendering: function () {
@@ -317,19 +324,27 @@ sap.ui.define([
             let isSelectedItemFilled
 
             switch (controlName) {
-                case "Entity":
-                    isSelectedItemFilled = selectedControl.getSelectedKeys().length
+                case "ID_STORICO":
+                    isSelectedItemFilled = selectedControl.getSelectedKey().length
                     isSelectedItemFilled = true // Deselect to make optional fields upon deletion filterable based on the selected filters
                     
                     if(isSelectedItemFilled){
-
+                        
+                        // Resetting the chained models
+                        filtriSelezionati.Periodo = null
+                        filtriSelezionati.CostCenter = null
+                        filtriSelezionati.Entity = null
+                        filtriSelezionati.TipoContratto = null
+                        filtriSelezionati.Contratto = null
+                        oSelectedFiltersModel.refresh();
+                        
                         const els = [
                             this.getView().byId("TipoContrattoBox"),
                             this.getView().byId("ContrattoBox"),
                             this.getView().byId("AnnoSelect"),
                             this.getView().byId("PeriodoSelect"),
                             this.getView().byId("CostCenterBox"),
-                            this.getView().byId("IdStoricoSelect")
+                            this.getView().byId("EntityBox")
                         ]
 
                         els.forEach(el => {
@@ -351,21 +366,30 @@ sap.ui.define([
                             }, labelText, null);
                             this.makeTitleObjAttrBold();
                         })
+                        oSelectedFiltersModel.setProperty("/allSelected", false);
                     }
                     break;
         
-                case "TipoContratto":
-                    isSelectedItemFilled = selectedControl.getSelectedKeys().length
+                case "Anno":
+                    isSelectedItemFilled = selectedControl.getSelectedKey().length
                     isSelectedItemFilled = true // Deselect to make optional fields upon deletion filterable based on the selected filters
                     
                     if(isSelectedItemFilled){
 
+                        // Resetting the chained models
+                        filtriSelezionati.Periodo = null
+                        filtriSelezionati.CostCenter = null
+                        filtriSelezionati.Entity = null
+                        filtriSelezionati.TipoContratto = null
+                        filtriSelezionati.Contratto = null
+                        oSelectedFiltersModel.refresh();
+                        
                         const els = [
+                            this.getView().byId("TipoContrattoBox"),
                             this.getView().byId("ContrattoBox"),
-                            this.getView().byId("AnnoSelect"),
                             this.getView().byId("PeriodoSelect"),
                             this.getView().byId("CostCenterBox"),
-                            this.getView().byId("IdStoricoSelect")
+                            this.getView().byId("EntityBox")
                         ]
 
                         els.forEach(el => {
@@ -386,22 +410,30 @@ sap.ui.define([
                                 getSource: () => el
                             }, labelText, null);
                             this.makeTitleObjAttrBold();
+                            oSelectedFiltersModel.setProperty("/allSelected", false);
                         })
                     }
                      
                     break;
         
-                case "Contratto":                    
-                    isSelectedItemFilled = selectedControl.getSelectedKeys().length
+                case "Periodo":                    
+                    isSelectedItemFilled = selectedControl.getSelectedKey().length
                     isSelectedItemFilled = true // Deselect to make optional fields upon deletion filterable based on the selected filters
-                    
+                
                     if(isSelectedItemFilled){
 
+                        // Resetting the chained models
+                        filtriSelezionati.CostCenter = null
+                        filtriSelezionati.Entity = null
+                        filtriSelezionati.TipoContratto = null
+                        filtriSelezionati.Contratto = null
+                        oSelectedFiltersModel.refresh();
+                        
                         const els = [
-                            this.getView().byId("AnnoSelect"),
-                            this.getView().byId("PeriodoSelect"),
+                            this.getView().byId("TipoContrattoBox"),
+                            this.getView().byId("ContrattoBox"),
                             this.getView().byId("CostCenterBox"),
-                            this.getView().byId("IdStoricoSelect")
+                            this.getView().byId("EntityBox")
                         ]
 
                         els.forEach(el => {
@@ -422,20 +454,28 @@ sap.ui.define([
                                 getSource: () => el
                             }, labelText, null);
                             this.makeTitleObjAttrBold();
+                            oSelectedFiltersModel.setProperty("/allSelected", false);
                         })
                     }
                         
                     break;
         
-                case "Anno":
-                    isSelectedItemFilled= selectedControl.getSelectedKey().length
+                case "Entity":
+                    isSelectedItemFilled = selectedControl.getSelectedKeys().length
+                    isSelectedItemFilled = true // Deselect to make optional fields upon deletion filterable based on the selected filters
                     
                     if(isSelectedItemFilled){
 
+                        // Resetting the chained models
+                        filtriSelezionati.TipoContratto = null
+                        filtriSelezionati.Contratto = null
+                        filtriSelezionati.CostCenter = null
+                        oSelectedFiltersModel.refresh();
+                        
                         const els = [
-                            this.getView().byId("PeriodoSelect"),
+                            this.getView().byId("TipoContrattoBox"),
+                            this.getView().byId("ContrattoBox"),
                             this.getView().byId("CostCenterBox"),
-                            this.getView().byId("IdStoricoSelect")
                         ]
 
                         els.forEach(el => {
@@ -456,20 +496,26 @@ sap.ui.define([
                                 getSource: () => el
                             }, labelText, null);
                             this.makeTitleObjAttrBold();
+                            oSelectedFiltersModel.setProperty("/allSelected", false);
                         })
                     }
                      
                     break;
         
-                case "Periodo":
-                    isSelectedItemFilled = selectedControl.getSelectedKey().length;
+                case "CostCenter":
+                    isSelectedItemFilled = selectedControl.getSelectedKeys().length
                     isSelectedItemFilled = true // Deselect to make optional fields upon deletion filterable based on the selected filters
                     
                     if(isSelectedItemFilled){
+                        
+                        // Resetting the chained models
+                        filtriSelezionati.TipoContratto = null
+                        filtriSelezionati.Contratto = null
+                        oSelectedFiltersModel.refresh();
 
                         const els = [
-                            this.getView().byId("CostCenterBox"),
-                            this.getView().byId("IdStoricoSelect")
+                            this.getView().byId("TipoContrattoBox"),
+                            this.getView().byId("ContrattoBox"),
                         ]
 
                         els.forEach(el => {
@@ -490,19 +536,20 @@ sap.ui.define([
                                 getSource: () => el
                             }, labelText, null);
                             this.makeTitleObjAttrBold();
+                            oSelectedFiltersModel.setProperty("/allSelected", false);
                         })
                     }
                            
                     break;
         
-                case "CostCenter":                    
+                case "TipoContratto":                    
                     isSelectedItemFilled = selectedControl.getSelectedKeys().length
                     isSelectedItemFilled = true // Deselect to make optional fields upon deletion filterable based on the selected filters
-
+                
                     if(isSelectedItemFilled){
-
+                        
                         const els = [
-                            this.getView().byId("IdStoricoSelect")
+                            this.getView().byId("ContrattoBox"),
                         ]
 
                         els.forEach(el => {
@@ -523,12 +570,13 @@ sap.ui.define([
                                 getSource: () => el
                             }, labelText, null);
                             this.makeTitleObjAttrBold();
+                            oSelectedFiltersModel.setProperty("/allSelected", false);
                         })
                     }
                      
                     break;  
                 
-                case "ID_STORICO":
+                case "Contratto":
                 break;
                 default:
                     console.error("default, errore nello switch")
@@ -545,71 +593,67 @@ sap.ui.define([
 
             let oSelectedFilters = this.getView().getModel('selectedFiltersModel').getData();
 
+          //  console.log(Object.values(oSelectedFilters.entity));
             const requestData = {
-                entity: Object.values(oSelectedFilters.entity),
-                tipoContratto: oSelectedFilters.tipoContratto ? Object.values(oSelectedFilters.tipoContratto) : null,
-                contratto: oSelectedFilters.contratto ? Object.values(oSelectedFilters.contratto) : null, // Campo opzionale
+                Id_storico: oSelectedFilters.ID_STORICO,
                 year: oSelectedFilters.year,
                 period: oSelectedFilters.period,
+                entity: oSelectedFilters.entity ? Object.values(oSelectedFilters.entity) : null,
                 costCenter: oSelectedFilters.costCenter ? Object.values(oSelectedFilters.costCenter) : null, // Campo opzionale
-                Id_storico: oSelectedFilters.ID_STORICO,
+                tipoContratto: oSelectedFilters.tipoContratto ? Object.values(oSelectedFilters.tipoContratto) : null,
+                contratto: oSelectedFilters.contratto ? Object.values(oSelectedFilters.contratto) : null, // Campo opzionale
             }
 
             axios.post(servicePath, requestData)
             .then((response) => {
                 let oFiltersModel = this.getView().getModel('oFiltersModel')
               
-                if(!requestData.tipoContratto || requestData.tipoContratto.length == 0){
-                oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
-                oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
+                if(!requestData.year){
                 oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
                 oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
+                oFiltersModel.getData().Entity = this._elaborateEntities(response.data.BUKRS, response.data.BUTXT)
                 oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
-                
+                oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
+                oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)                
                 }
                 
-                if(!requestData.contratto || requestData.contratto.length == 0)
-                    if(!requestData.year){
-                    {
-                    oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
-                    oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
-                    oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
-                    oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                    oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
-                    
-                    }
-                }
-
-                    if(!requestData.year){
-                        oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
-                        oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
-                        oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                        oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
-                        
-                        }
-
                 if(!requestData.period){
                     oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
+                    oFiltersModel.getData().Entity = this._elaborateEntities(response.data.BUKRS, response.data.BUTXT)
                     oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                    oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
-                    
+                    oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
+                    oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR) 
                     }
+
+                    if(!requestData.entity || requestData.entity.length == 0){
+                        oFiltersModel.getData().Entity = this._elaborateEntities(response.data.BUKRS, response.data.BUTXT)
+                        oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                        oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
+                        oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR) 
+                        }
 
                 if(!requestData.costCenter || requestData.costCenter.length == 0){
                     oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                    oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                    oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
+                    oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR) 
+                    }
+
+                if(!requestData.tipoContratto || requestData.tipoContratto.length == 0){
+                    oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
+                    oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR) 
                     
                     }
-                if(!requestData.Id_storico){
-                    oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
-                    
+                if(!requestData.contratto || requestData.contratto.length == 0){
+                    oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
+                    oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR) 
                     }
                    
+                console.log(oFiltersModel.getData().Entity)
 
 
                 
 
+                console.log("Tipo Contratto",oFiltersModel.getData().TipoContratto)
                 
                 // {
                 //         Entity: this._elaborateEntities(response.data.BUKRS, response.data.BUTXT),

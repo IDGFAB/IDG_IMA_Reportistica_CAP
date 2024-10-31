@@ -182,8 +182,8 @@ async GetTabellaFiltrata(entity = [], tipoContratto = [], contratto = [], year =
     SUM("YTD_INTEREST") AS "YTD_INTEREST",
     SUM("LEASE_COST") AS "LEASE_COST",
     SUM("DEPRECIATION") AS "DEPRECIATION",
-    0 AS "GAIN_FX_RATES",
-    0 AS "LOSS_FX_RATES"
+    SUM("GAIN_FX_RATES") AS "GAIN_FX_RATES",
+    SUM("LOSS_FX_RATES") AS "LOSS_FX_RATES"
 FROM (
 -- Prima query
 
@@ -240,8 +240,8 @@ FROM (
         SUM("BBWHR_INTEREST") AS "YTD_INTEREST",
         SUM("BBWHR_PAYMENT") AS "LEASE_COST",
         SUM("BBWHR_DEPRECIATION") AS "DEPRECIATION",
-        TO_DECIMAL('0') AS "GAIN_FX_RATES",
-        TO_DECIMAL('0') AS "LOSS_FX_RATES"
+        SUM("GAIN") AS "GAIN_FX_RATES",
+        SUM("LOSS") AS "LOSS_FX_RATES"
     FROM "CATALOGSERVICE_VIEW_ALL_DATA_V2"
     ${queryWithMinor}
          
@@ -429,13 +429,13 @@ async Filters() {
 
 
 async applyFilters(
-    entity = [], 
-    tipoContratto = [], 
-    contratto = [], 
+    Id_storico = null,
     year = null, 
     period = null, 
+    entity = [], 
     costCenter = [], 
-    Id_storico = null
+    tipoContratto = [], 
+    contratto = [], 
 ) {
 
 
@@ -711,49 +711,113 @@ async CreateQuery23(entity = [], contratto = [], year = null, period = null, Id_
 		return sqlQuery;
 	}
 
+    async CreateQuery23WithMinor(entity = [], contratto = [], year = null, period = null, Id_storico = null) {
+        let whereClauses = [];
+    
+            // Controllo per il parametro Entity (obbligatorio e array)
+            if (Array.isArray(entity) && entity.length > 0) {
+                whereClauses.push('"BUKRS" IN (' + entity.map(e => `'${e}'`).join(', ') + ')');
+            } else {
+                throw new Error("Il parametro 'Entity' è obbligatorio e deve essere un array.");
+            }
+        
+            // Controllo per il parametro Contratto (facoltativo e array)
+            if (contratto) {
+                if (Array.isArray(contratto)) {
+                    if(contratto.length > 0){
+                        whereClauses.push('"RECNNR" IN (' + contratto.map(c => `'${c}'`).join(', ') + ')');
+                    }
+                } else {
+                    whereClauses.push('"RECNNR" = \'' + contratto + '\'');
+                }
+            }
+        
+            // Controllo per il parametro Year (obbligatorio e non array)
+            if (year !== null && year !== undefined) {
+                whereClauses.push('"YEARDUEDATE" = \'' + year + '\'');
+            } else {
+                throw new Error("Il parametro 'Year' è obbligatorio.");
+            }
+        
+            // Controllo per il parametro Period (obbligatorio e non array)
+            if (period !== null && period !== undefined) {
+                whereClauses.push('TO_INT("PERIODDUEDATE") <= ' + period);
+            } else {
+                throw new Error("Il parametro 'Period' è obbligatorio.");
+            }
+    
+            // Controllo per il parametro Year (obbligatorio e non array)
+            if (Id_storico !== null && Id_storico !== undefined) {
+                whereClauses.push('"ID_STORICO" = \'' + Id_storico + '\'');
+            } else {
+                throw new Error("Il parametro 'Id_storico' è obbligatorio.");
+            }
+        
+            // Costruzione della query finale
+            let sqlQuery = ''; // Sostituisci con il nome della tua tabella
+            if (whereClauses.length > 0) {
+                sqlQuery += 'WHERE ' + whereClauses.join(' AND ');
+            }
+        
+            return sqlQuery;
+        }
+
 
 async GetTabellaFiltrata23(entity = [], contratto = [], year = null, period = null, Id_storico = null){
 
     var test = []
     var test2=[]
 
-    let query =await this.CreateQuery23(entity,  contratto, year, period, Id_storico)
+    let query23 =await this.CreateQuery23(entity,  contratto, year, period, Id_storico)
+    let queryMinor23 =await this.CreateQuery23WithMinor(entity,  contratto, year, period, Id_storico)
 
 
     try{
-    const filteredTable = await cds.db.run(`SELECT 'Reclass Liab. Current Portion' "JOURNAL_TYPE",
-	'Lease Liabilities Short Term' "ACCOUNT",
-	"RECNTXTOLD" "RECNTXTOLD",
-	"IDENTOBJNR" "IDENTOBJNR", --CDC
-    "XMBEZ" "XMBEZ", --ASSET CATEGORY
-	0 "DEBIT",
-	SUM("DEBITO_BTERM") "CREDIT",
-	"BUKRS", --COMPANY CODE
-	"RECNTYPE", --CONTRACT TYPE
-	"RECNNR", -- CONTRACT NUMBER
-	"YEARDUEDATE", --YEAR
-	"PERIODDUEDATE", --PERIOD
-	"ID_STORICO",
-	"ZZPARTNER", --ICP
-	"INTRENO",
-	"CERULE" "CERULE", --VALUATION CERULE
-	0 "DEBIT_CURR",
-	0 "CREDIT_CURR"
-FROM "CATALOGSERVICE_VIEW_ALL_DATA_V2"
-${query}
-GROUP BY "RECNNR",
-	"IDENTOBJNR",
-	"RECNTXTOLD",
-	"XMBEZ",
-	"BUKRS",
-	"RECNTYPE",
-	"RECNNR",
-	"YEARDUEDATE",
-	"PERIODDUEDATE",
-	"ID_STORICO",
-	"ZZPARTNER",
-	"INTRENO",
-	"CERULE"`)
+    const filteredTable = await cds.db.run(`SELECT "JOURNAL_TYPE",
+    "ACCOUNT",
+    "IDENTOBJNR",
+    "RECNTXTOLD",
+    "XMBEZ",
+    "DEBIT",
+    "CREDIT",
+    "DEBIT_CURR",
+    "CREDIT_CURR"
+FROM (
+        SELECT UPPER("JOURNAL_TYPE") "JOURNAL_TYPE",
+            UPPER("ACCOUNT") "ACCOUNT",
+            "IDENTOBJNR",
+            "RECNTXTOLD",
+            "XMBEZ",
+            SUM("DEBIT") "DEBIT",
+            SUM("CREDIT") "CREDIT",
+            SUM("DEBIT_CURR") "DEBIT_CURR",
+            SUM("CREDIT_CURR") "CREDIT_CURR"
+        FROM "CATALOGSERVICE_VIEW_CAP_REPORT_23_EQ"
+        ${query23}
+        GROUP BY "JOURNAL_TYPE",
+            "ACCOUNT",
+            "IDENTOBJNR",
+            "RECNTXTOLD",
+            "XMBEZ"
+        UNION ALL
+        SELECT UPPER("JOURNAL_TYPE") "JOURNAL_TYPE",
+            UPPER("ACCOUNT") "ACCOUNT",
+            "IDENTOBJNR",
+            "RECNTXTOLD",
+            "XMBEZ",
+            SUM("DEBIT") "DEBIT",
+            SUM("CREDIT") "CREDIT",
+            SUM("DEBIT_CURR") "DEBIT_CURR",
+            SUM("CREDIT_CURR") "CREDIT_CURR"
+        FROM "CATALOGSERVICE_VIEW_CAP_REPORT23_LT"
+        ${queryMinor23}
+        GROUP BY "JOURNAL_TYPE",
+            "ACCOUNT",
+            "IDENTOBJNR",
+            "RECNTXTOLD",
+            "XMBEZ")
+ORDER BY "JOURNAL_TYPE",
+    "ACCOUNT"`)
 
 console.log(filteredTable);
 return filteredTable
@@ -767,6 +831,177 @@ throw error
 
     
 }
+
+async applyFilters9(
+    entity = [], 
+    year = null, 
+    period = null, 
+) {
+    // Definizione dei filtri progressivi
+    const whereClause = {};
+
+    //primo filtro: entity (BUTXT)
+    if (entity?.length > 0) {
+        whereClause.BUKRS = entity;
+    }
+
+    // Filtro per anno (YEARDUEDATE)
+    if (year) {
+        whereClause.YEARDUEDATE = year;
+    }
+
+    // Filtro per periodo (PERIODDUEDATE)
+    if (period) {
+        whereClause.PERIODDUEDATE = period;
+    }
+
+    // Esegui la query di selezione con i filtri dinamici
+    const filteredData = await cds.run(
+        SELECT.distinct
+            .from('CATALOGSERVICE_GV_FILTRI_ID22')
+            .columns('BUTXT', 'RECNTYPE', 'RECNNR', 'YEARDUEDATE', 'PERIODDUEDATE', 'IDENTOBJNR', 'BUKRS', 'ID_STORICO')
+            .where(whereClause)  // Inserisci la clausola WHERE dinamica
+    );
+
+
+    this.log.info(filteredData)
+
+    // Usa Set per rimuovere automaticamente i duplicati dai risultati
+    const butxt = new Set();
+    const yearduedate = new Set();
+    const periodduedate = new Set();
+    const bukrs = new Set();
+
+    // Popola i set con i risultati filtrati
+    filteredData.forEach(row => {
+        butxt.add(row.BUTXT);
+        yearduedate.add(row.YEARDUEDATE);
+        periodduedate.add(row.PERIODDUEDATE);
+        bukrs.add(row.BUKRS);
+    });
+
+    // Converte i set in array
+    const BUTXT = Array.from(butxt);
+    const YEARDUEDATE = Array.from(yearduedate);
+    const PERIODDUEDATE = Array.from(periodduedate);
+    const BUKRS = Array.from(bukrs);
+
+    console.log("butxt array:", BUTXT);
+    console.log("yearduedate array:", YEARDUEDATE);
+    console.log("periodduedate array:", PERIODDUEDATE);
+    console.log("bukrs array:", BUKRS);
+
+    // Ritorna gli array filtrati
+    return {
+        BUTXT: BUTXT,
+        YEARDUEDATE: YEARDUEDATE,
+        PERIODDUEDATE: PERIODDUEDATE,
+        BUKRS: BUKRS,
+    };
+}
+
+
+async CreateQuery9(entity = [], year = null, period = null) {
+    let whereClauses = [];
+
+	    // Controllo per il parametro Entity (obbligatorio e array)
+		if (Array.isArray(entity) && entity.length > 0) {
+			whereClauses.push('"BUKRS" IN (' + entity.map(e => `'${e}'`).join(', ') + ')');
+		} else {
+			throw new Error("Il parametro 'Entity' è obbligatorio e deve essere un array.");
+		}
+	
+		// Controllo per il parametro Year (obbligatorio e non array)
+		if (year !== null && year !== undefined) {
+			whereClauses.push('"YEARDUEDATE" = \'' + year + '\'');
+		} else {
+			throw new Error("Il parametro 'Year' è obbligatorio.");
+		}
+	
+		// Controllo per il parametro Period (obbligatorio e non array)
+		if (period !== null && period !== undefined) {
+			whereClauses.push('TO_INT("PERIODDUEDATE") = ' + period);
+		} else {
+			throw new Error("Il parametro 'Period' è obbligatorio.");
+		}
+	
+		// Costruzione della query finale
+		let sqlQuery = ''; // Sostituisci con il nome della tua tabella
+		if (whereClauses.length > 0) {
+			sqlQuery += 'WHERE ' + whereClauses.join(' AND ');
+		}
+	
+		return sqlQuery;
+	}
+
+
+    async GetTabellaFiltrata9(entity = [], year = null, period = null){
+    
+        let query9 =await this.CreateQuery9(entity, year, period)
+       
+    
+    
+        try{
+        const filteredTable = await cds.db.run(`SELECT "JOURNAL_TYPE",
+        "ACCOUNT",
+        "IDENTOBJNR",
+        "RECNTXTOLD",
+        "XMBEZ",
+        "DEBIT",
+        "CREDIT",
+        "DEBIT_CURR",
+        "CREDIT_CURR"
+    FROM (
+            SELECT UPPER("JOURNAL_TYPE") "JOURNAL_TYPE",
+                UPPER("ACCOUNT") "ACCOUNT",
+                "IDENTOBJNR",
+                "RECNTXTOLD",
+                "XMBEZ",
+                SUM("DEBIT") "DEBIT",
+                SUM("CREDIT") "CREDIT",
+                SUM("DEBIT_CURR") "DEBIT_CURR",
+                SUM("CREDIT_CURR") "CREDIT_CURR"
+            FROM "CATALOGSERVICE_VIEW_CAP_REPORT_23_EQ"
+            ${query9}
+            GROUP BY "JOURNAL_TYPE",
+                "ACCOUNT",
+                "IDENTOBJNR",
+                "RECNTXTOLD",
+                "XMBEZ"
+            UNION ALL
+            SELECT UPPER("JOURNAL_TYPE") "JOURNAL_TYPE",
+                UPPER("ACCOUNT") "ACCOUNT",
+                "IDENTOBJNR",
+                "RECNTXTOLD",
+                "XMBEZ",
+                SUM("DEBIT") "DEBIT",
+                SUM("CREDIT") "CREDIT",
+                SUM("DEBIT_CURR") "DEBIT_CURR",
+                SUM("CREDIT_CURR") "CREDIT_CURR"
+            FROM "CATALOGSERVICE_VIEW_CAP_REPORT23_LT"
+            ${query9}
+            GROUP BY "JOURNAL_TYPE",
+                "ACCOUNT",
+                "IDENTOBJNR",
+                "RECNTXTOLD",
+                "XMBEZ")
+    ORDER BY "JOURNAL_TYPE",
+        "ACCOUNT"`)
+    
+    console.log(filteredTable);
+    return filteredTable
+    
+    }
+    catch(error){
+    this.log.error
+    throw error
+    }
+    
+    
+        
+    }
+
+  
 
 
 
