@@ -96,6 +96,7 @@ entity View_All_Data_v2 {
         BELNR                      : String(10);
         GAIN                       : Decimal(18, 2);
         LOSS                       : Decimal(18, 2);
+        PRICE_EROU                 : Decimal(19, 6);
 
 }
 
