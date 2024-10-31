@@ -182,8 +182,8 @@ async GetTabellaFiltrata(entity = [], tipoContratto = [], contratto = [], year =
     SUM("YTD_INTEREST") AS "YTD_INTEREST",
     SUM("LEASE_COST") AS "LEASE_COST",
     SUM("DEPRECIATION") AS "DEPRECIATION",
-    0 AS "GAIN_FX_RATES",
-    0 AS "LOSS_FX_RATES"
+    SUM("GAIN_FX_RATES") AS "GAIN_FX_RATES",
+    SUM("LOSS_FX_RATES") AS "LOSS_FX_RATES"
 FROM (
 -- Prima query
 
@@ -240,8 +240,8 @@ FROM (
         SUM("BBWHR_INTEREST") AS "YTD_INTEREST",
         SUM("BBWHR_PAYMENT") AS "LEASE_COST",
         SUM("BBWHR_DEPRECIATION") AS "DEPRECIATION",
-        TO_DECIMAL('0') AS "GAIN_FX_RATES",
-        TO_DECIMAL('0') AS "LOSS_FX_RATES"
+        SUM("GAIN") AS "GAIN_FX_RATES",
+        SUM("LOSS") AS "LOSS_FX_RATES"
     FROM "CATALOGSERVICE_VIEW_ALL_DATA_V2"
     ${queryWithMinor}
          

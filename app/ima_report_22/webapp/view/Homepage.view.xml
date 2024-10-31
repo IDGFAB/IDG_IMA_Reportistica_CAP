@@ -342,12 +342,12 @@
                             <table:multiLabels>
                                 <Label text="Lease Cost" textAlign="Center" vAlign="Middle">
                                     <customData>
-                                        <core:CustomData value="LEASE_COST" />
+                                        <core:CustomData value="LEASE_COST " />
                                     </customData>
                                 </Label>
                             </table:multiLabels>
                             <table:template>
-                                <Text text="{DataIMA22>LEASE_COST}" />
+                                <Text text="{DataIMA22>LEASE_COST} " />
                             </table:template>
                         </table:Column>
                         <table:Column width="11rem" sortProperty="DEPRECIATION">
