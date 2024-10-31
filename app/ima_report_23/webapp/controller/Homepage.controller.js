@@ -1093,6 +1093,8 @@ sap.ui.define([
             // Ottieni il modello associato alla tabella
             var oTable = this.byId("table");
             var oBinding = oTable.getBinding("rows");
+
+            console.log("tabella ",oTable)
         
             // Estrai i dati mappati per ogni riga
             var odata = oBinding.getContexts().map(function (oContext) {
@@ -1131,16 +1133,14 @@ sap.ui.define([
         
             // Suddivisione delle colonne in gruppi di massimo 5
             var columns = [
-                "ACC_SECTOR", "ACCUMULATED_DEPRECIATION", "RIGHT_OF_USE", "ASSET_CLASS", 
-                "BUKRS", "CONTRACT_CODE", "CONTRACT_DESCRIPTION", "DEPRECIATION", 
-                "CLOSING_LEASES_LIABILITIES", "INTERCOMPANY", "LEASE_COST", 
-                "CDNET_RIGHT_OF_USEC", "CDC", "CDC_CODE", "YTD_INTEREST", 
-                "GAIN_FX_RATES", "LOSS_FX_RATES"
+                "JOURNAL_TYPE", "ACCOUNT", "XMBEZ", "RECNTXTOLD", 
+                "IDENTOBJNR", "DEBIT", "CREDIT", "DEBIT_CURR", 
+                "CREDIT_CURR"
             ];
         
             // Calcola quante sezioni (o pagine) con colonne divise sono necessarie
-            for (let i = 0; i < columns.length; i += 5) {
-                let pageColumns = columns.slice(i, i + 5);
+            for (let i = 0; i < columns.length; i += 10) {
+                let pageColumns = columns.slice(i, i + 10);
                 
                 // Struttura la tabella per questa sezione
                 let tableBody = [];
