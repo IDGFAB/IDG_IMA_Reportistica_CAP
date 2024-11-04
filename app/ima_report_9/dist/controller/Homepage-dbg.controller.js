@@ -22,7 +22,7 @@ sap.ui.define([
 
             this._getDataFilters()
 
-            // this.getTableData()
+            // this.getTableData() //funzione per dati dinamici
 
             this.getView().setModel(new JSONModel(), 'DataIMA9')
             // this._bindToolbarText();
@@ -58,86 +58,86 @@ sap.ui.define([
                       "Right of Use": {
                         "Total": 99999999,
                         "Building": 17910324,
-                        "Cars in pool": 278436,
-                        "Cars in benefit": 450944
+                        "Cars_in_pool": 278436,
+                        "Cars_in_benefit": 450944
                       },
                       "Accumulated Depreciation": {
                         "Total": 6560981,
                         "Building": 6097132,
-                        "Cars in pool": 223233,
-                        "Cars in benefit": 240616
+                        "Cars_in_pool": 223233,
+                        "Cars_in_benefit": 240616
                       },
                       "Net Right of Use": {
                         "Total": 12078722,
                         "Building": 11813193,
-                        "Cars in pool": 55203,
-                        "Cars in benefit": 210327
+                        "Cars_in_pool": 55203,
+                        "Cars_in_benefit": 210327
                       }
                     },
                     "Movements": {
                       "Amount at transition date": {
                         "Total": null,
                         "Building": null,
-                        "Cars in pool": null,
-                        "Cars in benefit": null
+                        "Cars_in_pool": null,
+                        "Cars_in_benefit": null
                       },
                       "Increase for new contract": {
                         "Total": 28901,
                         "Building": null,
-                        "Cars in pool": null,
-                        "Cars in benefit": 28901
+                        "Cars_in_pool": null,
+                        "Cars_in_benefit": 28901
                       },
                       "Revaluation (increase for remeasurement)": {
                         "Total": 39253,
                         "Building": null,
-                        "Cars in pool": 39047,
-                        "Cars in benefit": 205
+                        "Cars_in_pool": 39047,
+                        "Cars_in_benefit": 205
                       },
                       "Decrease - Right of Use": {
                         "Total": 58949,
                         "Building": null,
-                        "Cars in pool": 14984,
-                        "Cars in benefit": 43965
+                        "Cars_in_pool": 14984,
+                        "Cars_in_benefit": 43965
                       },
                       "Decrease - Accumulated Depreciation": {
                         "Total": 58949,
                         "Building": null,
-                        "Cars in pool": 14984,
-                        "Cars in benefit": 43965
+                        "Cars_in_pool": 14984,
+                        "Cars_in_benefit": 43965
                       },
                       "Depreciation": {
                         "Total": 1695290,
                         "Building": 1524283,
-                        "Cars in pool": 64381,
-                        "Cars in benefit": 106626
+                        "Cars_in_pool": 64381,
+                        "Cars_in_benefit": 106626
                       }
                     },
                     "Totale": {
                       "Totale": {
                         "Total": 1627137,
                         "Building": 1524283,
-                        "Cars in pool": 25334,
-                        "Cars in benefit": 77520
+                        "Cars_in_pool": 25334,
+                        "Cars_in_benefit": 77520
                       }
                     },
                     "Closing": {
                       "Right of Use": {
                         "Total": 18648908,
                         "Building": 17910324,
-                        "Cars in pool": 302499,
-                        "Cars in benefit": 436085
+                        "Cars_in_pool": 302499,
+                        "Cars_in_benefit": 436085
                       },
                       "Accumulated Depreciation": {
                         "Total": 8197322,
                         "Building": 7621415,
-                        "Cars in pool": 272631,
-                        "Cars in benefit": 303277
+                        "Cars_in_pool": 272631,
+                        "Cars_in_benefit": 303277
                       },
                       "Net Right of Use": {
                         "Total": 10451586,
                         "Building": 10288910,
-                        "Cars in pool": 29869,
-                        "Cars in benefit": 132807
+                        "Cars_in_pool": 29869,
+                        "Cars_in_benefit": 132807
                       }
                     }
                   }
@@ -153,86 +153,86 @@ sap.ui.define([
                       "Right of Use": {
                         "Total": 888888888,
                         "Building": 345678987678,
-                        "Cars in pool": 567617200,
-                        "Cars in benefit": 32422322
+                        "Cars_in_pool": 567617200,
+                        "Cars_in_benefit": 32422322
                       },
                       "Accumulated Depreciation": {
                         "Total": 6560981,
                         "Building": 6097132,
-                        "Cars in pool": 999999999,
-                        "Cars in benefit": 111111111
+                        "Cars_in_pool": 999999999,
+                        "Cars_in_benefit": 111111111
                       },
                       "Net Right of Use": {
                         "Total": 12078722,
                         "Building": 11813193,
-                        "Cars in pool": 899999,
-                        "Cars in benefit": 210327
+                        "Cars_in_pool": 899999,
+                        "Cars_in_benefit": 210327
                       }
                     },
                     "Movements": {
                       "Amount at transition date": {
                         "Total": null,
                         "Building": null,
-                        "Cars in pool": null,
-                        "Cars in benefit": null
+                        "Cars_in_pool": null,
+                        "Cars_in_benefit": null
                       },
                       "Increase for new contract": {
                         "Total": 28901,
                         "Building": null,
-                        "Cars in pool": null,
-                        "Cars in benefit": 28901
+                        "Cars_in_pool": null,
+                        "Cars_in_benefit": 28901
                       },
                       "Revaluation (increase for remeasurement)": {
                         "Total": 39253,
                         "Building": null,
-                        "Cars in pool": 39047,
-                        "Cars in benefit": 205
+                        "Cars_in_pool": 39047,
+                        "Cars_in_benefit": 205
                       },
                       "Decrease - Right of Use": {
                         "Total": 58949,
                         "Building": null,
-                        "Cars in pool": 14984,
-                        "Cars in benefit": 43965
+                        "Cars_in_pool": 14984,
+                        "Cars_in_benefit": 43965
                       },
                       "Decrease - Accumulated Depreciation": {
                         "Total": 58949,
                         "Building": null,
-                        "Cars in pool": 55555555555555,
-                        "Cars in benefit": 43965
+                        "Cars_in_pool": 55555555555555,
+                        "Cars_in_benefit": 43965
                       },
                       "Depreciation": {
                         "Total": 1695290,
                         "Building": 999999999999,
-                        "Cars in pool": 64381,
-                        "Cars in benefit": 106626
+                        "Cars_in_pool": 64381,
+                        "Cars_in_benefit": 106626
                       }
                     },
                     "Totale": {
                       "Totale": {
                         "Total": 1627137,
                         "Building": 1524283,
-                        "Cars in pool": 25334,
-                        "Cars in benefit": 77520
+                        "Cars_in_pool": 25334,
+                        "Cars_in_benefit": 77520
                       }
                     },
                     "Closing": {
                       "Right of Use": {
                         "Total": 18648908,
                         "Building": 17910324,
-                        "Cars in pool": 302499,
-                        "Cars in benefit": 436085
+                        "Cars_in_pool": 302499,
+                        "Cars_in_benefit": 436085
                       },
                       "Accumulated Depreciation": {
                         "Total": 8197322,
                         "Building": 7621415,
-                        "Cars in pool": 272631,
-                        "Cars in benefit": 303277
+                        "Cars_in_pool": 272631,
+                        "Cars_in_benefit": 303277
                       },
                       "Net Right of Use": {
                         "Total": 10451586,
                         "Building": 10288910,
-                        "Cars in pool": 29869,
-                        "Cars in benefit": 132807
+                        "Cars_in_pool": 29869,
+                        "Cars_in_benefit": 132807
                       }
                     }
                   }
@@ -248,86 +248,86 @@ sap.ui.define([
                       "Right of Use": {
                         "Total": 77777777777,
                         "Building": 17910324,
-                        "Cars in pool": 278436,
-                        "Cars in benefit": 450944
+                        "Cars_in_pool": 278436,
+                        "Cars_in_benefit": 450944
                       },
                       "Accumulated Depreciation": {
                         "Total": 6560981,
                         "Building": 6097132,
-                        "Cars in pool": 223233,
-                        "Cars in benefit": 240616
+                        "Cars_in_pool": 223233,
+                        "Cars_in_benefit": 240616
                       },
                       "Net Right of Use": {
                         "Total": 12078722,
                         "Building": 11813193,
-                        "Cars in pool": 55203,
-                        "Cars in benefit": 210327
+                        "Cars_in_pool": 55203,
+                        "Cars_in_benefit": 210327
                       }
                     },
                     "Movements": {
                       "Amount at transition date": {
                         "Total": null,
                         "Building": null,
-                        "Cars in pool": null,
-                        "Cars in benefit": null
+                        "Cars_in_pool": null,
+                        "Cars_in_benefit": null
                       },
                       "Increase for new contract": {
                         "Total": 28901,
                         "Building": null,
-                        "Cars in pool": null,
-                        "Cars in benefit": 28901
+                        "Cars_in_pool": null,
+                        "Cars_in_benefit": 28901
                       },
                       "Revaluation (increase for remeasurement)": {
                         "Total": 39253,
                         "Building": null,
-                        "Cars in pool": 39047,
-                        "Cars in benefit": 205
+                        "Cars_in_pool": 39047,
+                        "Cars_in_benefit": 205
                       },
                       "Decrease - Right of Use": {
                         "Total": 58949,
                         "Building": null,
-                        "Cars in pool": 14984,
-                        "Cars in benefit": 43965
+                        "Cars_in_pool": 14984,
+                        "Cars_in_benefit": 43965
                       },
                       "Decrease - Accumulated Depreciation": {
                         "Total": 58949,
                         "Building": null,
-                        "Cars in pool": 14984,
-                        "Cars in benefit": 43965
+                        "Cars_in_pool": 14984,
+                        "Cars_in_benefit": 43965
                       },
                       "Depreciation": {
                         "Total": 1695290,
                         "Building": 1524283,
-                        "Cars in pool": 64381,
-                        "Cars in benefit": 106626
+                        "Cars_in_pool": 64381,
+                        "Cars_in_benefit": 106626
                       }
                     },
                     "Totale": {
                       "Totale": {
                         "Total": 1627137,
                         "Building": 1524283,
-                        "Cars in pool": 25334,
-                        "Cars in benefit": 77520
+                        "Cars_in_pool": 25334,
+                        "Cars_in_benefit": 77520
                       }
                     },
                     "Closing": {
                       "Right of Use": {
                         "Total": 18648908,
                         "Building": 17910324,
-                        "Cars in pool": 302499,
-                        "Cars in benefit": 436085
+                        "Cars_in_pool": 302499,
+                        "Cars_in_benefit": 436085
                       },
                       "Accumulated Depreciation": {
                         "Total": 8197322,
                         "Building": 7621415,
-                        "Cars in pool": 272631,
-                        "Cars in benefit": 303277
+                        "Cars_in_pool": 272631,
+                        "Cars_in_benefit": 303277
                       },
                       "Net Right of Use": {
                         "Total": 10451586,
                         "Building": 10288910,
-                        "Cars in pool": 29869,
-                        "Cars in benefit": 132807
+                        "Cars_in_pool": 29869,
+                        "Cars_in_benefit": 132807
                       }
                     }
                   }
@@ -343,86 +343,86 @@ sap.ui.define([
                       "Right of Use": {
                         "Total": 6666666666,
                         "Building": 17910324,
-                        "Cars in pool": 278436,
-                        "Cars in benefit": 450944
+                        "Cars_in_pool": 278436,
+                        "Cars_in_benefit": 450944
                       },
                       "Accumulated Depreciation": {
                         "Total": 6560981,
                         "Building": 6097132,
-                        "Cars in pool": 223233,
-                        "Cars in benefit": 240616
+                        "Cars_in_pool": 223233,
+                        "Cars_in_benefit": 240616
                       },
                       "Net Right of Use": {
                         "Total": 12078722,
                         "Building": 11813193,
-                        "Cars in pool": 55203,
-                        "Cars in benefit": 210327
+                        "Cars_in_pool": 55203,
+                        "Cars_in_benefit": 210327
                       }
                     },
                     "Movements": {
                       "Amount at transition date": {
                         "Total": null,
                         "Building": null,
-                        "Cars in pool": null,
-                        "Cars in benefit": null
+                        "Cars_in_pool": null,
+                        "Cars_in_benefit": null
                       },
                       "Increase for new contract": {
                         "Total": 28901,
                         "Building": null,
-                        "Cars in pool": null,
-                        "Cars in benefit": 28901
+                        "Cars_in_pool": null,
+                        "Cars_in_benefit": 28901
                       },
                       "Revaluation (increase for remeasurement)": {
                         "Total": 39253,
                         "Building": null,
-                        "Cars in pool": 39047,
-                        "Cars in benefit": 205
+                        "Cars_in_pool": 39047,
+                        "Cars_in_benefit": 205
                       },
                       "Decrease - Right of Use": {
                         "Total": 58949,
                         "Building": null,
-                        "Cars in pool": 14984,
-                        "Cars in benefit": 43965
+                        "Cars_in_pool": 14984,
+                        "Cars_in_benefit": 43965
                       },
                       "Decrease - Accumulated Depreciation": {
                         "Total": 58949,
                         "Building": null,
-                        "Cars in pool": 14984,
-                        "Cars in benefit": 43965
+                        "Cars_in_pool": 14984,
+                        "Cars_in_benefit": 43965
                       },
                       "Depreciation": {
                         "Total": 1695290,
                         "Building": 1524283,
-                        "Cars in pool": 64381,
-                        "Cars in benefit": 106626
+                        "Cars_in_pool": 64381,
+                        "Cars_in_benefit": 106626
                       }
                     },
                     "Totale": {
                       "Totale": {
                         "Total": 1627137,
                         "Building": 1524283,
-                        "Cars in pool": 25334,
-                        "Cars in benefit": 77520
+                        "Cars_in_pool": 25334,
+                        "Cars_in_benefit": 77520
                       }
                     },
                     "Closing": {
                       "Right of Use": {
                         "Total": 18648908,
                         "Building": 17910324,
-                        "Cars in pool": 302499,
-                        "Cars in benefit": 436085
+                        "Cars_in_pool": 302499,
+                        "Cars_in_benefit": 436085
                       },
                       "Accumulated Depreciation": {
                         "Total": 8197322,
                         "Building": 7621415,
-                        "Cars in pool": 272631,
-                        "Cars in benefit": 303277
+                        "Cars_in_pool": 272631,
+                        "Cars_in_benefit": 303277
                       },
                       "Net Right of Use": {
                         "Total": 10451586,
                         "Building": 10288910,
-                        "Cars in pool": 29869,
-                        "Cars in benefit": 132807
+                        "Cars_in_pool": 29869,
+                        "Cars_in_benefit": 132807
                       }
                     }
                   }
@@ -437,12 +437,12 @@ sap.ui.define([
         _createFiltersModel: function () {
             let oFiltersModel = new JSONModel({
                 Entity: null,
-                TipoContratto: null,
-                Contratto: null,
+              //  TipoContratto: null,
+              //  Contratto: null,
                 Anno: null,
                 Periodo: null,
-                CostCenter: null,
-                Id_storico:null,
+              //  CostCenter: null,
+              //  Id_storico:null,
                 CompanyCode: null
             });
             this.getView().setModel(oFiltersModel, 'oFiltersModel');
@@ -487,12 +487,12 @@ sap.ui.define([
                     oFiltersModel.setData(
                         {
                             Entity: this._elaborateEntities(response.data.BUKRS, response.data.BUTXT),
-                            TipoContratto: this._sortStringArray(response.data.RECNTYPE),
-                            Contratto: this._sortStringArray(response.data.RECNNR),
+                           // TipoContratto: this._sortStringArray(response.data.RECNTYPE),
+                           // Contratto: this._sortStringArray(response.data.RECNNR),
                             Periodo: this._elaboratedMonths(response.data.PERIODDUEDATE),
                             Anno: this._sortStringArray(response.data.YEARDUEDATE),
-                            CostCenter: this._sortStringArray(response.data.CDC),
-                            Id_storico: this._sortStringArray(response.data.ID_STORICO)
+                           // CostCenter: this._sortStringArray(response.data.CDC),
+                           // Id_storico: this._sortStringArray(response.data.ID_STORICO)
                         }
                     )
                     console.log('Filters data: ', oFiltersModel.getData());
@@ -524,15 +524,15 @@ sap.ui.define([
             console.log(Object.values(oSelectedFilters.entity));
             const requestData = {
                 entity: Object.values(oSelectedFilters.entity),
-                tipoContratto: Object.values(oSelectedFilters.tipoContratto),
-                contratto: oSelectedFilters.contratto ? Object.values(oSelectedFilters.contratto) : null, // Campo opzionale
+              //  tipoContratto: Object.values(oSelectedFilters.tipoContratto),
+              //  contratto: oSelectedFilters.contratto ? Object.values(oSelectedFilters.contratto) : null, // Campo opzionale
                 year: oSelectedFilters.year,
                 period: oSelectedFilters.period,
-                costCenter: oSelectedFilters.costCenter ? Object.values(oSelectedFilters.costCenter) : null, // Campo opzionale
-                Id_storico: oSelectedFilters.ID_STORICO,
+              //  costCenter: oSelectedFilters.costCenter ? Object.values(oSelectedFilters.costCenter) : null, // Campo opzionale
+              //  Id_storico: oSelectedFilters.ID_STORICO,
             }
 
-            const servicePath = `${this.osUrl}GetTabellaFiltrata`;  // Append the action name with a trailing slash
+            const servicePath = `${this.osUrl}GetTabellaFiltrata9`;  // Append the action name with a trailing slash
             axios.post(servicePath,  requestData)
                 .then((response) => {
                     this.getView().byId("table").setBusy(false)
@@ -622,8 +622,8 @@ sap.ui.define([
             let allSelected =
                 oSelectedFilters.Periodo &&
                     oSelectedFilters.Anno &&
-                    oSelectedFilters.ID_STORICO &&
-                    (oSelectedFilters.TipoContratto && oSelectedFilters.TipoContratto.length > 0) &&
+                    //oSelectedFilters.ID_STORICO &&
+                 //   (oSelectedFilters.TipoContratto && oSelectedFilters.TipoContratto.length > 0) &&
                     (oSelectedFilters.Entity && oSelectedFilters.Entity.length > 0) ? true : false;
 
             // Update allSelected property
@@ -664,12 +664,12 @@ sap.ui.define([
                         this.entityKeys = aSelectedKeys.length
                     } else {
                         const els = [
-                            this.getView().byId("TipoContrattoBox"),
-                            this.getView().byId("ContrattoBox"),
+                         //   this.getView().byId("TipoContrattoBox"),
+                         //   this.getView().byId("ContrattoBox"),
                             this.getView().byId("AnnoSelect"),
                             this.getView().byId("PeriodoSelect"),
-                            this.getView().byId("CostCenterBox"),
-                            this.getView().byId("IdStoricoSelect")
+                         //   this.getView().byId("CostCenterBox"),
+                         //   this.getView().byId("IdStoricoSelect")
                         ]
 
                         els.forEach(el => {
@@ -691,71 +691,71 @@ sap.ui.define([
                     }
                     break;
         
-                case "TipoContratto":
-                    if(this.typeContractKeys == undefined){
-                        let aSelectedKeys = selectedControl.getSelectedKeys();
-                        this.typeContractKeys = aSelectedKeys.length
+                // case "TipoContratto":
+                //     if(this.typeContractKeys == undefined){
+                //         let aSelectedKeys = selectedControl.getSelectedKeys();
+                //         this.typeContractKeys = aSelectedKeys.length
 
-                    } else {
-                        const els = [
-                            this.getView().byId("ContrattoBox"),
-                            this.getView().byId("AnnoSelect"),
-                            this.getView().byId("PeriodoSelect"),
-                            this.getView().byId("CostCenterBox"),
-                            this.getView().byId("IdStoricoSelect")
-                        ]
+                //     } else {
+                //         const els = [
+                //             this.getView().byId("ContrattoBox"),
+                //             this.getView().byId("AnnoSelect"),
+                //             this.getView().byId("PeriodoSelect"),
+                //             this.getView().byId("CostCenterBox"),
+                //             this.getView().byId("IdStoricoSelect")
+                //         ]
 
-                        els.forEach(el => {
-                            if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
-                                // Handle MultiComboBox
-                                el.setSelectedKeys(null)
-                            } else if (el.getMetadata().getName() === "sap.m.Select") {
-                                // Handle Select
-                                el.setSelectedKey(null)
-                            } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
-                                // Handle ComboBox
-                                el.setSelectedKey(null)
-                            }
+                //         els.forEach(el => {
+                //             if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
+                //                 // Handle MultiComboBox
+                //                 el.setSelectedKeys(null)
+                //             } else if (el.getMetadata().getName() === "sap.m.Select") {
+                //                 // Handle Select
+                //                 el.setSelectedKey(null)
+                //             } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
+                //                 // Handle ComboBox
+                //                 el.setSelectedKey(null)
+                //             }
 
-                            // Checking each label's concatenation to empty it
-                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
-                            this.makeTitleObjAttrBold();
-                        })
-                    }
+                //             // Checking each label's concatenation to empty it
+                //             this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
+                //             this.makeTitleObjAttrBold();
+                //         })
+                //     }
                      
-                    break;
+                //     break;
         
-                case "Contratto":                    
-                    if(this.contractKeys == undefined){
-                        let aSelectedKeys = selectedControl.getSelectedKeys();
-                        this.contractKeys = aSelectedKeys.length
-                    } else {
-                        const els = [
-                            this.getView().byId("AnnoSelect"),
-                            this.getView().byId("PeriodoSelect"),
-                            this.getView().byId("CostCenterBox"),
-                            this.getView().byId("IdStoricoSelect")
-                        ]
+                // case "Contratto":                    
+                //     if(this.contractKeys == undefined){
+                //         let aSelectedKeys = selectedControl.getSelectedKeys();
+                //         this.contractKeys = aSelectedKeys.length
+                //     } else {
+                //         const els = [
+                //             this.getView().byId("AnnoSelect"),
+                //             this.getView().byId("PeriodoSelect"),
+                //             this.getView().byId("CostCenterBox"),
+                //             this.getView().byId("IdStoricoSelect")
+                //         ]
 
-                        els.forEach(el => {
-                            if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
-                                // Handle MultiComboBox
-                                el.setSelectedKeys(null)
-                            } else if (el.getMetadata().getName() === "sap.m.Select") {
-                                // Handle Select
-                                el.setSelectedKey(null)
-                            } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
-                                // Handle ComboBox
-                                el.setSelectedKey(null)
-                            }
+                //         els.forEach(el => {
+                //             if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
+                //                 // Handle MultiComboBox
+                //                 el.setSelectedKeys(null)
+                //             } else if (el.getMetadata().getName() === "sap.m.Select") {
+                //                 // Handle Select
+                //                 el.setSelectedKey(null)
+                //             } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
+                //                 // Handle ComboBox
+                //                 el.setSelectedKey(null)
+                //             }
 
-                            // Checking each label's concatenation to empty it
-                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
-                            this.makeTitleObjAttrBold();
-                        })
-                    }
+                //             // Checking each label's concatenation to empty it
+                //             this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
+                //             this.makeTitleObjAttrBold();
+                //         })
+                //     }
                         
-                    break;
+                //     break;
         
                 case "Anno":
                     if(this.annoKey == undefined){
@@ -764,8 +764,8 @@ sap.ui.define([
                     } else {
                         const els = [
                             this.getView().byId("PeriodoSelect"),
-                            this.getView().byId("CostCenterBox"),
-                            this.getView().byId("IdStoricoSelect")
+                            // this.getView().byId("CostCenterBox"),
+                            // this.getView().byId("IdStoricoSelect")
                         ]
 
                         els.forEach(el => {
@@ -794,8 +794,8 @@ sap.ui.define([
                         this.periodoKey = aSelectedKey
                     } else {
                         const els = [
-                            this.getView().byId("CostCenterBox"),
-                            this.getView().byId("IdStoricoSelect")
+                            // this.getView().byId("CostCenterBox"),
+                            // this.getView().byId("IdStoricoSelect")
                         ]
 
                         els.forEach(el => {
@@ -818,37 +818,37 @@ sap.ui.define([
                            
                     break;
         
-                case "CostCenter":                    
-                    if(this.cdcKeys == undefined){
-                        let aSelectedKeys = selectedControl.getSelectedKeys();
-                        this.cdcKeys = aSelectedKeys.length
-                    } else {
-                        const els = [
-                            this.getView().byId("IdStoricoSelect")
-                        ]
+                // case "CostCenter":                    
+                //     if(this.cdcKeys == undefined){
+                //         let aSelectedKeys = selectedControl.getSelectedKeys();
+                //         this.cdcKeys = aSelectedKeys.length
+                //     } else {
+                //         const els = [
+                //             this.getView().byId("IdStoricoSelect")
+                //         ]
 
-                        els.forEach(el => {
-                            if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
-                                // Handle MultiComboBox
-                                el.setSelectedKeys(null)
-                            } else if (el.getMetadata().getName() === "sap.m.Select") {
-                                // Handle Select
-                                el.setSelectedKey(null)
-                            } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
-                                // Handle ComboBox
-                                el.setSelectedKey(null)
-                            }
+                //         els.forEach(el => {
+                //             if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
+                //                 // Handle MultiComboBox
+                //                 el.setSelectedKeys(null)
+                //             } else if (el.getMetadata().getName() === "sap.m.Select") {
+                //                 // Handle Select
+                //                 el.setSelectedKey(null)
+                //             } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
+                //                 // Handle ComboBox
+                //                 el.setSelectedKey(null)
+                //             }
 
-                            // Checking each label's concatenation to empty it
-                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
-                            this.makeTitleObjAttrBold();
-                        })
-                    }
+                //             // Checking each label's concatenation to empty it
+                //             this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
+                //             this.makeTitleObjAttrBold();
+                //         })
+                //     }
                      
-                    break;  
+                //     break;  
                 
-                case "ID_STORICO":
-                break;
+                // case "ID_STORICO":
+                // break;
                 default:
                     console.error("default, errore nello switch")
                     break;
@@ -858,19 +858,19 @@ sap.ui.define([
 
         selectFiltering: function() {
             
-            const servicePath = `${this.osUrl}applyFilters`;
+            const servicePath = `${this.osUrl}applyFilters9`;
 
             let oSelectedFilters = this.getView().getModel('selectedFiltersModel').getData();
 
             console.log(Object.values(oSelectedFilters.entity));
             const requestData = {
                 entity: Object.values(oSelectedFilters.entity),
-                tipoContratto: oSelectedFilters.tipoContratto ? Object.values(oSelectedFilters.tipoContratto) : null,
-                contratto: oSelectedFilters.contratto ? Object.values(oSelectedFilters.contratto) : null, // Campo opzionale
+                // tipoContratto: oSelectedFilters.tipoContratto ? Object.values(oSelectedFilters.tipoContratto) : null,
+                // contratto: oSelectedFilters.contratto ? Object.values(oSelectedFilters.contratto) : null, // Campo opzionale
                 year: oSelectedFilters.year,
                 period: oSelectedFilters.period,
-                costCenter: oSelectedFilters.costCenter ? Object.values(oSelectedFilters.costCenter) : null, // Campo opzionale
-                Id_storico: oSelectedFilters.ID_STORICO,
+                // costCenter: oSelectedFilters.costCenter ? Object.values(oSelectedFilters.costCenter) : null, // Campo opzionale
+                // Id_storico: oSelectedFilters.ID_STORICO,
             }
 
             axios.post(servicePath, requestData)
@@ -878,56 +878,56 @@ sap.ui.define([
                 console.log("dati filtrati test", response.data);  // Handle the response array
                 let oFiltersModel = this.getView().getModel('oFiltersModel')
               
-                if(!requestData.tipoContratto || requestData.tipoContratto.length == 0){
-                oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
-                oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
-                oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
-                oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
-                oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                // if(!requestData.tipoContratto || requestData.tipoContratto.length == 0){
+                // oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
+                // oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
+                // oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
+                // oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
+                // oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                // oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
                 
-                }
+                // }
                 
-                if(!requestData.contratto || requestData.contratto.length == 0){
-                    oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
-                    oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
-                    oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
-                    oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                    oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                // if(!requestData.contratto || requestData.contratto.length == 0){
+                //     oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
+                //     oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
+                //     oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
+                //     oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                //     oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
                     
-                    }
+                //     }
 
                     if(!requestData.year){
                         oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
                         oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
-                        oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                        oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                        // oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                        // oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
                         
                         }
 
                 if(!requestData.period){
                     oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
-                    oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                    oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                    // oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                    // oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
                     
                     }
 
-                if(!requestData.costCenter || requestData.costCenter.length == 0){
-                    oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                    oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                // if(!requestData.costCenter || requestData.costCenter.length == 0){
+                //     oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                //     oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
                     
-                    }
-                if(!requestData.Id_storico){
-                    oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                //     }
+                // if(!requestData.Id_storico){
+                //     oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
                     
-                    }
+                //     }
                    
                 console.log(oFiltersModel.getData().Entity)
 
 
                 
 
-                console.log("Tipo Contratto",oFiltersModel.getData().TipoContratto)
+               // console.log("Tipo Contratto",oFiltersModel.getData().TipoContratto)
                 
                 // {
                 //         Entity: this._elaborateEntities(response.data.BUKRS, response.data.BUTXT),
@@ -1183,8 +1183,8 @@ sap.ui.define([
                 { key: "Description", label: "Description", width: "350px", freeze: true },
                 { key: "Total", label: "Total", width: "150px" },
                 { key: "Building", label: "Building", width: "150px" },
-                { key: "Cars in pool", label: "Cars in pool", width: "150px" },
-                { key: "Cars in benefit", label: "Cars in benefit", width: "150px" }
+                { key: "Cars_in_pool", label: "Cars_in_pool", width: "150px" },
+                { key: "Cars_in_benefit", label: "Cars_in_benefit", width: "150px" }
             ];
         
             // Add columns
@@ -1268,8 +1268,8 @@ sap.ui.define([
                         "Description": description,
                         "Total": formatNumber(descriptionData.Total),
                         "Building": formatNumber(descriptionData.Building),
-                        "Cars in pool": formatNumber(descriptionData["Cars in pool"]),
-                        "Cars in benefit": formatNumber(descriptionData["Cars in benefit"])
+                        "Cars_in_pool": formatNumber(descriptionData["Cars_in_pool"]),
+                        "Cars_in_benefit": formatNumber(descriptionData["Cars_in_benefit"])
                     });
                     
                     lastSection = section;
@@ -1374,6 +1374,7 @@ sap.ui.define([
                     styles: [
                         {
                             id: "header",  // Style ID for headers
+                            width: "200px",
                             fontSize: 12,  // Font size
                             fontColor: "#ffffff",  // Font color (white)
                             backgroundColor: "#808080",  // Background color (grey)
@@ -1388,6 +1389,7 @@ sap.ui.define([
                         },
                         {
                             id: "content",  // Style ID for content cells
+                            width: "200px",
                             fontSize: 10,  // Font size
                             hAlign: "Left",  // Left alignment
                             border: {
@@ -1416,65 +1418,63 @@ sap.ui.define([
         },
 
         onDownloadPdfPress: function () {
-            var oTable = this.byId("table");
-            var oBinding = oTable.getBinding("rows");
-            var odata = oBinding.getContexts().map(function (oContext) {
-                return oContext.getObject();
-            });
-        
-            var columns = [
-                "ACC_SECTOR", "ACCUMULATED_DEPRECIATION", "RIGHT_OF_USE", "ASSET_CLASS", 
-                "BUKRS", "CONTRACT_CODE", "CONTRACT_DESCRIPTION", "DEPRECIATION", 
-                "CLOSING_LEASES_LIABILITIES", "INTERCOMPANY", "LEASE_COST", 
-                "CDNET_RIGHT_OF_USEC", "CDC", "CDC_CODE", "YTD_INTEREST", 
-                "GAIN_FX_RATES", "LOSS_FX_RATES"
-            ];
-        
-            var docDefinition = {
-                pageSize: 'A4',
-                pageOrientation: 'landscape',
-                pageMargins: [5, 5, 5, 5],  // Minimum margins
-                footer: { text: new Date().toLocaleString(), alignment: 'right', fontSize: 6 },
-                content: []
-            };
-        
-            // Create table data
-            let tableBody = [];
-            
-            // Add header row
-            tableBody.push(columns.map(col => ({
-                text: col.substring(0, 10),
-                style: { fontSize: 8, bold: true, alignment: 'center' },
-                noWrap: true  // Prevent text wrapping in headers
-            })));
-        
-            // Add data rows
-            odata.forEach(function (rowData) {
-                let row = columns.map(col => ({
-                    text: String(rowData[col] || "-").substring(0, 20), // Limit text length
-                    style: { fontSize: 8 },
-                    noWrap: true  // Prevent text wrapping in cells
-                }));
-                tableBody.push(row);
-            });
-        
-            // Add table to document
-            docDefinition.content.push({
-                table: {
-                    headerRows: 1,
-                    widths: Array(columns.length).fill(43),  // Fixed width for all columns
-                    body: tableBody
-                },
-                layout: {
-                    paddingLeft: function() { return 2; },
-                    paddingRight: function() { return 2; },
-                    paddingTop: function() { return 2; },
-                    paddingBottom: function() { return 2; }
-                }
-            });
-        
-            pdfMake.createPdf(docDefinition).download();
-        },
+          var oTable = this.byId("table");
+          var oBinding = oTable.getBinding("rows");
+          var odata = oBinding.getContexts().map(function (oContext) {
+              return oContext.getObject();
+          });
+      
+          // Definiamo le colonne per la nuova tabella
+          var columns = [
+              "Section", "Description", "Total", "Building", "Cars_in_pool", "Cars_in_benefit"
+          ];
+      
+          var docDefinition = {
+              pageSize: 'A4',
+              pageOrientation: 'landscape',
+              pageMargins: [5, 5, 5, 5],  // Margini minimi
+              footer: { text: new Date().toLocaleString(), alignment: 'right', fontSize: 6 },
+              content: []
+          };
+      
+          // Creiamo il corpo della tabella
+          let tableBody = [];
+          
+          // Aggiungiamo la riga di intestazione
+          tableBody.push(columns.map(col => ({
+              text: col.replace(/_/g, " "), // Rimpiazziamo gli underscore con spazi per i titoli
+              style: { fontSize: 8, bold: true, alignment: 'center' },
+              noWrap: true  // Impedisce il wrapping del testo nelle intestazioni
+          })));
+      
+          // Aggiungiamo le righe di dati
+          odata.forEach(function (rowData) {
+              let row = columns.map(col => ({
+                  text: String(rowData[col] || "-").substring(0, 20), // Limitiamo la lunghezza del testo
+                  style: { fontSize: 8 },
+                  noWrap: true  // Impedisce il wrapping del testo nelle celle
+              }));
+              tableBody.push(row);
+          });
+      
+          // Aggiungiamo la tabella al documento
+          docDefinition.content.push({
+              table: {
+                  headerRows: 1,
+                  widths: Array(columns.length).fill(90),  // Larghezza fissa per tutte le colonne
+                  body: tableBody
+              },
+              layout: {
+                  paddingLeft: function() { return 2; },
+                  paddingRight: function() { return 2; },
+                  paddingTop: function() { return 2; },
+                  paddingBottom: function() { return 2; }
+              }
+          });
+      
+          pdfMake.createPdf(docDefinition).download();
+      },
+      
 
         _createColumnConfig: function () {
             var oTable = this.byId("table");

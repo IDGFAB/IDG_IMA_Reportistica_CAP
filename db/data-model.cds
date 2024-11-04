@@ -149,6 +149,7 @@ entity View_IMA_Lettura {
         RECNCNCURR                 : String(5);
         RECNTXTOLD                 : String(20);
     key ID_STORICO                 : String(20);
+        PRICE_EROU                 : Decimal(19, 6);
 }
 
 

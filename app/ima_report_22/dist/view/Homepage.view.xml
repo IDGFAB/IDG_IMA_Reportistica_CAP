@@ -146,7 +146,7 @@
                 <!-- Table Definition -->
                 <table:Table id="table" selectionMode="None" visibleRowCountMode="Interactive" minAutoRowCount="8" enableBusyIndicator="true" enableColumnFreeze="true" width="100%" rows="{DataIMA22>/}">
                     <table:columns>
-                        <table:Column width="11rem">
+                        <table:Column width="11rem" sortProperty="ASSET_CLASS">
                             <table:multiLabels>
                                 <Label text="Asset Class" textAlign="Center" vAlign="Middle">
                                     <customData>
@@ -158,7 +158,7 @@
                                 <Text text="{DataIMA22>ASSET_CLASS}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="11rem">
+                        <table:Column width="11rem" sortProperty="INTERCOMPANY">
                             <table:multiLabels>
                                 <Label text="Intercompany" textAlign="Center" vAlign="Middle">
                                     <customData>
@@ -170,7 +170,7 @@
                                 <Text text="{DataIMA22>INTERCOMPANY}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="11rem">
+                        <table:Column width="11rem" sortProperty="CDC">
                             <table:multiLabels>
                                 <Label text="Cost Centre" textAlign="Center" vAlign="Middle">
                                     <customData>
@@ -182,7 +182,7 @@
                                 <Text text="{DataIMA22>CDC}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="11rem">
+                        <table:Column width="11rem" sortProperty="CDC_CODE">
                             <table:multiLabels>
                                 <Label text="CC Description" textAlign="Center" vAlign="Middle">
                                     <customData>
@@ -194,7 +194,7 @@
                                 <Text text="{DataIMA22>CDC_CODE}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="11rem">
+                        <table:Column width="11rem" sortProperty="LEASE_N">
                             <table:multiLabels>
                                 <Label text="Lease Number" textAlign="Center" vAlign="Middle">
                                     <customData>
@@ -206,7 +206,7 @@
                                 <Text text="{DataIMA22>LEASE_N}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="11rem">
+                        <table:Column width="11rem" sortProperty="CONTRACT_CODE">
                             <table:multiLabels>
                                 <Label text="Contract Code" textAlign="Center" vAlign="Middle">
                                     <customData>
@@ -218,7 +218,7 @@
                                 <Text text="{DataIMA22>CONTRACT_CODE}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="11rem">
+                        <table:Column width="11rem" sortProperty="ACC_SECTOR">
                             <table:multiLabels>
                                 <Label text="Business Area" textAlign="Center" vAlign="Middle">
                                     <customData>
@@ -230,7 +230,7 @@
                                 <Text text="{DataIMA22>ACC_SECTOR}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="11rem">
+                        <table:Column width="11rem" sortProperty="CONTRACT_DESCRIPTION">
                             <table:multiLabels>
                                 <Label text="Contract Description" textAlign="Center" vAlign="Middle">
                                     <customData>
@@ -242,7 +242,7 @@
                                 <Text text="{DataIMA22>CONTRACT_DESCRIPTION}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="11rem">
+                        <table:Column width="11rem" sortProperty="MERGED_ENTITY">
                             <table:multiLabels>
                                 <Label text="Merged Entity" textAlign="Center" vAlign="Middle">
                                     <customData>
@@ -254,7 +254,7 @@
                                 <Text text="{DataIMA22>MERGED_ENTITY}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="11rem">
+                        <table:Column width="11rem" sortProperty="RIGHT_OF_USE">
                             <table:multiLabels>
                                 <Label text="Right of Use" textAlign="Center" vAlign="Middle">
                                     <customData>
@@ -266,7 +266,7 @@
                                 <Text text="{DataIMA22>RIGHT_OF_USE}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="11rem">
+                        <table:Column width="11rem" sortProperty="ACCUMULATED_DEPRECIATION">
                             <table:multiLabels>
                                 <Label text="Accumulated Depr." textAlign="Center" vAlign="Middle">
                                     <customData>
@@ -278,7 +278,7 @@
                                 <Text text="{DataIMA22>ACCUMULATED_DEPRECIATION}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="11rem">
+                        <table:Column width="11rem" sortProperty="NET_RIGHT_OF_USE">
                             <table:multiLabels>
                                 <Label text="Net Right of Use" textAlign="Center" vAlign="Middle">
                                     <customData>
@@ -290,7 +290,7 @@
                                 <Text text="{DataIMA22>NET_RIGHT_OF_USE}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="11rem">
+                        <table:Column width="11rem" sortProperty="CLOSING_LEASES_LIABILITIES">
                             <table:multiLabels>
                                 <Label text="Closing Leases Liabilities" textAlign="Center" vAlign="Middle">
                                     <customData>
@@ -302,7 +302,7 @@
                                 <Text text="{DataIMA22>CLOSING_LEASES_LIABILITIES}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="11rem">
+                        <table:Column width="11rem" sortProperty="LEASE_LIABILITIES_SHORT_TERM"> 
                             <table:multiLabels>
                                 <Label text="Lease Liabilities Short Term" textAlign="Center" vAlign="Middle">
                                     <customData>
@@ -314,7 +314,7 @@
                                 <Text text="{DataIMA22>LEASE_LIABILITIES_SHORT_TERM}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="11rem">
+                        <table:Column width="11rem" sortProperty="LEASE_LIABILITIES_LONG_TERM">
                             <table:multiLabels>
                                 <Label text="Lease Liabilities Long Term" textAlign="Center" vAlign="Middle">
                                     <customData>
@@ -326,7 +326,7 @@
                                 <Text text="{DataIMA22>LEASE_LIABILITIES_LONG_TERM}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="11rem">
+                        <table:Column width="11rem" sortProperty="YTD_INTEREST">
                             <table:multiLabels>
                                 <Label text="YTD Interest" textAlign="Center" vAlign="Middle">
                                     <customData>
@@ -338,19 +338,19 @@
                                 <Text text="{DataIMA22>YTD_INTEREST}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="11rem">
+                        <table:Column width="11rem" sortProperty="LEASE_COST">
                             <table:multiLabels>
                                 <Label text="Lease Cost" textAlign="Center" vAlign="Middle">
                                     <customData>
-                                        <core:CustomData value="LEASE_COST" />
+                                        <core:CustomData value="LEASE_COST " />
                                     </customData>
                                 </Label>
                             </table:multiLabels>
                             <table:template>
-                                <Text text="{DataIMA22>LEASE_COST}" />
+                                <Text text="{DataIMA22>LEASE_COST} " />
                             </table:template>
                         </table:Column>
-                        <table:Column width="11rem">
+                        <table:Column width="11rem" sortProperty="DEPRECIATION">
                             <table:multiLabels>
                                 <Label text="Depreciation" textAlign="Center" vAlign="Middle">
                                     <customData>
@@ -362,7 +362,7 @@
                                 <Text text="{DataIMA22>DEPRECIATION}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="11rem">
+                        <table:Column width="11rem" sortProperty="GAIN_FX_RATES">
                             <table:multiLabels>
                                 <Label text="Gain FX Rates" textAlign="Center" vAlign="Middle">
                                     <customData>
@@ -374,7 +374,7 @@
                                 <Text text="{DataIMA22>GAIN_FX_RATES}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="11rem">
+                        <table:Column width="11rem" sortProperty="LOSS_FX_RATES">
                             <table:multiLabels>
                                 <Label text="Loss FX Rates" textAlign="Center" vAlign="Middle">
                                     <customData>
