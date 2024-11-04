@@ -78,64 +78,69 @@ sap.ui.define([
                 }));
         },
 
+        convertModelStringToNumericValues() {
+            function padStart(num, targetLength) {
+                let numStr = num.toString();
+                while (numStr.length < targetLength) {
+                  numStr = '0' + numStr;
+                }
+                return numStr;
+            }
+            
+            var oModel = this.getView().getModel("DataIMA22");
+            var aData = oModel.getData();
+            
+            const numericFields = [
+                "RIGHT_OF_USE",
+                "ACCUMULATED_DEPRECIATION",
+                "NET_RIGHT_OF_USE",
+                "CLOSING_LEASES_LIABILITIES",
+                "LEASE_LIABILITIES_SHORT_TERM",
+                "LEASE_LIABILITIES_LONG_TERM",
+                "YTD_INTEREST",
+                "LEASE_COST",
+                "DEPRECIATION",
+                "GAIN_FX_RATES",
+                "LOSS_FX_RATES"
+            ];
+        
+            aData = aData.map(item => {
+                // Helper function to format number with thousands separator and 2 decimals
+                const formatNumber = (num) => {
+                    return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                };
+            
+                numericFields.forEach(field => {
+                    if (item[field]) {
+                        const strValue = String(item[field]);
+                        
+                        const numValue = parseFloat(
+                            strValue.replace(/\./g, '').replace(/,/g, '.'));
+                        // Store the actual numeric value
+                        item[field] = numValue;
+                        
+                        // Format display value with thousands separator and 2 decimals
+                        item[field + '_DISPLAY'] = formatNumber(
+                            strValue.startsWith('0,') 
+                                ? parseFloat(strValue.replace(/,/g, '0.'))
+                                : parseFloat(strValue.replace(/\./g, '').replace(/,/g, '.'))
+                        );
+                    }
+                });
+                return item;
+            });
+            
+            oModel.setData(aData);
+            oModel.refresh();
+        },
+        
         onTableSort: function(oEvent) {
             const oColumn = oEvent.getParameter("column");
             const sSortProperty = oColumn.getSortProperty();
             const bDescending = oEvent.getParameter("sortOrder") === "Descending";
-         
-            // Function to clean numeric values (remove dots and convert to float)
-            const cleanNumber = (value) => {
-                return parseFloat(String(value).replace(/\./g, ''));
-            };
-         
-            // Create sorter based on column type
-            const oSorter = new sap.ui.model.Sorter(sSortProperty, bDescending, false, function(a, b) {
-                switch(sSortProperty) {
-                    // Numeric columns
-                    case "LEASE_N":
-                    case "RIGHT_OF_USE":
-                    case "ACCUMULATED_DEPRECIATION":
-                    case "NET_RIGHT_OF_USE":
-                    case "CLOSING_LEASES_LIABILITIES":
-                    case "LEASE_LIABILITIES_SHORT_TERM":
-                    case "LEASE_LIABILITIES_LONG_TERM":
-                    case "YTD_INTEREST":
-                    case "LEASE_COST":
-                    case "DEPRECIATION":
-                    case "GAIN_FX_RATES":
-                    case "LOSS_FX_RATES":
-                        const valueA = cleanNumber(a);
-                        const valueB = cleanNumber(b);
-                        
-                        if (isNaN(valueA)) return 1;
-                        if (isNaN(valueB)) return -1;
-                        
-                        return valueA - valueB;
-         
-                    // String columns - case insensitive comparison
-                    case "ASSET_CLASS":
-                    case "INTERCOMPANY":
-                    case "CDC":
-                    case "CDC_CODE":
-                    case "CONTRACT_CODE":
-                    case "ACC_SECTOR":
-                    case "CONTRACT_DESCRIPTION":
-                    case "MERGED_ENTITY":
-                        return String(a).toLowerCase().localeCompare(String(b).toLowerCase());
-                        
-                    // Default case if property is not listed
-                    default:
-                        // Try numeric first, fall back to string if not a valid number
-                        const numA = cleanNumber(a);
-                        const numB = cleanNumber(b);
-                        
-                        if (!isNaN(numA) && !isNaN(numB)) {
-                            return numA - numB;
-                        }
-                        return String(a).toLowerCase().localeCompare(String(b).toLowerCase());
-                }
-            });
-         
+            
+            // Simple sorter since values are already numeric
+            const oSorter = new Sorter(sSortProperty, bDescending);
             this.byId("table").getBinding("rows").sort(oSorter);
         },
 
@@ -223,6 +228,7 @@ sap.ui.define([
                             let processedData = dataArray[0].value.map(this.convertExponentialValues);
                             dataFiltered.setData(processedData);
                             dataFiltered.refresh();
+                            this.convertModelStringToNumericValues(); // Converting into numeric values
                         }
                     } else {
                         dataFiltered.setData(response.data)
@@ -648,12 +654,10 @@ sap.ui.define([
                     oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR) 
                     }
                    
-                console.log(oFiltersModel.getData().Entity)
 
 
                 
 
-                console.log("Tipo Contratto",oFiltersModel.getData().TipoContratto)
                 
                 // {
                 //         Entity: this._elaborateEntities(response.data.BUKRS, response.data.BUTXT),
