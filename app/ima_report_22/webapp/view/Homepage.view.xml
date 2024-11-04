@@ -144,7 +144,7 @@
             <!-- ScrollContainer to allow horizontal scrolling -->
             <ScrollContainer horizontal="true" width="100%">
                 <!-- Table Definition -->
-                <table:Table id="table" selectionMode="None" visibleRowCountMode="Interactive" minAutoRowCount="8" enableBusyIndicator="true" enableColumnFreeze="true" width="100%" rows="{DataIMA22>/}">
+                <table:Table id="table" sort=".onTableSort" selectionMode="None" visibleRowCountMode="Interactive" minAutoRowCount="8" enableBusyIndicator="true" enableColumnFreeze="true" width="100%" rows="{DataIMA22>/}">
                     <table:columns>
                         <table:Column width="11rem" sortProperty="ASSET_CLASS">
                             <table:multiLabels>
@@ -263,7 +263,7 @@
                                 </Label>
                             </table:multiLabels>
                             <table:template>
-                                <Text text="{DataIMA22>RIGHT_OF_USE}" />
+                                <Text text="{DataIMA22>RIGHT_OF_USE_DISPLAY}" />
                             </table:template>
                         </table:Column>
                         <table:Column width="11rem" sortProperty="ACCUMULATED_DEPRECIATION">
@@ -275,7 +275,7 @@
                                 </Label>
                             </table:multiLabels>
                             <table:template>
-                                <Text text="{DataIMA22>ACCUMULATED_DEPRECIATION}" />
+                                <Text text="{DataIMA22>ACCUMULATED_DEPRECIATION_DISPLAY}" />
                             </table:template>
                         </table:Column>
                         <table:Column width="11rem" sortProperty="NET_RIGHT_OF_USE">
@@ -287,7 +287,7 @@
                                 </Label>
                             </table:multiLabels>
                             <table:template>
-                                <Text text="{DataIMA22>NET_RIGHT_OF_USE}" />
+                                <Text text="{DataIMA22>NET_RIGHT_OF_USE_DISPLAY}" />
                             </table:template>
                         </table:Column>
                         <table:Column width="11rem" sortProperty="CLOSING_LEASES_LIABILITIES">
@@ -299,7 +299,7 @@
                                 </Label>
                             </table:multiLabels>
                             <table:template>
-                                <Text text="{DataIMA22>CLOSING_LEASES_LIABILITIES}" />
+                                <Text text="{DataIMA22>CLOSING_LEASES_LIABILITIES_DISPLAY}" />
                             </table:template>
                         </table:Column>
                         <table:Column width="11rem" sortProperty="LEASE_LIABILITIES_SHORT_TERM"> 
@@ -311,7 +311,7 @@
                                 </Label>
                             </table:multiLabels>
                             <table:template>
-                                <Text text="{DataIMA22>LEASE_LIABILITIES_SHORT_TERM}" />
+                                <Text text="{DataIMA22>LEASE_LIABILITIES_SHORT_TERM_DISPLAY}" />
                             </table:template>
                         </table:Column>
                         <table:Column width="11rem" sortProperty="LEASE_LIABILITIES_LONG_TERM">
@@ -323,7 +323,7 @@
                                 </Label>
                             </table:multiLabels>
                             <table:template>
-                                <Text text="{DataIMA22>LEASE_LIABILITIES_LONG_TERM}" />
+                                <Text text="{DataIMA22>LEASE_LIABILITIES_LONG_TERM_DISPLAY}" />
                             </table:template>
                         </table:Column>
                         <table:Column width="11rem" sortProperty="YTD_INTEREST">
@@ -335,7 +335,7 @@
                                 </Label>
                             </table:multiLabels>
                             <table:template>
-                                <Text text="{DataIMA22>YTD_INTEREST}" />
+                                <Text text="{DataIMA22>YTD_INTEREST_DISPLAY}" />
                             </table:template>
                         </table:Column>
                         <table:Column width="11rem" sortProperty="LEASE_COST">
@@ -347,7 +347,7 @@
                                 </Label>
                             </table:multiLabels>
                             <table:template>
-                                <Text text="{DataIMA22>LEASE_COST} " />
+                                <Text text="{DataIMA22>LEASE_COST_DISPLAY}" />
                             </table:template>
                         </table:Column>
                         <table:Column width="11rem" sortProperty="DEPRECIATION">
@@ -359,7 +359,7 @@
                                 </Label>
                             </table:multiLabels>
                             <table:template>
-                                <Text text="{DataIMA22>DEPRECIATION}" />
+                                <Text text="{DataIMA22>DEPRECIATION_DISPLAY}" />
                             </table:template>
                         </table:Column>
                         <table:Column width="11rem" sortProperty="GAIN_FX_RATES">
@@ -371,7 +371,7 @@
                                 </Label>
                             </table:multiLabels>
                             <table:template>
-                                <Text text="{DataIMA22>GAIN_FX_RATES}" />
+                                <Text text="{DataIMA22>GAIN_FX_RATES_DISPLAY}" />
                             </table:template>
                         </table:Column>
                         <table:Column width="11rem" sortProperty="LOSS_FX_RATES">
@@ -383,7 +383,7 @@
                                 </Label>
                             </table:multiLabels>
                             <table:template>
-                                <Text text="{DataIMA22>LOSS_FX_RATES}" />
+                                <Text text="{DataIMA22>LOSS_FX_RATES_DISPLAY}" />
                             </table:template>
                         </table:Column>
                     </table:columns>
