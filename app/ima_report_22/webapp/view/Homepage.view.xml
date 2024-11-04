@@ -63,7 +63,7 @@
                             <!-- Entity Filter -->
                             <fb:FilterGroupItem  name="Entity" label="Company" groupName="Group1" visibleInFilterBar="true">
                                 <fb:control>
-                                    <MultiComboBox id="EntityBox" name="Entity" enabled="{= ${selectedFiltersModel>/period} &amp;&amp; ${selectedFiltersModel>/period}.length > 0 ? true : false }" showSelectAll="true" selectionChange=".onSelectionChange" items="{ path: 'oFiltersModel>/Entity', sorter: { path: 'description' }
+                                    <MultiComboBox id="EntityBox" name="Entity" enabled="{= ${selectedFiltersModel>/period} &amp;&amp; ${selectedFiltersModel>/period}.length > 0 ? true : false }" showSelectAll="true" selectionFinish=".onSelectionChange" items="{ path: 'oFiltersModel>/Entity', sorter: { path: 'description' }
                                             }" selectedKeys="{selectedFiltersModel>/entity}" required="true" showClearIcon="true">
                                         <core:Item key="{oFiltersModel>ID}" text="{oFiltersModel>description}" />
                                     </MultiComboBox>
@@ -72,7 +72,7 @@
                             <!-- CostCenter Filter -->
                             <fb:FilterGroupItem name="CostCenter"  label="Cost Center" groupName="Group1" visibleInFilterBar="true">
                                 <fb:control>
-                                    <MultiComboBox id="CostCenterBox" name="CostCenter" enabled="{= ${selectedFiltersModel>/entity} &amp;&amp; ${selectedFiltersModel>/entity}.length > 0  ? true : false }" showSelectAll="true" selectionChange=".onSelectionChange" items="{ path: 'oFiltersModel>/CostCenter' }" selectedKeys="{selectedFiltersModel>/costCenter}" showClearIcon="true">
+                                    <MultiComboBox id="CostCenterBox" name="CostCenter" enabled="{= ${selectedFiltersModel>/entity} &amp;&amp; ${selectedFiltersModel>/entity}.length > 0  ? true : false }" showSelectAll="true" selectionFinish=".onSelectionChange" items="{ path: 'oFiltersModel>/CostCenter' }" selectedKeys="{selectedFiltersModel>/costCenter}" showClearIcon="true">
                                         <core:Item key="{oFiltersModel>}" text="{oFiltersModel>}" />
                                     </MultiComboBox>
                                 </fb:control>
@@ -80,7 +80,7 @@
                             <!-- TipoContratto Filter -->
                             <fb:FilterGroupItem  name="TipoContratto"  label="Contract type" groupName="Group1" visibleInFilterBar="true">
                                 <fb:control>
-                                    <MultiComboBox id="TipoContrattoBox" name="TipoContratto" enabled="{= ${selectedFiltersModel>/entity} &amp;&amp; ${selectedFiltersModel>/entity}.length > 0 ? true : false }" showSelectAll="true" selectionChange=".onSelectionChange"  
+                                    <MultiComboBox id="TipoContrattoBox" name="TipoContratto" enabled="{= ${selectedFiltersModel>/entity} &amp;&amp; ${selectedFiltersModel>/entity}.length > 0 ? true : false }" showSelectAll="true" selectionFinish=".onSelectionChange"  
                                         items="{ 
                                             path: 'oFiltersModel>/TipoContratto'
                                         }" 
@@ -92,7 +92,7 @@
                             <!-- Contratto Filter -->
                             <fb:FilterGroupItem name="Contratto" label="Contract" groupName="Group1" visibleInFilterBar="true">
                                 <fb:control>
-                                    <MultiComboBox id="ContrattoBox" name="Contratto" showSelectAll="true" selectionChange=".onSelectionChange" items="{ path: 'oFiltersModel>/Contratto' }" selectedKeys="{selectedFiltersModel>/contratto}" showClearIcon="true" enabled="{= ${selectedFiltersModel>/tipoContratto} &amp;&amp; ${selectedFiltersModel>/tipoContratto}.length > 0 ? true : false }">
+                                    <MultiComboBox id="ContrattoBox" name="Contratto" showSelectAll="true" selectionFinish=".onSelectionChange" items="{ path: 'oFiltersModel>/Contratto' }" selectedKeys="{selectedFiltersModel>/contratto}" showClearIcon="true" enabled="{= ${selectedFiltersModel>/tipoContratto} &amp;&amp; ${selectedFiltersModel>/tipoContratto}.length > 0 ? true : false }">
                                         <core:Item key="{oFiltersModel>}" text="{oFiltersModel>}" />
                                     </MultiComboBox>
                                 </fb:control>

@@ -574,9 +574,11 @@ sap.ui.define([
 
                 if(!requestData.costCenter || requestData.costCenter.length == 0){
                     oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                    oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
                     oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR) 
+                    if(!requestData.tipoContratto){
+                    oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
                     }
+                }
 
                 if(!requestData.tipoContratto || requestData.tipoContratto.length == 0){
                     oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
@@ -584,7 +586,7 @@ sap.ui.define([
                     
                     }
                 if(!requestData.contratto || requestData.contratto.length == 0){
-                    oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
+                    //oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
                     oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR) 
                     }
                    

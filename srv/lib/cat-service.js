@@ -266,7 +266,7 @@ FROM (
         "GSBER",
         "RECNTXT",
         "ZZSOCIETA",
-        SUM("PRICE_SROU") + SUM("BBWHR_ACQUISITION") AS "RIGHT_OF_USE",
+        SUM("PRICE_EROU") + SUM("BBWHR_ACQUISITION") AS "RIGHT_OF_USE",
         TO_DECIMAL('0') AS "ACCUMULATED_DEPRECIATION",
         TO_DECIMAL('0') AS "NET_RIGHT_OF_USE",
         TO_DECIMAL('0') AS "CLOSING_LEASES_LIABILITIES",
@@ -287,8 +287,8 @@ FROM (
             t1."GSBER",
             t1."RECNTXT",
             t1."ZZSOCIETA",
-            CASE WHEN ((t1."PRICE_SROU" > 0.00) AND (NOT (t1."RECNDPO" = t1."RECNBEG")) AND (t1."RECNTXTOLD" != '')) THEN t1."BBWHR_ACQUISITION" * -1 ELSE 0 END AS "BBWHR_ACQUISITION",
-            t1."PRICE_SROU"
+            CASE WHEN ((t1."PRICE_EROU" > 0.00) AND (NOT (t1."RECNDPO" = t1."RECNBEG")) AND (t1."RECNTXTOLD" != '')) THEN t1."BBWHR_ACQUISITION" * -1 ELSE 0 END AS "BBWHR_ACQUISITION",
+            t1."PRICE_EROU"
         FROM "CATALOGSERVICE_VIEW_ALL_DATA_V2" t1
         JOIN (
             SELECT RECNNR,
@@ -313,7 +313,7 @@ FROM (
             t1."RECNTXT",
             t1."ZZSOCIETA",
             t1."BBWHR_ACQUISITION",
-            t1."PRICE_SROU"
+            t1."PRICE_EROU"
         FROM "CATALOGSERVICE_VIEW_ALL_DATA_V2" t1
          ${queryWithMinor}
                
@@ -560,24 +560,26 @@ async applyFilters(
 
 
 async applyFilters23(
+    Id_storico = null,
     entity = [], 
-    contratto = [], 
     year = null, 
     period = null, 
-    Id_storico = null
+    contratto = []
 ) {
     // Definizione dei filtri progressivi
     const whereClause = {};
+
+        // Filtro per storico (ID_STORICO), si sblocca dopo year e period
+    if (Id_storico) {
+        whereClause.ID_STORICO = Id_storico;
+    }
 
     //primo filtro: entity (BUTXT)
     if (entity?.length > 0) {
         whereClause.BUKRS = entity;
     }
 
-    // Filtro per contratto (RECNNR), opzionale ma deve considerare i filtri precedenti
-    if (contratto?.length > 0) {
-        whereClause.RECNNR = contratto;
-    }
+
 
     // Filtro per anno (YEARDUEDATE)
     if (year) {
@@ -589,10 +591,11 @@ async applyFilters23(
         whereClause.PERIODDUEDATE = period;
     }
 
-    // Filtro per storico (ID_STORICO), si sblocca dopo year e period
-    if (Id_storico) {
-        whereClause.ID_STORICO = Id_storico;
+    // Filtro per contratto (RECNNR), opzionale ma deve considerare i filtri precedenti
+    if (contratto?.length > 0) {
+        whereClause.RECNNR = contratto;
     }
+
 
     // Esegui la query di selezione con i filtri dinamici
     const filteredData = await cds.run(
@@ -604,6 +607,9 @@ async applyFilters23(
 
 
     this.log.info(filteredData)
+
+    console.log("wherefiltri 23", whereClause)
+
 
     // Usa Set per rimuovere automaticamente i duplicati dai risultati
     const butxt = new Set();
