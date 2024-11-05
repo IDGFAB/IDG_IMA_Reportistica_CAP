@@ -36,6 +36,7 @@ sap.ui.define([
             this.cdcKeys;
             this.annoKey;
             this.periodoKey;
+            this.idStoricoKey;
         },
 
         onAfterRendering: function () {
@@ -488,11 +489,11 @@ sap.ui.define([
                         {
                             Entity: this._elaborateEntities(response.data.BUKRS, response.data.BUTXT),
                            // TipoContratto: this._sortStringArray(response.data.RECNTYPE),
-                           // Contratto: this._sortStringArray(response.data.RECNNR),
+                            Contratto: this._sortStringArray(response.data.RECNNR),
                             Periodo: this._elaboratedMonths(response.data.PERIODDUEDATE),
                             Anno: this._sortStringArray(response.data.YEARDUEDATE),
-                           // CostCenter: this._sortStringArray(response.data.CDC),
-                           // Id_storico: this._sortStringArray(response.data.ID_STORICO)
+                            CostCenter: this._sortStringArray(response.data.CDC),
+                            Id_storico: this._sortStringArray(response.data.ID_STORICO)
                         }
                     )
                     console.log('Filters data: ', oFiltersModel.getData());
@@ -523,13 +524,13 @@ sap.ui.define([
 
             console.log(Object.values(oSelectedFilters.entity));
             const requestData = {
-                entity: Object.values(oSelectedFilters.entity),
+                entity: oSelectedFilters.entity ? Object.values(oSelectedFilters.entity) : null,
               //  tipoContratto: Object.values(oSelectedFilters.tipoContratto),
-              //  contratto: oSelectedFilters.contratto ? Object.values(oSelectedFilters.contratto) : null, // Campo opzionale
+                contratto: oSelectedFilters.contratto ? Object.values(oSelectedFilters.contratto) : null, // Campo opzionale
                 year: oSelectedFilters.year,
                 period: oSelectedFilters.period,
-              //  costCenter: oSelectedFilters.costCenter ? Object.values(oSelectedFilters.costCenter) : null, // Campo opzionale
-              //  Id_storico: oSelectedFilters.ID_STORICO,
+               costCenter: oSelectedFilters.costCenter ? Object.values(oSelectedFilters.costCenter) : null, // Campo opzionale
+               Id_storico: oSelectedFilters.ID_STORICO,
             }
 
             const servicePath = `${this.osUrl}GetTabellaFiltrata9`;  // Append the action name with a trailing slash
@@ -658,18 +659,18 @@ sap.ui.define([
             console.log("vecchie chiavi", aPreviousSelectedKeys)
 
             switch (controlName) {
-                case "Entity":
-                    if(this.entityKeys == undefined){
-                        let aSelectedKeys = selectedControl.getSelectedKeys();
-                        this.entityKeys = aSelectedKeys.length
+                case "ID_STORICO":
+                    if(this.idStoricoKey == undefined){
+                        let aSelectedKey = selectedControl.getSelectedKey();
+                        this.idStoricoKey = aSelectedKey.length
                     } else {
                         const els = [
                          //   this.getView().byId("TipoContrattoBox"),
-                         //   this.getView().byId("ContrattoBox"),
+                            this.getView().byId("ContrattoBox"),
                             this.getView().byId("AnnoSelect"),
                             this.getView().byId("PeriodoSelect"),
-                         //   this.getView().byId("CostCenterBox"),
-                         //   this.getView().byId("IdStoricoSelect")
+                            this.getView().byId("CostCenterBox"),
+                            this.getView().byId("EntityBox")
                         ]
 
                         els.forEach(el => {
@@ -724,38 +725,38 @@ sap.ui.define([
                 //     }
                      
                 //     break;
-        
-                // case "Contratto":                    
-                //     if(this.contractKeys == undefined){
-                //         let aSelectedKeys = selectedControl.getSelectedKeys();
-                //         this.contractKeys = aSelectedKeys.length
-                //     } else {
-                //         const els = [
-                //             this.getView().byId("AnnoSelect"),
-                //             this.getView().byId("PeriodoSelect"),
-                //             this.getView().byId("CostCenterBox"),
-                //             this.getView().byId("IdStoricoSelect")
-                //         ]
 
-                //         els.forEach(el => {
-                //             if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
-                //                 // Handle MultiComboBox
-                //                 el.setSelectedKeys(null)
-                //             } else if (el.getMetadata().getName() === "sap.m.Select") {
-                //                 // Handle Select
-                //                 el.setSelectedKey(null)
-                //             } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
-                //                 // Handle ComboBox
-                //                 el.setSelectedKey(null)
-                //             }
+                case "Entity":                    
+                if(this.entityKeys == undefined){
+                    let aSelectedKeys = selectedControl.getSelectedKeys();
+                    this.entityKeys = aSelectedKeys.length
+                } else {
+                    const els = [
+                        this.getView().byId("AnnoSelect"),
+                        this.getView().byId("PeriodoSelect"),
+                        this.getView().byId("CostCenterBox"),
+                        this.getView().byId("ContrattoBox")
+                    ]
 
-                //             // Checking each label's concatenation to empty it
-                //             this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
-                //             this.makeTitleObjAttrBold();
-                //         })
-                //     }
-                        
-                //     break;
+                    els.forEach(el => {
+                        if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
+                            // Handle MultiComboBox
+                            el.setSelectedKeys(null)
+                        } else if (el.getMetadata().getName() === "sap.m.Select") {
+                            // Handle Select
+                            el.setSelectedKey(null)
+                        } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
+                            // Handle ComboBox
+                            el.setSelectedKey(null)
+                        }
+
+                        // Checking each label's concatenation to empty it
+                        this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
+                        this.makeTitleObjAttrBold();
+                    })
+                }
+                    
+                break;
         
                 case "Anno":
                     if(this.annoKey == undefined){
@@ -764,8 +765,8 @@ sap.ui.define([
                     } else {
                         const els = [
                             this.getView().byId("PeriodoSelect"),
-                            // this.getView().byId("CostCenterBox"),
-                            // this.getView().byId("IdStoricoSelect")
+                            this.getView().byId("CostCenterBox"),
+                            this.getView().byId("ContrattoBox")
                         ]
 
                         els.forEach(el => {
@@ -794,8 +795,8 @@ sap.ui.define([
                         this.periodoKey = aSelectedKey
                     } else {
                         const els = [
-                            // this.getView().byId("CostCenterBox"),
-                            // this.getView().byId("IdStoricoSelect")
+                            this.getView().byId("CostCenterBox"),
+                            this.getView().byId("ContrattoBox")
                         ]
 
                         els.forEach(el => {
@@ -818,34 +819,37 @@ sap.ui.define([
                            
                     break;
         
-                // case "CostCenter":                    
-                //     if(this.cdcKeys == undefined){
-                //         let aSelectedKeys = selectedControl.getSelectedKeys();
-                //         this.cdcKeys = aSelectedKeys.length
-                //     } else {
-                //         const els = [
-                //             this.getView().byId("IdStoricoSelect")
-                //         ]
+                case "CostCenter":                    
+                    if(this.cdcKeys == undefined){
+                        let aSelectedKeys = selectedControl.getSelectedKeys();
+                        this.cdcKeys = aSelectedKeys.length
+                    } else {
+                        const els = [
+                            this.getView().byId("ContrattoBox")
+                        ]
 
-                //         els.forEach(el => {
-                //             if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
-                //                 // Handle MultiComboBox
-                //                 el.setSelectedKeys(null)
-                //             } else if (el.getMetadata().getName() === "sap.m.Select") {
-                //                 // Handle Select
-                //                 el.setSelectedKey(null)
-                //             } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
-                //                 // Handle ComboBox
-                //                 el.setSelectedKey(null)
-                //             }
+                        els.forEach(el => {
+                            if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
+                                // Handle MultiComboBox
+                                el.setSelectedKeys(null)
+                            } else if (el.getMetadata().getName() === "sap.m.Select") {
+                                // Handle Select
+                                el.setSelectedKey(null)
+                            } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
+                                // Handle ComboBox
+                                el.setSelectedKey(null)
+                            }
 
-                //             // Checking each label's concatenation to empty it
-                //             this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
-                //             this.makeTitleObjAttrBold();
-                //         })
-                //     }
+                            // Checking each label's concatenation to empty it
+                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
+                            this.makeTitleObjAttrBold();
+                        })
+                    }
                      
-                //     break;  
+                    break;  
+
+                    case "Contratto":                    
+                    break;
                 
                 // case "ID_STORICO":
                 // break;
@@ -862,15 +866,15 @@ sap.ui.define([
 
             let oSelectedFilters = this.getView().getModel('selectedFiltersModel').getData();
 
-            console.log(Object.values(oSelectedFilters.entity));
+          //  console.log(Object.values(oSelectedFilters.entity));
             const requestData = {
-                entity: Object.values(oSelectedFilters.entity),
-                // tipoContratto: oSelectedFilters.tipoContratto ? Object.values(oSelectedFilters.tipoContratto) : null,
-                // contratto: oSelectedFilters.contratto ? Object.values(oSelectedFilters.contratto) : null, // Campo opzionale
-                year: oSelectedFilters.year,
-                period: oSelectedFilters.period,
-                // costCenter: oSelectedFilters.costCenter ? Object.values(oSelectedFilters.costCenter) : null, // Campo opzionale
-                // Id_storico: oSelectedFilters.ID_STORICO,
+              Id_storico: oSelectedFilters.ID_STORICO,
+              // tipoContratto: oSelectedFilters.tipoContratto ? Object.values(oSelectedFilters.tipoContratto) : null,
+              entity: oSelectedFilters.entity ? Object.values(oSelectedFilters.entity) : null,
+              year: oSelectedFilters.year,
+              period: oSelectedFilters.period,
+              costCenter: oSelectedFilters.costCenter ? Object.values(oSelectedFilters.costCenter) : null, // Campo opzionale
+              contratto: oSelectedFilters.contratto ? Object.values(oSelectedFilters.contratto) : null, // Campo opzionale
             }
 
             axios.post(servicePath, requestData)
@@ -878,15 +882,15 @@ sap.ui.define([
                 console.log("dati filtrati test", response.data);  // Handle the response array
                 let oFiltersModel = this.getView().getModel('oFiltersModel')
               
-                // if(!requestData.tipoContratto || requestData.tipoContratto.length == 0){
+                 if(!requestData.entity || requestData.entity.length == 0){
                 // oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
-                // oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
-                // oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
-                // oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
-                // oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                // oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                 oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
+                 oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
+                 oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
+                 oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                 oFiltersModel.getData().Entity =this._elaborateEntities(response.data.BUKRS, response.data.BUTXT)
                 
-                // }
+                 }
                 
                 // if(!requestData.contratto || requestData.contratto.length == 0){
                 //     oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
@@ -900,27 +904,27 @@ sap.ui.define([
                     if(!requestData.year){
                         oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
                         oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
-                        // oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                        // oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                         oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                         oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
                         
                         }
 
                 if(!requestData.period){
                     oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
-                    // oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                    // oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                    oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                    oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
                     
                     }
 
-                // if(!requestData.costCenter || requestData.costCenter.length == 0){
-                //     oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                //     oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                if(!requestData.costCenter || requestData.costCenter.length == 0){
+                  oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                  oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
+                    }
+
+                 if(!requestData.contratto || requestData.contratto.length == 0){
+                     oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
                     
-                //     }
-                // if(!requestData.Id_storico){
-                //     oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
-                    
-                //     }
+                     }
                    
                 console.log(oFiltersModel.getData().Entity)
 

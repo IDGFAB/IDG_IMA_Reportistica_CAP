@@ -839,16 +839,40 @@ throw error
 }
 
 async applyFilters9(
+    Id_storico = null,
     entity = [], 
     year = null, 
     period = null, 
+    costCenter = [],
+    contratto = []
 ) {
+ 
+    // Array che conterrà i valori
+    let arrayNumeri = [];
+
+    // Convertiamo il numero in intero
+    let numero = parseInt(period);
+
+    // Ciclo for che riempe l'array
+    for (let i = numero; i >= 1; i--) {
+        // Convertiamo il numero di nuovo in stringa e aggiungiamo gli zeri iniziali
+        let stringaNumero = i.toString().padStart(3, '0');
+        // Aggiungiamo la stringa all'array
+        arrayNumeri.push(stringaNumero);
+    }
+
+
     // Definizione dei filtri progressivi
     const whereClause = {};
 
     //primo filtro: entity (BUTXT)
     if (entity?.length > 0) {
         whereClause.BUKRS = entity;
+    }
+
+    // Filtro per contratto (RECNNR), opzionale ma deve considerare i filtri precedenti
+    if (contratto?.length > 0) {
+        whereClause.RECNNR = contratto;
     }
 
     // Filtro per anno (YEARDUEDATE)
@@ -858,7 +882,17 @@ async applyFilters9(
 
     // Filtro per periodo (PERIODDUEDATE)
     if (period) {
-        whereClause.PERIODDUEDATE = period;
+        whereClause.PERIODDUEDATE = arrayNumeri;
+    }
+
+    // Filtro per centro di costo (IDENTOBJNR), si sblocca solo dopo year e period
+    if (costCenter?.length > 0) {
+        whereClause.IDENTOBJNR = costCenter;
+    }
+
+    // Filtro per storico (ID_STORICO), si sblocca dopo year e period
+    if (Id_storico) {
+        whereClause.ID_STORICO = Id_storico;
     }
 
     // Esegui la query di selezione con i filtri dinamici
@@ -877,6 +911,9 @@ async applyFilters9(
     const yearduedate = new Set();
     const periodduedate = new Set();
     const bukrs = new Set();
+    const id_storico = new Set();
+    const cdc = new Set();
+    const recnnr = new Set();
 
     // Popola i set con i risultati filtrati
     filteredData.forEach(row => {
@@ -884,6 +921,9 @@ async applyFilters9(
         yearduedate.add(row.YEARDUEDATE);
         periodduedate.add(row.PERIODDUEDATE);
         bukrs.add(row.BUKRS);
+        cdc.add(row.IDENTOBJNR);
+        id_storico.add(row.ID_STORICO)
+        recnnr.add(row.RECNNR)
     });
 
     // Converte i set in array
@@ -891,11 +931,18 @@ async applyFilters9(
     const YEARDUEDATE = Array.from(yearduedate);
     const PERIODDUEDATE = Array.from(periodduedate);
     const BUKRS = Array.from(bukrs);
+    const ID_STORICO = Array.from(id_storico);
+    const CDC = Array.from(cdc);
+    const RECNNR = Array.from(recnnr);
+
 
     console.log("butxt array:", BUTXT);
     console.log("yearduedate array:", YEARDUEDATE);
     console.log("periodduedate array:", PERIODDUEDATE);
     console.log("bukrs array:", BUKRS);
+    console.log("bukrs array:", ID_STORICO);
+    console.log("bukrs array:", CDC);
+    console.log("bukrs array:", RECNNR);
 
     // Ritorna gli array filtrati
     return {
@@ -903,11 +950,14 @@ async applyFilters9(
         YEARDUEDATE: YEARDUEDATE,
         PERIODDUEDATE: PERIODDUEDATE,
         BUKRS: BUKRS,
+        ID_STORICO: ID_STORICO,
+        CDC: CDC,
+        RECNNR: RECNNR,
     };
 }
 
 
-async CreateQuery9(entity = [], year = null, period = null) {
+async CreateQuery(entity = [], contratto = [], year = null, period = null, costCenter = [], Id_storico = null) {
     let whereClauses = [];
 
 	    // Controllo per il parametro Entity (obbligatorio e array)
@@ -915,6 +965,17 @@ async CreateQuery9(entity = [], year = null, period = null) {
 			whereClauses.push('"BUKRS" IN (' + entity.map(e => `'${e}'`).join(', ') + ')');
 		} else {
 			throw new Error("Il parametro 'Entity' è obbligatorio e deve essere un array.");
+		}
+	
+		// Controllo per il parametro Contratto (facoltativo e array)
+		if (contratto) {
+			if (Array.isArray(contratto)) {
+				if(contratto.length > 0){
+					whereClauses.push('"RECNNR" IN (' + contratto.map(c => `'${c}'`).join(', ') + ')');
+				}
+			} else {
+				whereClauses.push('"RECNNR" = \'' + contratto + '\'');
+			}
 		}
 	
 		// Controllo per il parametro Year (obbligatorio e non array)
@@ -931,6 +992,22 @@ async CreateQuery9(entity = [], year = null, period = null) {
 			throw new Error("Il parametro 'Period' è obbligatorio.");
 		}
 	
+		// Controllo per il parametro Cost Center (facoltativo e array)
+		if (Array.isArray(costCenter)) {
+			if(costCenter.length > 0) {
+				whereClauses.push('"IDENTOBJNR" IN (' + costCenter.map(cc => `'${cc}'`).join(', ') + ')');
+			}
+		} else if (costCenter) {
+			whereClauses.push('"IDENTOBJNR" = \'' + costCenter + '\'');
+		}
+
+				// Controllo per il parametro Year (obbligatorio e non array)
+		if (Id_storico !== null && Id_storico !== undefined) {
+			whereClauses.push('"ID_STORICO" = \'' + Id_storico + '\'');
+		} else {
+			throw new Error("Il parametro 'Id_storico' è obbligatorio.");
+		}
+	
 		// Costruzione della query finale
 		let sqlQuery = ''; // Sostituisci con il nome della tua tabella
 		if (whereClauses.length > 0) {
@@ -941,9 +1018,9 @@ async CreateQuery9(entity = [], year = null, period = null) {
 	}
 
 
-    async GetTabellaFiltrata9(entity = [], year = null, period = null){
+    async GetTabellaFiltrata9(entity = [], contratto = [], year = null, period = null, costCenter = [], Id_storico = null){
     
-        let query9 =await this.CreateQuery9(entity, year, period)
+        let query9 =await this.CreateQuery9(entity, contratto, year, period, costCenter, Id_storico)
        
     
     
