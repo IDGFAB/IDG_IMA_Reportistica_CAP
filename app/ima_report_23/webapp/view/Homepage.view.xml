@@ -125,7 +125,7 @@
                 <!-- Table Definition -->
                 <table:Table id="table" selectionMode="None" visibleRowCountMode="Interactive" minAutoRowCount="8" enableBusyIndicator="true" enableColumnFreeze="true" width="100%" rows="{DataIMA23>/}">
                     <table:columns>
-                        <table:Column width="17rem">
+                        <table:Column width="17rem" sortProperty="JOURNAL_TYPE" >
                             <table:multiLabels>
                                 <Label textAlign="Center" />
                                 <Label text="Journal Type">
@@ -138,7 +138,7 @@
                                 <Text text="{DataIMA23>JOURNAL_TYPE}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="17rem">
+                        <table:Column width="17rem" sortProperty="ACCOUNT" >
                             <table:multiLabels>
                                 <Label textAlign="Center" />
                                 <Label  text="Account">
@@ -151,7 +151,7 @@
                                 <Text text="{DataIMA23>ACCOUNT}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="14rem">
+                        <table:Column width="14rem" sortProperty="XMBEZ" >
                             <table:multiLabels>
                                 <Label textAlign="Center" />
                                 <Label text="Asset Category">
@@ -164,7 +164,7 @@
                                 <Text text="{DataIMA23>XMBEZ}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="14rem">
+                        <table:Column width="14rem" sortProperty="RECNTXTOLD" >
                             <table:multiLabels>
                                 <Label textAlign="Center" />
                                 <Label text="Lease N">
@@ -177,7 +177,7 @@
                                 <Text text="{DataIMA23>RECNTXTOLD}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="11rem">
+                        <table:Column width="11rem" sortProperty="IDENTOBJNR" >
                             <table:multiLabels>
                                 <Label textAlign="Center" />
                                 <Label text="Cost Center">
@@ -190,7 +190,7 @@
                                 <Text text="{DataIMA23>IDENTOBJNR}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="10rem" headerSpan="2">
+                        <table:Column width="10rem" headerSpan="2" sortProperty="DEBIT" >
                             <table:multiLabels>
                                 <Label textAlign="Center" text="Entity Currency: EUR" />
                                 <Label textAlign="Center" text="Debit" >
@@ -200,10 +200,10 @@
                                 </Label>
                             </table:multiLabels>
                             <table:template>
-                                <Text text="{DataIMA23>DEBIT}" />
+                                <Text text="{DataIMA23>DEBIT_DISPLAY}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="10rem">
+                        <table:Column width="10rem" sortProperty="CREDIT" >
                             <table:multiLabels>
                                 <Label textAlign="Center" text="Entity Currency: EUR" />
                                 <Label textAlign="Center" text="Credit">
@@ -213,10 +213,10 @@
                                 </Label>
                             </table:multiLabels>
                             <table:template>
-                                <Text text="{DataIMA23>CREDIT}" />
+                                <Text text="{DataIMA23>CREDIT_DISPLAY}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="10rem" headerSpan="2">
+                        <table:Column width="10rem" headerSpan="2" sortProperty="DEBIT_CURR" >
                             <table:multiLabels>
                                 <Label textAlign="Center" text="Contract Currency" width="100%"/>
                                 <Label textAlign="Center" text="Debit">
@@ -226,10 +226,10 @@
                                 </Label>
                             </table:multiLabels>
                             <table:template>
-                                <Text text="{DataIMA23>DEBIT_CURR}" />
+                                <Text text="{DataIMA23>DEBIT_CURR_DISPLAY}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="11rem">
+                        <table:Column width="11rem" sortProperty="CREDIT_CURR" >
                             <table:multiLabels>
                                 <Label textAlign="Center" text="Contract Currency" />
                                 <Label textAlign="Center" text="Credit">
@@ -239,7 +239,7 @@
                                 </Label>
                             </table:multiLabels>
                             <table:template>
-                                <Text text="{DataIMA23>CREDIT_CURR}" />
+                                <Text text="{DataIMA23>CREDIT_CURR_DISPLAY}" />
                             </table:template>
                         </table:Column>
                     </table:columns>

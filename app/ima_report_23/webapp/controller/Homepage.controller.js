@@ -1,19 +1,11 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
-    "sap/ui/core/CustomData",
     "sap/ui/model/json/JSONModel",
-    "sap/ui/table/Table",
-    "sap/ui/table/RowSettings",
-    "sap/ui/table/Column",
-    "sap/m/Text",
-    "sap/ui/core/Item",
     "sap/ui/export/Spreadsheet",
     "sap/m/ObjectAttribute",
-    "sap/ui/model/Filter",
-    "sap/ui/model/FilterOperator",
-    "sap/m/MessageBox",
+    "sap/ui/model/Sorter",
 ],
-    function (Controller, CustomData, JSONModel, Table, RowSettings, Column, Text, Item, Spreadsheet, ObjectAttribute, Filter, FilterOperator, MessageBox) {
+    function (Controller, JSONModel, Spreadsheet, ObjectAttribute, Sorter) {
         "use strict";
 
         return Controller.extend("imareport23.controller.Homepage", {
@@ -76,6 +68,64 @@ sap.ui.define([
                 }));
         },
 
+        convertModelStringToNumericValues() {
+            function padStart(num, targetLength) {
+                let numStr = num.toString();
+                while (numStr.length < targetLength) {
+                  numStr = '0' + numStr;
+                }
+                return numStr;
+            }
+            
+            var oModel = this.getView().getModel("DataIMA23");
+            var aData = oModel.getData();
+            
+            const numericFields = [
+                "DEBIT",
+                "CREDIT",
+                "DEBIT_CURR",
+                "CREDIT_CURR"
+            ];
+        
+            aData = aData.map(item => {
+                // Helper function to format number with thousands separator and 2 decimals
+                const formatNumber = (num) => {
+                    return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                };
+            
+                numericFields.forEach(field => {
+                    if (item[field]) {
+                        const strValue = String(item[field]);
+                        
+                        const numValue = parseFloat(
+                            strValue.replace(/\./g, '').replace(/,/g, '.'));
+                        // Store the actual numeric value
+                        item[field] = numValue;
+                        
+                        // Format display value with thousands separator and 2 decimals
+                        item[field + '_DISPLAY'] = formatNumber(
+                            strValue.startsWith('0,') 
+                                ? parseFloat(strValue.replace(/,/g, '0.'))
+                                : parseFloat(strValue.replace(/\./g, '').replace(/,/g, '.'))
+                        );
+                    }
+                });
+                return item;
+            });
+            
+            oModel.setData(aData);
+            oModel.refresh();
+        },
+        
+        onTableSort: function(oEvent) {
+            const oColumn = oEvent.getParameter("column");
+            const sSortProperty = oColumn.getSortProperty();
+            const bDescending = oEvent.getParameter("sortOrder") === "Descending";
+            
+            // Simple sorter since values are already numeric
+            const oSorter = new Sorter(sSortProperty, bDescending);
+            this.byId("table").getBinding("rows").sort(oSorter);
+        },
 
         _sortEntitiesByDescription: function(entities) {
             return entities.sort((a, b) => a.description.localeCompare(b.description));
@@ -161,6 +211,7 @@ sap.ui.define([
                             let processedData = dataArray[0].value.map(this.convertExponentialValues);
                             dataFiltered.setData(processedData);
                             dataFiltered.refresh();
+                            this.convertModelStringToNumericValues();
                         }
                     } else {
                         dataFiltered.setData(response.data)
