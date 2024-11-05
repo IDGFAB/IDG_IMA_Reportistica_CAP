@@ -957,7 +957,7 @@ async applyFilters9(
 }
 
 
-async CreateQuery(entity = [], contratto = [], year = null, period = null, costCenter = [], Id_storico = null) {
+async CreateQuery9(entity = [], contratto = [], year = null, period = null, costCenter = [], Id_storico = null) {
     let whereClauses = [];
 
 	    // Controllo per il parametro Entity (obbligatorio e array)
