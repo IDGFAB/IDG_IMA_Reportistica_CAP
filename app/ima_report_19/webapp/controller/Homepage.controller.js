@@ -36,6 +36,7 @@ sap.ui.define([
             this.cdcKeys;
             this.annoKey;
             this.periodoKey;
+            this.idStoricoKey
         },
 
         createSorter: function() {
@@ -132,7 +133,7 @@ sap.ui.define([
             console.log(Object.values(oSelectedFilters.entity));
             const requestData = {
                 entity: Object.values(oSelectedFilters.entity),
-                tipoContratto: Object.values(oSelectedFilters.tipoContratto),
+                // tipoContratto: Object.values(oSelectedFilters.tipoContratto),
                 contratto: oSelectedFilters.contratto ? Object.values(oSelectedFilters.contratto) : null, // Campo opzionale
                 year: oSelectedFilters.year,
                 period: oSelectedFilters.period,
@@ -140,7 +141,7 @@ sap.ui.define([
                 Id_storico: oSelectedFilters.ID_STORICO,
             }
 
-            const servicePath = `${this.osUrl}GetTabellaFiltrata`;  // Append the action name with a trailing slash
+            const servicePath = `${this.osUrl}GetTabellaFiltrata19`;  // Append the action name with a trailing slash
             axios.post(servicePath,  requestData)
                 .then((response) => {
                     this.getView().byId("table").setBusy(false)
@@ -236,7 +237,6 @@ sap.ui.define([
                 oSelectedFilters.Periodo &&
                     oSelectedFilters.Anno &&
                     oSelectedFilters.ID_STORICO &&
-                    (oSelectedFilters.TipoContratto && oSelectedFilters.TipoContratto.length > 0) &&
                     (oSelectedFilters.Entity && oSelectedFilters.Entity.length > 0) ? true : false;
 
             // Update allSelected property
@@ -271,18 +271,18 @@ sap.ui.define([
             console.log("vecchie chiavi", aPreviousSelectedKeys)
 
             switch (controlName) {
-                case "Entity":
-                    if(this.entityKeys == undefined){
-                        let aSelectedKeys = selectedControl.getSelectedKeys();
-                        this.entityKeys = aSelectedKeys.length
+                case "ID_STORICO":
+                    if(this.idStoricoKey == undefined){
+                        let aSelectedKey = selectedControl.getSelectedKey();
+                        this.idStoricoKey = aSelectedKey.length
                     } else {
                         const els = [
-                            this.getView().byId("TipoContrattoBox"),
+                            // this.getView().byId("TipoContrattoBox"),
                             this.getView().byId("ContrattoBox"),
                             this.getView().byId("AnnoSelect"),
                             this.getView().byId("PeriodoSelect"),
                             this.getView().byId("CostCenterBox"),
-                            this.getView().byId("IdStoricoSelect")
+                            this.getView().byId("EntityBox")
                         ]
 
                         els.forEach(el => {
@@ -304,10 +304,10 @@ sap.ui.define([
                     }
                     break;
         
-                case "TipoContratto":
-                    if(this.typeContractKeys == undefined){
+                case "Entity":
+                    if(this.entityKeys == undefined){
                         let aSelectedKeys = selectedControl.getSelectedKeys();
-                        this.typeContractKeys = aSelectedKeys.length
+                        this.entityKeys = aSelectedKeys.length
 
                     } else {
                         const els = [
@@ -315,7 +315,7 @@ sap.ui.define([
                             this.getView().byId("AnnoSelect"),
                             this.getView().byId("PeriodoSelect"),
                             this.getView().byId("CostCenterBox"),
-                            this.getView().byId("IdStoricoSelect")
+                            // this.getView().byId("IdStoricoSelect")
                         ]
 
                         els.forEach(el => {
@@ -338,37 +338,37 @@ sap.ui.define([
                      
                     break;
         
-                case "Contratto":                    
-                    if(this.contractKeys == undefined){
-                        let aSelectedKeys = selectedControl.getSelectedKeys();
-                        this.contractKeys = aSelectedKeys.length
-                    } else {
-                        const els = [
-                            this.getView().byId("AnnoSelect"),
-                            this.getView().byId("PeriodoSelect"),
-                            this.getView().byId("CostCenterBox"),
-                            this.getView().byId("IdStoricoSelect")
-                        ]
+                // case "Contratto":                    
+                //     if(this.contractKeys == undefined){
+                //         let aSelectedKeys = selectedControl.getSelectedKeys();
+                //         this.contractKeys = aSelectedKeys.length
+                //     } else {
+                //         const els = [
+                //             this.getView().byId("AnnoSelect"),
+                //             this.getView().byId("PeriodoSelect"),
+                //             this.getView().byId("CostCenterBox"),
+                //             this.getView().byId("IdStoricoSelect")
+                //         ]
 
-                        els.forEach(el => {
-                            if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
-                                // Handle MultiComboBox
-                                el.setSelectedKeys(null)
-                            } else if (el.getMetadata().getName() === "sap.m.Select") {
-                                // Handle Select
-                                el.setSelectedKey(null)
-                            } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
-                                // Handle ComboBox
-                                el.setSelectedKey(null)
-                            }
+                //         els.forEach(el => {
+                //             if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
+                //                 // Handle MultiComboBox
+                //                 el.setSelectedKeys(null)
+                //             } else if (el.getMetadata().getName() === "sap.m.Select") {
+                //                 // Handle Select
+                //                 el.setSelectedKey(null)
+                //             } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
+                //                 // Handle ComboBox
+                //                 el.setSelectedKey(null)
+                //             }
 
-                            // Checking each label's concatenation to empty it
-                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
-                            this.makeTitleObjAttrBold();
-                        })
-                    }
+                //             // Checking each label's concatenation to empty it
+                //             this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
+                //             this.makeTitleObjAttrBold();
+                //         })
+                //     }
                         
-                    break;
+                //     break;
         
                 case "Anno":
                     if(this.annoKey == undefined){
@@ -378,7 +378,7 @@ sap.ui.define([
                         const els = [
                             this.getView().byId("PeriodoSelect"),
                             this.getView().byId("CostCenterBox"),
-                            this.getView().byId("IdStoricoSelect")
+                            this.getView().byId("ContrattoBox")
                         ]
 
                         els.forEach(el => {
@@ -408,7 +408,7 @@ sap.ui.define([
                     } else {
                         const els = [
                             this.getView().byId("CostCenterBox"),
-                            this.getView().byId("IdStoricoSelect")
+                            this.getView().byId("ContrattoBox")
                         ]
 
                         els.forEach(el => {
@@ -437,7 +437,7 @@ sap.ui.define([
                         this.cdcKeys = aSelectedKeys.length
                     } else {
                         const els = [
-                            this.getView().byId("IdStoricoSelect")
+                            this.getView().byId("ContrattoBox")
                         ]
 
                         els.forEach(el => {
@@ -460,7 +460,7 @@ sap.ui.define([
                      
                     break;  
                 
-                case "ID_STORICO":
+                case "Contratto":
                 break;
                 default:
                     console.error("default, errore nello switch")
@@ -471,19 +471,19 @@ sap.ui.define([
 
         selectFiltering: function() {
             
-            const servicePath = `${this.osUrl}applyFilters`;
+            const servicePath = `${this.osUrl}applyFilters19`;
 
             let oSelectedFilters = this.getView().getModel('selectedFiltersModel').getData();
 
-            console.log(Object.values(oSelectedFilters.entity));
+            // console.log(Object.values(oSelectedFilters.entity));
             const requestData = {
-                entity: Object.values(oSelectedFilters.entity),
-                tipoContratto: oSelectedFilters.tipoContratto ? Object.values(oSelectedFilters.tipoContratto) : null,
-                contratto: oSelectedFilters.contratto ? Object.values(oSelectedFilters.contratto) : null, // Campo opzionale
+                Id_storico: oSelectedFilters.ID_STORICO,
+                entity: oSelectedFilters.entity ? Object.values(oSelectedFilters.entity) : null,
+                // tipoContratto: oSelectedFilters.tipoContratto ? Object.values(oSelectedFilters.tipoContratto) : null,
                 year: oSelectedFilters.year,
                 period: oSelectedFilters.period,
                 costCenter: oSelectedFilters.costCenter ? Object.values(oSelectedFilters.costCenter) : null, // Campo opzionale
-                Id_storico: oSelectedFilters.ID_STORICO,
+                contratto: oSelectedFilters.contratto ? Object.values(oSelectedFilters.contratto) : null, // Campo opzionale
             }
 
             axios.post(servicePath, requestData)
@@ -491,22 +491,22 @@ sap.ui.define([
                 console.log("dati filtrati test", response.data);  // Handle the response array
                 let oFiltersModel = this.getView().getModel('oFiltersModel')
               
-                if(!requestData.tipoContratto || requestData.tipoContratto.length == 0){
-                oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
+                if(!requestData.entity || requestData.entity.length == 0){
+                // oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
                 oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
                 oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
                 oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
                 oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                oFiltersModel.getData().Entity = this._elaborateEntities(response.data.BUKRS, response.data.BUTXT)
                 
                 }
                 
                 if(!requestData.contratto || requestData.contratto.length == 0){
                     oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
-                    oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
-                    oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
-                    oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                    oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                    // oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
+                    // oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
+                    // oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                    // oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
                     
                     }
 
@@ -514,26 +514,26 @@ sap.ui.define([
                         oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
                         oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
                         oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                        oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                        oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
                         
                         }
 
                 if(!requestData.period){
                     oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
                     oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                    oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                    oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
                     
                     }
 
                 if(!requestData.costCenter || requestData.costCenter.length == 0){
                     oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                    oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                    oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
                     
                     }
-                if(!requestData.Id_storico){
-                    oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                // if(!requestData.Id_storico){
+                //     oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
                     
-                    }
+                //     }
                    
                 console.log(oFiltersModel.getData().Entity)
 

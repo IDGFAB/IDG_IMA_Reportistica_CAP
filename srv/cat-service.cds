@@ -16,9 +16,11 @@ service CatalogService {
     action GetTabellaFiltrata(entity: array of String , tipoContratto: array of String, contratto: array of String, year: String, period:String, costCenter: array of String, Id_storico: String) returns array of String;
     action GetTabellaFiltrata23(entity: array of String, contratto: array of String, year: String, period:String, Id_storico: String) returns array of String;
     action GetTabellaFiltrata9(entity: array of String , contratto: array of String, year: String, period:String, costCenter: array of String, Id_storico: String) returns array of String;
+    action GetTabellaFiltrata19(entity: array of String , contratto: array of String, year: String, period:String, costCenter: array of String, Id_storico: String) returns array of String;
     action applyFilters(entity: array of String , tipoContratto: array of String, contratto: array of String, year: String, period:String, costCenter: array of String, Id_storico: String) returns type.Filters;
     action applyFilters23(entity: array of String , contratto: array of String, year: String, period:String, Id_storico: String) returns type.Filters;
     action applyFilters9(entity: array of String , contratto: array of String, year: String, period:String, costCenter: array of String, Id_storico: String) returns type.Filters;
+    action applyFilters19(entity: array of String , contratto: array of String, year: String, period:String, costCenter: array of String, Id_storico: String) returns type.Filters;
     action Filters() returns type.Filters;
     action FilterControl(entity: array of String, tipoContratto: array of String) returns type.Filters;
 }

@@ -1084,6 +1084,254 @@ async CreateQuery9(entity = [], contratto = [], year = null, period = null, cost
         
     }
 
+
+
+    async applyFilters19(
+        Id_storico = null,
+        entity = [], 
+        year = null, 
+        period = null, 
+        costCenter = [],
+        contratto = []
+    ) {
+     
+        // Array che conterrà i valori
+        let arrayNumeri = [];
+    
+        // Convertiamo il numero in intero
+        let numero = parseInt(period);
+    
+        // Ciclo for che riempe l'array
+        for (let i = numero; i >= 1; i--) {
+            // Convertiamo il numero di nuovo in stringa e aggiungiamo gli zeri iniziali
+            let stringaNumero = i.toString().padStart(3, '0');
+            // Aggiungiamo la stringa all'array
+            arrayNumeri.push(stringaNumero);
+        }
+    
+    
+        // Definizione dei filtri progressivi
+        const whereClause = {};
+    
+        //primo filtro: entity (BUTXT)
+        if (entity?.length > 0) {
+            whereClause.BUKRS = entity;
+        }
+    
+        // Filtro per contratto (RECNNR), opzionale ma deve considerare i filtri precedenti
+        if (contratto?.length > 0) {
+            whereClause.RECNNR = contratto;
+        }
+    
+        // Filtro per anno (YEARDUEDATE)
+        if (year) {
+            whereClause.YEARDUEDATE = year;
+        }
+    
+        // Filtro per periodo (PERIODDUEDATE)
+        if (period) {
+            whereClause.PERIODDUEDATE = arrayNumeri;
+        }
+    
+        // Filtro per centro di costo (IDENTOBJNR), si sblocca solo dopo year e period
+        if (costCenter?.length > 0) {
+            whereClause.IDENTOBJNR = costCenter;
+        }
+    
+        // Filtro per storico (ID_STORICO), si sblocca dopo year e period
+        if (Id_storico) {
+            whereClause.ID_STORICO = Id_storico;
+        }
+    
+        // Esegui la query di selezione con i filtri dinamici
+        const filteredData = await cds.run(
+            SELECT.distinct
+                .from('CATALOGSERVICE_GV_FILTRI_ID22')
+                .columns('BUTXT', 'RECNTYPE', 'RECNNR', 'YEARDUEDATE', 'PERIODDUEDATE', 'IDENTOBJNR', 'BUKRS', 'ID_STORICO')
+                .where(whereClause)  // Inserisci la clausola WHERE dinamica
+        );
+    
+    
+        this.log.info(filteredData)
+    
+        // Usa Set per rimuovere automaticamente i duplicati dai risultati
+        const butxt = new Set();
+        const yearduedate = new Set();
+        const periodduedate = new Set();
+        const bukrs = new Set();
+        const id_storico = new Set();
+        const cdc = new Set();
+        const recnnr = new Set();
+    
+        // Popola i set con i risultati filtrati
+        filteredData.forEach(row => {
+            butxt.add(row.BUTXT);
+            yearduedate.add(row.YEARDUEDATE);
+            periodduedate.add(row.PERIODDUEDATE);
+            bukrs.add(row.BUKRS);
+            cdc.add(row.IDENTOBJNR);
+            id_storico.add(row.ID_STORICO)
+            recnnr.add(row.RECNNR)
+        });
+    
+        // Converte i set in array
+        const BUTXT = Array.from(butxt);
+        const YEARDUEDATE = Array.from(yearduedate);
+        const PERIODDUEDATE = Array.from(periodduedate);
+        const BUKRS = Array.from(bukrs);
+        const ID_STORICO = Array.from(id_storico);
+        const CDC = Array.from(cdc);
+        const RECNNR = Array.from(recnnr);
+    
+    
+        console.log("butxt array:", BUTXT);
+        console.log("yearduedate array:", YEARDUEDATE);
+        console.log("periodduedate array:", PERIODDUEDATE);
+        console.log("bukrs array:", BUKRS);
+        console.log("bukrs array:", ID_STORICO);
+        console.log("bukrs array:", CDC);
+        console.log("bukrs array:", RECNNR);
+    
+        // Ritorna gli array filtrati
+        return {
+            BUTXT: BUTXT,
+            YEARDUEDATE: YEARDUEDATE,
+            PERIODDUEDATE: PERIODDUEDATE,
+            BUKRS: BUKRS,
+            ID_STORICO: ID_STORICO,
+            CDC: CDC,
+            RECNNR: RECNNR,
+        };
+    }
+
+    async CreateQuery19(entity = [], contratto = [], year = null, period = null, costCenter = [], Id_storico = null) {
+        let whereClauses = [];
+    
+            // Controllo per il parametro Entity (obbligatorio e array)
+            if (Array.isArray(entity) && entity.length > 0) {
+                whereClauses.push('"BUKRS" IN (' + entity.map(e => `'${e}'`).join(', ') + ')');
+            } else {
+                throw new Error("Il parametro 'Entity' è obbligatorio e deve essere un array.");
+            }
+        
+            // Controllo per il parametro Contratto (facoltativo e array)
+            if (contratto) {
+                if (Array.isArray(contratto)) {
+                    if(contratto.length > 0){
+                        whereClauses.push('"RECNNR" IN (' + contratto.map(c => `'${c}'`).join(', ') + ')');
+                    }
+                } else {
+                    whereClauses.push('"RECNNR" = \'' + contratto + '\'');
+                }
+            }
+        
+            // Controllo per il parametro Year (obbligatorio e non array)
+            if (year !== null && year !== undefined) {
+                whereClauses.push('"YEARDUEDATE" = \'' + year + '\'');
+            } else {
+                throw new Error("Il parametro 'Year' è obbligatorio.");
+            }
+        
+            // Controllo per il parametro Period (obbligatorio e non array)
+            if (period !== null && period !== undefined) {
+                whereClauses.push('TO_INT("PERIODDUEDATE") = ' + period);
+            } else {
+                throw new Error("Il parametro 'Period' è obbligatorio.");
+            }
+        
+            // Controllo per il parametro Cost Center (facoltativo e array)
+            if (Array.isArray(costCenter)) {
+                if(costCenter.length > 0) {
+                    whereClauses.push('"IDENTOBJNR" IN (' + costCenter.map(cc => `'${cc}'`).join(', ') + ')');
+                }
+            } else if (costCenter) {
+                whereClauses.push('"IDENTOBJNR" = \'' + costCenter + '\'');
+            }
+    
+                    // Controllo per il parametro Year (obbligatorio e non array)
+            if (Id_storico !== null && Id_storico !== undefined) {
+                whereClauses.push('"ID_STORICO" = \'' + Id_storico + '\'');
+            } else {
+                throw new Error("Il parametro 'Id_storico' è obbligatorio.");
+            }
+        
+            // Costruzione della query finale
+            let sqlQuery = ''; // Sostituisci con il nome della tua tabella
+            if (whereClauses.length > 0) {
+                sqlQuery += 'WHERE ' + whereClauses.join(' AND ');
+            }
+        
+            return sqlQuery;
+        }
+
+
+        async GetTabellaFiltrata19(entity = [], contratto = [], year = null, period = null, costCenter = [], Id_storico = null){
+    
+            let query19 =await this.CreateQuery19(entity, contratto, year, period, costCenter, Id_storico)
+           
+        
+        
+            try{
+            const filteredTable = await cds.db.run(`SELECT "JOURNAL_TYPE",
+            "ACCOUNT",
+            "IDENTOBJNR",
+            "RECNTXTOLD",
+            "XMBEZ",
+            "DEBIT",
+            "CREDIT",
+            "DEBIT_CURR",
+            "CREDIT_CURR"
+        FROM (
+                SELECT UPPER("JOURNAL_TYPE") "JOURNAL_TYPE",
+                    UPPER("ACCOUNT") "ACCOUNT",
+                    "IDENTOBJNR",
+                    "RECNTXTOLD",
+                    "XMBEZ",
+                    SUM("DEBIT") "DEBIT",
+                    SUM("CREDIT") "CREDIT",
+                    SUM("DEBIT_CURR") "DEBIT_CURR",
+                    SUM("CREDIT_CURR") "CREDIT_CURR"
+                FROM "CATALOGSERVICE_VIEW_CAP_REPORT_23_EQ"
+                ${query19}
+                GROUP BY "JOURNAL_TYPE",
+                    "ACCOUNT",
+                    "IDENTOBJNR",
+                    "RECNTXTOLD",
+                    "XMBEZ"
+                UNION ALL
+                SELECT UPPER("JOURNAL_TYPE") "JOURNAL_TYPE",
+                    UPPER("ACCOUNT") "ACCOUNT",
+                    "IDENTOBJNR",
+                    "RECNTXTOLD",
+                    "XMBEZ",
+                    SUM("DEBIT") "DEBIT",
+                    SUM("CREDIT") "CREDIT",
+                    SUM("DEBIT_CURR") "DEBIT_CURR",
+                    SUM("CREDIT_CURR") "CREDIT_CURR"
+                FROM "CATALOGSERVICE_VIEW_CAP_REPORT23_LT"
+                ${query19}
+                GROUP BY "JOURNAL_TYPE",
+                    "ACCOUNT",
+                    "IDENTOBJNR",
+                    "RECNTXTOLD",
+                    "XMBEZ")
+        ORDER BY "JOURNAL_TYPE",
+            "ACCOUNT"`)
+        
+        console.log(filteredTable);
+        return filteredTable
+        
+        }
+        catch(error){
+        this.log.error
+        throw error
+        }
+        
+        
+            
+        }
+    
+
   
 
 
