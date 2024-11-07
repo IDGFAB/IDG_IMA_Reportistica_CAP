@@ -13,6 +13,9 @@ service CatalogService {
     entity VIEW_ALL_UNION_ID23 as projection on my.VIEW_ALL_UNION_ID23;
     entity View_CAP_REPORT23_LT as projection on my.View_CAP_REPORT23_LT;
     entity View_CAP_REPORT_23_EQ as projection on my.View_CAP_REPORT_23_EQ;
+    entity View_ZRE_SUMDEP as projection on my.View_ZRE_SUMDEP;
+    entity View_VICEPROCESS as projection on my.View_VICEPROCESS;
+    entity View_VICDCOND as projection on my.View_VICDCOND;
     action GetTabellaFiltrata(entity: array of String , tipoContratto: array of String, contratto: array of String, year: String, period:String, costCenter: array of String, Id_storico: String) returns array of String;
     action GetTabellaFiltrata23(entity: array of String, contratto: array of String, year: String, period:String, Id_storico: String) returns array of String;
     action GetTabellaFiltrata9(entity: array of String , contratto: array of String, year: String, period:String, costCenter: array of String, Id_storico: String) returns array of String;

@@ -52,6 +52,24 @@
             "schema": "IMA_TEST_SPACE",
             "object": "View_CAP_REPORT_23_EQ"
         }
+    },
+    "IMA_REPORT_VIEW_ZRE_SUMDEP": {
+        "target": {
+            "schema": "IMA_TEST_SPACE",
+            "object": "View_ZRE_SUMDEP"
+        }
+    },
+    "IMA_REPORT_VIEW_VICEPROCESS": {
+        "target": {
+            "schema": "IMA_TEST_SPACE",
+            "object": "View_VICEPROCESS"
+        }
+    },
+    "IMA_REPORT_VIEW_VICDCOND": {
+        "target": {
+            "schema": "IMA_TEST_SPACE",
+            "object": "View_VICDCOND"
+        }
     }
 
 }

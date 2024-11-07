@@ -129,7 +129,6 @@ entity View_IMA_Lettura {
         GSBER                      : String(4);
         RECNTXT                    : String(80);
         ZZSOCIETA                  : String(4);
-        PRICE_SROU                 : Decimal(19, 6);
         BBWHR_ACQUISITION          : Decimal(23, 2);
         RECNDPO                    : String(8);
         RECNBEG                    : String(8);
@@ -140,7 +139,6 @@ entity View_IMA_Lettura {
         BBWHR_PAYMENT              : Decimal(23, 2);
         BBWHR_DEPRECIATION         : Decimal(23, 2);
     key SPRAS                      : String(1);
-        KTEXT                      : String(20);
     key KOSTL                      : String(10);
         DEBITO_MTERM               : Decimal(23, 2);
         DEBITO_BTERM               : Decimal(23, 2);
@@ -149,7 +147,15 @@ entity View_IMA_Lettura {
         RECNCNCURR                 : String(5);
         RECNTXTOLD                 : String(20);
     key ID_STORICO                 : String(20);
+        BBWHR_REPAYMENT_DIF        : Decimal(23, 2);
+        RECNNOTPER                 : String(8);
+        BBWHR_DEPRECIATION_SUM_BEG : Decimal(23, 2);
+        KTEXT                      : String(20);
+        PRICE_ZFAM                 : Decimal(19, 6);
         PRICE_EROU                 : Decimal(19, 6);
+        PRICE_SROU                 : Decimal(19, 6);
+        RECNNOTREASON              : String(2);
+        RECNENDABS                 : String(8);
 }
 
 
@@ -262,4 +268,38 @@ entity View_CAP_REPORT23_LT {
     key INTRENO                    : String(13);
         DEBIT_CURR                 : Decimal(5, 2);
         CREDIT_CURR                : Decimal(5, 2);
+}
+
+
+@cds.persistence.exists
+entity View_ZRE_SUMDEP {
+    key MANDT                      : String(3);
+    key BUKRS                      : String(4);
+    key RECNTYPE                   : String(4);
+    key RECNNR                     : String(13);
+    key CPUDT                      : String(8);
+    key ZZNDOC                     : String(20);
+    ZZDEPR_FUND_INT                : Decimal(23, 2);
+    ZZDEPR_FUND_VAL                : Decimal(23, 2);
+}
+
+
+@cds.persistence.exists
+entity View_VICEPROCESS {
+    key INTRENO                    : String(13);
+        CEFROM                     : String(8);
+    key MANDT                      : String(3);
+    key RULEGUID                   : Binary(16);
+    key PROCESSGUID                : Binary(16);
+        CNVALUE                    : Decimal(15, 2);
+
+}
+
+@cds.persistence.exists
+entity View_VICDCOND {
+    key INTRENO                    : String(13);
+    CONDVALIDFROM                  : String(8);
+    CONDVALIDTO                    : String(8);
+    CONDTYPE                       : String(4);
+
 }

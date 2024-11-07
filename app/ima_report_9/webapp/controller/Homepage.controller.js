@@ -549,12 +549,13 @@ sap.ui.define([
                             let processedData = dataArray[0].value.map(this.convertExponentialValues);
                             dataFiltered.setData(processedData);
                             dataFiltered.refresh();
+                            this.tableCreator(dataFiltered)
                         }
                     } else {
                         dataFiltered.setData(response.data)
                         dataFiltered.refresh()
                     }     
-                    return
+                    return dataFiltered
                     
 
 
@@ -1125,7 +1126,7 @@ sap.ui.define([
             // });
         },
 
-        onSearch: function () {
+        onSearch: async function () {
 
             // let oSelectedFiltersModel = this.getView().getModel('selectedFiltersModel');
             // let dataFilled = Object.values(oSelectedFiltersModel.getData()).every(filter => filter != null);
@@ -1156,8 +1157,13 @@ sap.ui.define([
 
             // TOBE re-enabled later with actual data comes
             this.getTableData();
+
+        },
+
+        tableCreator: function(data) {
+            let oData = data.getData()
             
-            const oData = this.getTableMockData(); // Getting the array of the mock data
+            //const oData = this.getTableMockData(); // Getting the array of the mock data
             
             // To print  checks if the filters are being filled
             const areFiltersFilled = this.getView().getModel("selectedFiltersModel").getData().allSelected
@@ -1174,32 +1180,28 @@ sap.ui.define([
             }
         },
 
+
         makeGeneratedTableMockData: function(oData) {
             var oTable = this.byId("table");
-            const objData = this._prepareData(oData[0].Data);
-            
+            const objData = this._prepareData(oData);
+        
             // Clear existing columns
             oTable.removeAllColumns();
-            
-            // Define columns
-            const columns = [
-                { key: "Section", label: "Section", width: "150px", freeze: true },
-                { key: "Description", label: "Description", width: "350px", freeze: true },
-                { key: "Total", label: "Total", width: "150px" },
-                { key: "Building", label: "Building", width: "150px" },
-                { key: "Cars_in_pool", label: "Cars_in_pool", width: "150px" },
-                { key: "Cars_in_benefit", label: "Cars_in_benefit", width: "150px" }
-            ];
         
-            // Add columns
+            // Dynamically define columns based on keys in the first object of objData
+            const firstRow = objData[0] || {};
+            const columns = Object.keys(firstRow).map(key => {
+                return { key: key, label: key.replace(/_/g, " "), width: "150px" };
+            });
+        
+            // Add columns dynamically
             columns.forEach(column => {
                 oTable.addColumn(new sap.ui.table.Column({
                     label: new sap.m.Label({ text: column.label }),
                     template: new sap.m.Text({ text: "{" + column.key + "}" }),
                     width: column.width,
                     sorted: false,
-                    filtered: false,
-                    freezed: column.freeze
+                    filtered: false
                 }));
             });
         
@@ -1220,68 +1222,170 @@ sap.ui.define([
             
             this.getView().getModel("selectedFiltersModel").setProperty("/matchData", true);
             this._colorTotalRows();
-
+        
             console.log("Table found:", !!oTable, "Table ID:", oTable?.getId());
         },
         
-        _prepareData: function (oData) {
+
+        // makeGeneratedTableMockData: function(oData) {
+        //     var oTable = this.byId("table");
+        //     const objData = this._prepareData(oData[0].Data);
+            
+        //     // Clear existing columns
+        //     oTable.removeAllColumns();
+            
+        //     // Define columns
+        //     const columns = [
+        //         { key: "Section", label: "Section", width: "150px", freeze: true },
+        //         { key: "Description", label: "Description", width: "350px", freeze: true },
+        //         { key: "Total", label: "Total", width: "150px" },
+        //         { key: "Building", label: "Building", width: "150px" },
+        //         { key: "Cars_in_pool", label: "Cars_in_pool", width: "150px" },
+        //         { key: "Cars_in_benefit", label: "Cars_in_benefit", width: "150px" }
+        //     ];
+        
+        //     // Add columns
+        //     columns.forEach(column => {
+        //         oTable.addColumn(new sap.ui.table.Column({
+        //             label: new sap.m.Label({ text: column.label }),
+        //             template: new sap.m.Text({ text: "{" + column.key + "}" }),
+        //             width: column.width,
+        //             sorted: false,
+        //             filtered: false,
+        //             freezed: column.freeze
+        //         }));
+        //     });
+        
+        //     // Create and set model
+        //     const oTableModel = new JSONModel({
+        //         rows: objData
+        //     });
+            
+        //     // Set size limit to handle all rows
+        //     oTableModel.setSizeLimit(objData.length + 100);
+            
+        //     oTable.setModel(oTableModel);
+        //     oTable.bindRows("/rows");
+            
+        //     // Adjust visible row count based on data
+        //     const visibleRowCount = Math.min(objData.length, 20); // Maximum 20 rows visible
+        //     oTable.setVisibleRowCount(visibleRowCount);
+            
+        //     this.getView().getModel("selectedFiltersModel").setProperty("/matchData", true);
+        //     this._colorTotalRows();
+
+        //     console.log("Table found:", !!oTable, "Table ID:", oTable?.getId());
+        // },
+
+
+        _prepareData: function(oData) {
             var aRows = [];
             var lastSection = "";
         
-            var sectionsMap = {
-                "Opening": ["Right of Use", "Accumulated Depreciation", "Net Right of Use", ""],
-                "Movements": [
-                    "Amount at transition date", "Increase for new contract", 
-                    "Revaluation (increase for remeasurement)",
-                    "Decrease - Right of Use", "Decrease - Accumulated Depreciation",
-                    "Increase for Mergers - Right of Use", 
-                    "Increase for Mergers - Accumulated Depreciation",
-                    "Decrease for Mergers - Right of Use", 
-                    "Decrease for Mergers - Accumulated Depreciation",
-                    "Reverse for Change CDC - Right of Use", 
-                    "Recognition for Change CDC - Right of Use",
-                    "Reverse for Change CDC - Accumulated Depreciation",
-                    "Recognition for Change CDC - Accumulated Depreciation", 
-                    "Depreciation"
-                ],
-                "Totale": ["Totale", ""],
-                "Closing": ["Right of Use", "Accumulated Depreciation", "Net Right of Use"]
-            };
+            oData.forEach(function(item) {
+                // Estraggo le proprietà rilevanti dal singolo oggetto
+                var section = item.Journal_Type || ""; // usa il valore di Journal_Type come "Section"
+                var description = item.Account || "";  // usa il valore di Account come "Description"
+                
+                // Formatto i numeri
+                const formatNumber = (value) => {
+                    if (value === undefined || value === null) return "-";
+                    if (typeof value === 'number') {
+                        return value.toLocaleString('en-US', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        });
+                    }
+                    return value;
+                };
         
-            // Process sections
-            Object.keys(sectionsMap).forEach(function (section) {
-                sectionsMap[section].forEach(function (description) {
-                    // Safely access nested properties
-                    var sectionData = oData[section] || {};
-                    var descriptionData = sectionData[description] || {};
-        
-                    // Format number function
-                    const formatNumber = (value) => {
-                        if (value === undefined || value === null) return "-";
-                        if (typeof value === 'number') {
-                            return value.toLocaleString('en-US', {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2
-                            });
-                        }
-                        return value;
-                    };
-        
-                    aRows.push({
-                        "Section": section === lastSection ? "" : section,
-                        "Description": description,
-                        "Total": formatNumber(descriptionData.Total),
-                        "Building": formatNumber(descriptionData.Building),
-                        "Cars_in_pool": formatNumber(descriptionData["Cars_in_pool"]),
-                        "Cars_in_benefit": formatNumber(descriptionData["Cars_in_benefit"])
-                    });
-                    
-                    lastSection = section;
-                });
+// Costruisco un oggetto per ogni riga con i dati formattati
+aRows.push({
+    "Section": section === lastSection ? "" : section,  // Vuoto se uguale alla sezione precedente
+    "Description": description,
+    "Total": formatNumber(item.Total),
+    "Building": formatNumber(item.Building),
+    "Cars_in_pool": formatNumber(item.Cars_in_pool),
+    "Cars_in_benefit": formatNumber(item.Cars_in_benefit),
+    "Guest_quarters_in_pool": formatNumber(item.Guest_quarters_in_pool),
+    "Guest_quarters_in_benefit": formatNumber(item.Guest_quarters_in_benefit),
+    "Garage_in_pool": formatNumber(item.Garage_in_pool),
+    "Garage_in_benefit": formatNumber(item.Garage_in_benefit),
+    "Productive_machinery": formatNumber(item.Productive_machinery),
+    "Plants": formatNumber(item.Plants),
+    "Other_productive_equipment": formatNumber(item.Other_productive_equipment),
+    "Other_motor_vehicles": formatNumber(item.Other_motor_vehicles),
+    "In_house_handling_equipment": formatNumber(item.In_house_handling_equipment),
+    "Hardware": formatNumber(item.Hardware),
+    "Other_assets": formatNumber(item.Other_assets),
+    "Land": formatNumber(item.Land)
+});
+
+                
+                lastSection = section;  // Aggiorno la sezione precedente
             });
         
             return aRows;
-        },
+        },        
+        
+        // _prepareData: function (oData) {
+        //     var aRows = [];
+        //     var lastSection = "";
+        
+        //     var sectionsMap = {
+        //         "Opening": ["Right of Use", "Accumulated Depreciation", "Net Right of Use", ""],
+        //         "Movements": [
+        //             "Amount at transition date", "Increase for new contract", 
+        //             "Revaluation (increase for remeasurement)",
+        //             "Decrease - Right of Use", "Decrease - Accumulated Depreciation",
+        //             "Increase for Mergers - Right of Use", 
+        //             "Increase for Mergers - Accumulated Depreciation",
+        //             "Decrease for Mergers - Right of Use", 
+        //             "Decrease for Mergers - Accumulated Depreciation",
+        //             "Reverse for Change CDC - Right of Use", 
+        //             "Recognition for Change CDC - Right of Use",
+        //             "Reverse for Change CDC - Accumulated Depreciation",
+        //             "Recognition for Change CDC - Accumulated Depreciation", 
+        //             "Depreciation"
+        //         ],
+        //         "Totale": ["Totale", ""],
+        //         "Closing": ["Right of Use", "Accumulated Depreciation", "Net Right of Use"]
+        //     };
+        
+        //     // Process sections
+        //     Object.keys(sectionsMap).forEach(function (section) {
+        //         sectionsMap[section].forEach(function (description) {
+        //             // Safely access nested properties
+        //             var sectionData = oData[section] || {};
+        //             var descriptionData = sectionData[description] || {};
+        
+        //             // Format number function
+        //             const formatNumber = (value) => {
+        //                 if (value === undefined || value === null) return "-";
+        //                 if (typeof value === 'number') {
+        //                     return value.toLocaleString('en-US', {
+        //                         minimumFractionDigits: 2,
+        //                         maximumFractionDigits: 2
+        //                     });
+        //                 }
+        //                 return value;
+        //             };
+        
+        //             aRows.push({
+        //                 "Section": section === lastSection ? "" : section,
+        //                 "Description": description,
+        //                 "Total": formatNumber(descriptionData.Total),
+        //                 "Building": formatNumber(descriptionData.Building),
+        //                 "Cars_in_pool": formatNumber(descriptionData["Cars_in_pool"]),
+        //                 "Cars_in_benefit": formatNumber(descriptionData["Cars_in_benefit"])
+        //             });
+                    
+        //             lastSection = section;
+        //         });
+        //     });
+        
+        //     return aRows;
+        // },
 
         _createColumns: function (aData) {
             var oTable = this.byId("table");
