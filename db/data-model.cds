@@ -156,6 +156,7 @@ entity View_IMA_Lettura {
         PRICE_SROU                 : Decimal(19, 6);
         RECNNOTREASON              : String(2);
         RECNENDABS                 : String(8);
+        CFPOSTINGFROM              : String(8);
 }
 
 
@@ -292,6 +293,7 @@ entity View_VICEPROCESS {
     key RULEGUID                   : Binary(16);
     key PROCESSGUID                : Binary(16);
         CNVALUE                    : Decimal(15, 2);
+        ABSOLUTEEND                : String(8);
 
 }
 

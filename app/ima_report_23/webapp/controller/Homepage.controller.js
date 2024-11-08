@@ -69,17 +69,9 @@ sap.ui.define([
         },
 
         convertModelStringToNumericValues() {
-            function padStart(num, targetLength) {
-                let numStr = num.toString();
-                while (numStr.length < targetLength) {
-                  numStr = '0' + numStr;
-                }
-                return numStr;
-            }
-            
             var oModel = this.getView().getModel("DataIMA23");
             var aData = oModel.getData();
-            
+        
             const numericFields = [
                 "DEBIT",
                 "CREDIT",
@@ -90,32 +82,34 @@ sap.ui.define([
             aData = aData.map(item => {
                 // Helper function to format number with thousands separator and 2 decimals
                 const formatNumber = (num) => {
-                    return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    return num.toLocaleString("it-IT", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 };
-            
+        
                 numericFields.forEach(field => {
                     if (item[field]) {
                         const strValue = String(item[field]);
-                        
-                        const numValue = parseFloat(
-                            strValue.replace(/\./g, '').replace(/,/g, '.'));
-                        // Store the actual numeric value
-                        item[field] = numValue;
-                        
-                        // Format display value with thousands separator and 2 decimals
-                        item[field + '_DISPLAY'] = formatNumber(
-                            strValue.startsWith('0,') 
-                                ? parseFloat(strValue.replace(/,/g, '0.'))
-                                : parseFloat(strValue.replace(/\./g, '').replace(/,/g, '.'))
-                        );
+        
+                        // Conversione diretta da stringa a numero senza sostituzioni
+                        const numValue = parseFloat(strValue);
+        
+                        // Verifica se la conversione ha prodotto un numero valido
+                        if (!isNaN(numValue)) {
+                            // Imposta il valore numerico corretto
+                            item[field] = numValue;
+                            // Formatta il valore per la visualizzazione
+                            item[field + '_DISPLAY'] = formatNumber(numValue);
+                        } else {
+                            console.warn(`Valore non valido per il campo ${field}:`, strValue);
+                        }
                     }
                 });
                 return item;
             });
-            
+        
             oModel.setData(aData);
             oModel.refresh();
         },
+        
         
         onTableSort: function(oEvent) {
             const oColumn = oEvent.getParameter("column");
