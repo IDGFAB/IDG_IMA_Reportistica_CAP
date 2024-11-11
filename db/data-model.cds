@@ -91,6 +91,7 @@ entity View_All_Data_v2 {
         IDENTASSET                 : String(12);
         BBWHR_REPAYMENT_DIF        : Decimal(23, 2);
         RECNNOTPER                 : String(8);
+        RECNENDABS                 : String(8);
         GJAHR                      : String(4);
         PERIODO                    : String(2);
         BELNR                      : String(10);
