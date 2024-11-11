@@ -1,19 +1,11 @@
 sap.ui.define([
     "sap/ui/core/mvc/Controller",
-    "sap/ui/core/CustomData",
     "sap/ui/model/json/JSONModel",
-    "sap/ui/table/Table",
-    "sap/ui/table/RowSettings",
-    "sap/ui/table/Column",
-    "sap/m/Text",
-    "sap/ui/core/Item",
     "sap/ui/export/Spreadsheet",
     "sap/m/ObjectAttribute",
-    "sap/ui/model/Filter",
-    "sap/ui/model/FilterOperator",
-    "sap/m/MessageBox",
+    "sap/ui/model/Sorter",
 ],
-    function (Controller, CustomData, JSONModel, Table, RowSettings, Column, Text, Item, Spreadsheet, ObjectAttribute, Filter, FilterOperator, MessageBox) {
+    function (Controller, JSONModel, Spreadsheet, ObjectAttribute, Sorter) {
         "use strict";
 
         return Controller.extend("imareport23.controller.Homepage", {
@@ -76,6 +68,58 @@ sap.ui.define([
                 }));
         },
 
+        convertModelStringToNumericValues() {
+            var oModel = this.getView().getModel("DataIMA23");
+            var aData = oModel.getData();
+        
+            const numericFields = [
+                "DEBIT",
+                "CREDIT",
+                "DEBIT_CURR",
+                "CREDIT_CURR"
+            ];
+        
+            aData = aData.map(item => {
+                // Helper function to format number with thousands separator and 2 decimals
+                const formatNumber = (num) => {
+                    return num.toLocaleString("it-IT", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                };
+        
+                numericFields.forEach(field => {
+                    if (item[field]) {
+                        const strValue = String(item[field]);
+        
+                        // Conversione diretta da stringa a numero senza sostituzioni
+                        const numValue = parseFloat(strValue);
+        
+                        // Verifica se la conversione ha prodotto un numero valido
+                        if (!isNaN(numValue)) {
+                            // Imposta il valore numerico corretto
+                            item[field] = numValue;
+                            // Formatta il valore per la visualizzazione
+                            item[field + '_DISPLAY'] = formatNumber(numValue);
+                        } else {
+                            console.warn(`Valore non valido per il campo ${field}:`, strValue);
+                        }
+                    }
+                });
+                return item;
+            });
+        
+            oModel.setData(aData);
+            oModel.refresh();
+        },
+        
+        
+        onTableSort: function(oEvent) {
+            const oColumn = oEvent.getParameter("column");
+            const sSortProperty = oColumn.getSortProperty();
+            const bDescending = oEvent.getParameter("sortOrder") === "Descending";
+            
+            // Simple sorter since values are already numeric
+            const oSorter = new Sorter(sSortProperty, bDescending);
+            this.byId("table").getBinding("rows").sort(oSorter);
+        },
 
         _sortEntitiesByDescription: function(entities) {
             return entities.sort((a, b) => a.description.localeCompare(b.description));
@@ -161,6 +205,7 @@ sap.ui.define([
                             let processedData = dataArray[0].value.map(this.convertExponentialValues);
                             dataFiltered.setData(processedData);
                             dataFiltered.refresh();
+                            this.convertModelStringToNumericValues();
                         }
                     } else {
                         dataFiltered.setData(response.data)
@@ -270,8 +315,8 @@ sap.ui.define([
             let isItemSelectedFilled
 
             switch (controlName) {
-                case "Entity":
-                        isItemSelectedFilled = selectedControl.getSelectedKeys().length;
+                case "ID_STORICO":
+                        isItemSelectedFilled = selectedControl.getSelectedKey().length;
                         isItemSelectedFilled = true // Deselect to make optional fields upon deletion filterable based on the selected filters
                        
                         if(isItemSelectedFilled){
@@ -281,7 +326,7 @@ sap.ui.define([
                             this.getView().byId("AnnoSelect"),
                             this.getView().byId("PeriodoSelect"),
                             // this.getView().byId("CostCenterBox"),
-                            this.getView().byId("IdStoricoSelect")
+                            this.getView().byId("EntityBox")
                         ]
 
                         els.forEach(el => {
@@ -303,41 +348,41 @@ sap.ui.define([
                     }
                     break;
         
-                case "TipoContratto":
-                    isItemSelectedFilled = selectedControl.getSelectedKeys();
-                    isItemSelectedFilled = true // Deselect to make optional fields upon deletion filterable based on the selected filters
+                // case "TipoContratto":
+                //     isItemSelectedFilled = selectedControl.getSelectedKeys();
+                //     isItemSelectedFilled = true // Deselect to make optional fields upon deletion filterable based on the selected filters
                     
-                    if(isItemSelectedFilled) {
+                //     if(isItemSelectedFilled) {
                         
-                        const els = [
-                            this.getView().byId("ContrattoBox"),
-                            this.getView().byId("AnnoSelect"),
-                            this.getView().byId("PeriodoSelect"),
-                            // this.getView().byId("CostCenterBox"),
-                            this.getView().byId("IdStoricoSelect")
-                        ]
+                //         const els = [
+                //             this.getView().byId("ContrattoBox"),
+                //             this.getView().byId("AnnoSelect"),
+                //             this.getView().byId("PeriodoSelect"),
+                //             // this.getView().byId("CostCenterBox"),
+                //             this.getView().byId("IdStoricoSelect")
+                //         ]
 
-                        els.forEach(el => {
-                            if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
-                                // Handle MultiComboBox
-                                el.setSelectedKeys(null)
-                            } else if (el.getMetadata().getName() === "sap.m.Select") {
-                                // Handle Select
-                                el.setSelectedKey(null)
-                            } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
-                                // Handle ComboBox
-                                el.setSelectedKey(null)
-                            }
+                //         els.forEach(el => {
+                //             if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
+                //                 // Handle MultiComboBox
+                //                 el.setSelectedKeys(null)
+                //             } else if (el.getMetadata().getName() === "sap.m.Select") {
+                //                 // Handle Select
+                //                 el.setSelectedKey(null)
+                //             } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
+                //                 // Handle ComboBox
+                //                 el.setSelectedKey(null)
+                //             }
 
-                            // Checking each label's concatenation to empty it
-                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
-                            this.makeTitleObjAttrBold();
-                        })
-                    }
+                //             // Checking each label's concatenation to empty it
+                //             this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
+                //             this.makeTitleObjAttrBold();
+                //         })
+                //     }
                      
-                    break;
+                //     break;
         
-                case "Contratto":                    
+                case "Entity":                    
                     isItemSelectedFilled = selectedControl.getSelectedKeys().length;
                     isItemSelectedFilled = true // Deselect to make optional fields upon deletion filterable based on the selected filters
                     
@@ -347,7 +392,7 @@ sap.ui.define([
                             this.getView().byId("AnnoSelect"),
                             this.getView().byId("PeriodoSelect"),
                             // this.getView().byId("CostCenterBox"),
-                            this.getView().byId("IdStoricoSelect")
+                            this.getView().byId("ContrattoBox")
                         ]
 
                         els.forEach(el => {
@@ -379,7 +424,7 @@ sap.ui.define([
                         const els = [
                             this.getView().byId("PeriodoSelect"),
                             // this.getView().byId("CostCenterBox"),
-                            this.getView().byId("IdStoricoSelect")
+                            this.getView().byId("ContrattoBox")
                         ]
 
                         els.forEach(el => {
@@ -410,7 +455,7 @@ sap.ui.define([
                             
                         const els = [
                             // this.getView().byId("CostCenterBox"),
-                            this.getView().byId("IdStoricoSelect")
+                            this.getView().byId("ContrattoBox")
                         ]
 
                         els.forEach(el => {
@@ -433,37 +478,37 @@ sap.ui.define([
                            
                     break;
         
-                case "CostCenter":                    
-                    isItemSelectedFilled = selectedControl.getSelectedKeys().length;
-                    isItemSelectedFilled = true // Deselect to make optional fields upon deletion filterable based on the selected filters
+                // case "CostCenter":                    
+                //     isItemSelectedFilled = selectedControl.getSelectedKeys().length;
+                //     isItemSelectedFilled = true // Deselect to make optional fields upon deletion filterable based on the selected filters
                     
-                    if(isItemSelectedFilled){
+                //     if(isItemSelectedFilled){
                         
-                        const els = [
-                            this.getView().byId("IdStoricoSelect")
-                        ]
+                //         const els = [
+                //             this.getView().byId("IdStoricoSelect")
+                //         ]
 
-                        els.forEach(el => {
-                            if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
-                                // Handle MultiComboBox
-                                el.setSelectedKeys(null)
-                            } else if (el.getMetadata().getName() === "sap.m.Select") {
-                                // Handle Select
-                                el.setSelectedKey(null)
-                            } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
-                                // Handle ComboBox
-                                el.setSelectedKey(null)
-                            }
+                //         els.forEach(el => {
+                //             if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
+                //                 // Handle MultiComboBox
+                //                 el.setSelectedKeys(null)
+                //             } else if (el.getMetadata().getName() === "sap.m.Select") {
+                //                 // Handle Select
+                //                 el.setSelectedKey(null)
+                //             } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
+                //                 // Handle ComboBox
+                //                 el.setSelectedKey(null)
+                //             }
 
-                            // Checking each label's concatenation to empty it
-                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
-                            this.makeTitleObjAttrBold();
-                        })
-                    }
+                //             // Checking each label's concatenation to empty it
+                //             this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
+                //             this.makeTitleObjAttrBold();
+                //         })
+                //     }
                      
-                    break;  
+                //     break;  
                 
-                case "ID_STORICO":
+                case "Contratto":
                 break;
                 default:
                     console.error("default, errore nello switch")
@@ -481,13 +526,13 @@ sap.ui.define([
             let oSelectedFilters = this.getView().getModel('selectedFiltersModel').getData();
 
             const requestData = {
-                entity: Object.values(oSelectedFilters.entity),
-               // tipoContratto: oSelectedFilters.tipoContratto ? Object.values(oSelectedFilters.tipoContratto) : null,
-                contratto: oSelectedFilters.contratto ? Object.values(oSelectedFilters.contratto) : null, // Campo opzionale
-                year: oSelectedFilters.year,
-                period: oSelectedFilters.period,
-            //    costCenter: oSelectedFilters.costCenter ? Object.values(oSelectedFilters.costCenter) : null, // Campo opzionale
                 Id_storico: oSelectedFilters.ID_STORICO,
+                entity: oSelectedFilters.entity ? Object.values(oSelectedFilters.entity) : null,
+               // tipoContratto: oSelectedFilters.tipoContratto ? Object.values(oSelectedFilters.tipoContratto) : null,
+               year: oSelectedFilters.year,
+               period: oSelectedFilters.period,
+               contratto: oSelectedFilters.contratto ? Object.values(oSelectedFilters.contratto) : null, // Campo opzionale
+            //    costCenter: oSelectedFilters.costCenter ? Object.values(oSelectedFilters.costCenter) : null, // Campo opzionale
             }
 
             axios.post(servicePath, requestData)
@@ -504,30 +549,29 @@ sap.ui.define([
                 
                 // }
                 
-                if(!requestData.contratto || requestData.contratto.length == 0)
-                    if(!requestData.year){
+                if(!requestData.entity || requestData.entity.length == 0)
                     {
                     oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
                     oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
                     oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
                     //oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                    oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                    oFiltersModel.getData().Entity = this._elaborateEntities(response.data.BUKRS, response.data.BUTXT)
                     
                     }
-                }
+                
 
                     if(!requestData.year){
                         oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
                         oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
                     //    oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                        oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                        oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
                         
                         }
 
                 if(!requestData.period){
                     oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
                 //    oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                    oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                    oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
                     
                     }
 
@@ -536,8 +580,8 @@ sap.ui.define([
                 //     oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
                     
                 //     }
-                if(!requestData.Id_storico){
-                    oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                if(!requestData.contratto){
+                    oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
                     
                     }
                    

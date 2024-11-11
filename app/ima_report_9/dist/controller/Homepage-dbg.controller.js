@@ -36,6 +36,7 @@ sap.ui.define([
             this.cdcKeys;
             this.annoKey;
             this.periodoKey;
+            this.idStoricoKey;
         },
 
         onAfterRendering: function () {
@@ -488,11 +489,11 @@ sap.ui.define([
                         {
                             Entity: this._elaborateEntities(response.data.BUKRS, response.data.BUTXT),
                            // TipoContratto: this._sortStringArray(response.data.RECNTYPE),
-                           // Contratto: this._sortStringArray(response.data.RECNNR),
+                            Contratto: this._sortStringArray(response.data.RECNNR),
                             Periodo: this._elaboratedMonths(response.data.PERIODDUEDATE),
                             Anno: this._sortStringArray(response.data.YEARDUEDATE),
-                           // CostCenter: this._sortStringArray(response.data.CDC),
-                           // Id_storico: this._sortStringArray(response.data.ID_STORICO)
+                            CostCenter: this._sortStringArray(response.data.CDC),
+                            Id_storico: this._sortStringArray(response.data.ID_STORICO)
                         }
                     )
                     console.log('Filters data: ', oFiltersModel.getData());
@@ -523,13 +524,13 @@ sap.ui.define([
 
             console.log(Object.values(oSelectedFilters.entity));
             const requestData = {
-                entity: Object.values(oSelectedFilters.entity),
+                entity: oSelectedFilters.entity ? Object.values(oSelectedFilters.entity) : null,
               //  tipoContratto: Object.values(oSelectedFilters.tipoContratto),
-              //  contratto: oSelectedFilters.contratto ? Object.values(oSelectedFilters.contratto) : null, // Campo opzionale
+                contratto: oSelectedFilters.contratto ? Object.values(oSelectedFilters.contratto) : null, // Campo opzionale
                 year: oSelectedFilters.year,
                 period: oSelectedFilters.period,
-              //  costCenter: oSelectedFilters.costCenter ? Object.values(oSelectedFilters.costCenter) : null, // Campo opzionale
-              //  Id_storico: oSelectedFilters.ID_STORICO,
+               costCenter: oSelectedFilters.costCenter ? Object.values(oSelectedFilters.costCenter) : null, // Campo opzionale
+               Id_storico: oSelectedFilters.ID_STORICO,
             }
 
             const servicePath = `${this.osUrl}GetTabellaFiltrata9`;  // Append the action name with a trailing slash
@@ -548,12 +549,13 @@ sap.ui.define([
                             let processedData = dataArray[0].value.map(this.convertExponentialValues);
                             dataFiltered.setData(processedData);
                             dataFiltered.refresh();
+                            this.tableCreator(dataFiltered)
                         }
                     } else {
                         dataFiltered.setData(response.data)
                         dataFiltered.refresh()
                     }     
-                    return
+                    return dataFiltered
                     
 
 
@@ -624,7 +626,9 @@ sap.ui.define([
                     oSelectedFilters.Anno &&
                     //oSelectedFilters.ID_STORICO &&
                  //   (oSelectedFilters.TipoContratto && oSelectedFilters.TipoContratto.length > 0) &&
-                    (oSelectedFilters.Entity && oSelectedFilters.Entity.length > 0) ? true : false;
+                    (oSelectedFilters.Entity && oSelectedFilters.Entity.length > 0) &&
+                    (oSelectedFilters.Contratto && oSelectedFilters.Contratto.length > 0) &&
+                    (oSelectedFilters.CostCenter && oSelectedFilters.CostCenter.length > 0) ? true : false 
 
             // Update allSelected property
             oSelectedFiltersModel.setProperty("/allSelected", allSelected);
@@ -658,18 +662,18 @@ sap.ui.define([
             console.log("vecchie chiavi", aPreviousSelectedKeys)
 
             switch (controlName) {
-                case "Entity":
-                    if(this.entityKeys == undefined){
-                        let aSelectedKeys = selectedControl.getSelectedKeys();
-                        this.entityKeys = aSelectedKeys.length
+                case "ID_STORICO":
+                    if(this.idStoricoKey == undefined){
+                        let aSelectedKey = selectedControl.getSelectedKey();
+                        this.idStoricoKey = aSelectedKey.length
                     } else {
                         const els = [
                          //   this.getView().byId("TipoContrattoBox"),
-                         //   this.getView().byId("ContrattoBox"),
+                            this.getView().byId("ContrattoBox"),
                             this.getView().byId("AnnoSelect"),
                             this.getView().byId("PeriodoSelect"),
-                         //   this.getView().byId("CostCenterBox"),
-                         //   this.getView().byId("IdStoricoSelect")
+                            this.getView().byId("CostCenterBox"),
+                            this.getView().byId("EntityBox")
                         ]
 
                         els.forEach(el => {
@@ -724,38 +728,38 @@ sap.ui.define([
                 //     }
                      
                 //     break;
-        
-                // case "Contratto":                    
-                //     if(this.contractKeys == undefined){
-                //         let aSelectedKeys = selectedControl.getSelectedKeys();
-                //         this.contractKeys = aSelectedKeys.length
-                //     } else {
-                //         const els = [
-                //             this.getView().byId("AnnoSelect"),
-                //             this.getView().byId("PeriodoSelect"),
-                //             this.getView().byId("CostCenterBox"),
-                //             this.getView().byId("IdStoricoSelect")
-                //         ]
 
-                //         els.forEach(el => {
-                //             if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
-                //                 // Handle MultiComboBox
-                //                 el.setSelectedKeys(null)
-                //             } else if (el.getMetadata().getName() === "sap.m.Select") {
-                //                 // Handle Select
-                //                 el.setSelectedKey(null)
-                //             } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
-                //                 // Handle ComboBox
-                //                 el.setSelectedKey(null)
-                //             }
+                case "Entity":                    
+                if(this.entityKeys == undefined){
+                    let aSelectedKeys = selectedControl.getSelectedKeys();
+                    this.entityKeys = aSelectedKeys.length
+                } else {
+                    const els = [
+                        this.getView().byId("AnnoSelect"),
+                        this.getView().byId("PeriodoSelect"),
+                        this.getView().byId("CostCenterBox"),
+                        this.getView().byId("ContrattoBox")
+                    ]
 
-                //             // Checking each label's concatenation to empty it
-                //             this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
-                //             this.makeTitleObjAttrBold();
-                //         })
-                //     }
-                        
-                //     break;
+                    els.forEach(el => {
+                        if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
+                            // Handle MultiComboBox
+                            el.setSelectedKeys(null)
+                        } else if (el.getMetadata().getName() === "sap.m.Select") {
+                            // Handle Select
+                            el.setSelectedKey(null)
+                        } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
+                            // Handle ComboBox
+                            el.setSelectedKey(null)
+                        }
+
+                        // Checking each label's concatenation to empty it
+                        this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
+                        this.makeTitleObjAttrBold();
+                    })
+                }
+                    
+                break;
         
                 case "Anno":
                     if(this.annoKey == undefined){
@@ -764,8 +768,8 @@ sap.ui.define([
                     } else {
                         const els = [
                             this.getView().byId("PeriodoSelect"),
-                            // this.getView().byId("CostCenterBox"),
-                            // this.getView().byId("IdStoricoSelect")
+                            this.getView().byId("CostCenterBox"),
+                            this.getView().byId("ContrattoBox")
                         ]
 
                         els.forEach(el => {
@@ -794,8 +798,8 @@ sap.ui.define([
                         this.periodoKey = aSelectedKey
                     } else {
                         const els = [
-                            // this.getView().byId("CostCenterBox"),
-                            // this.getView().byId("IdStoricoSelect")
+                            this.getView().byId("CostCenterBox"),
+                            this.getView().byId("ContrattoBox")
                         ]
 
                         els.forEach(el => {
@@ -818,34 +822,37 @@ sap.ui.define([
                            
                     break;
         
-                // case "CostCenter":                    
-                //     if(this.cdcKeys == undefined){
-                //         let aSelectedKeys = selectedControl.getSelectedKeys();
-                //         this.cdcKeys = aSelectedKeys.length
-                //     } else {
-                //         const els = [
-                //             this.getView().byId("IdStoricoSelect")
-                //         ]
+                case "CostCenter":                    
+                    if(this.cdcKeys == undefined){
+                        let aSelectedKeys = selectedControl.getSelectedKeys();
+                        this.cdcKeys = aSelectedKeys.length
+                    } else {
+                        const els = [
+                            this.getView().byId("ContrattoBox")
+                        ]
 
-                //         els.forEach(el => {
-                //             if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
-                //                 // Handle MultiComboBox
-                //                 el.setSelectedKeys(null)
-                //             } else if (el.getMetadata().getName() === "sap.m.Select") {
-                //                 // Handle Select
-                //                 el.setSelectedKey(null)
-                //             } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
-                //                 // Handle ComboBox
-                //                 el.setSelectedKey(null)
-                //             }
+                        els.forEach(el => {
+                            if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
+                                // Handle MultiComboBox
+                                el.setSelectedKeys(null)
+                            } else if (el.getMetadata().getName() === "sap.m.Select") {
+                                // Handle Select
+                                el.setSelectedKey(null)
+                            } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
+                                // Handle ComboBox
+                                el.setSelectedKey(null)
+                            }
 
-                //             // Checking each label's concatenation to empty it
-                //             this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
-                //             this.makeTitleObjAttrBold();
-                //         })
-                //     }
+                            // Checking each label's concatenation to empty it
+                            this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
+                            this.makeTitleObjAttrBold();
+                        })
+                    }
                      
-                //     break;  
+                    break;  
+
+                    case "Contratto":                    
+                    break;
                 
                 // case "ID_STORICO":
                 // break;
@@ -862,15 +869,15 @@ sap.ui.define([
 
             let oSelectedFilters = this.getView().getModel('selectedFiltersModel').getData();
 
-            console.log(Object.values(oSelectedFilters.entity));
+          //  console.log(Object.values(oSelectedFilters.entity));
             const requestData = {
-                entity: Object.values(oSelectedFilters.entity),
-                // tipoContratto: oSelectedFilters.tipoContratto ? Object.values(oSelectedFilters.tipoContratto) : null,
-                // contratto: oSelectedFilters.contratto ? Object.values(oSelectedFilters.contratto) : null, // Campo opzionale
-                year: oSelectedFilters.year,
-                period: oSelectedFilters.period,
-                // costCenter: oSelectedFilters.costCenter ? Object.values(oSelectedFilters.costCenter) : null, // Campo opzionale
-                // Id_storico: oSelectedFilters.ID_STORICO,
+              Id_storico: oSelectedFilters.ID_STORICO,
+              // tipoContratto: oSelectedFilters.tipoContratto ? Object.values(oSelectedFilters.tipoContratto) : null,
+              entity: oSelectedFilters.entity ? Object.values(oSelectedFilters.entity) : null,
+              year: oSelectedFilters.year,
+              period: oSelectedFilters.period,
+              costCenter: oSelectedFilters.costCenter ? Object.values(oSelectedFilters.costCenter) : null, // Campo opzionale
+              contratto: oSelectedFilters.contratto ? Object.values(oSelectedFilters.contratto) : null, // Campo opzionale
             }
 
             axios.post(servicePath, requestData)
@@ -878,15 +885,15 @@ sap.ui.define([
                 console.log("dati filtrati test", response.data);  // Handle the response array
                 let oFiltersModel = this.getView().getModel('oFiltersModel')
               
-                // if(!requestData.tipoContratto || requestData.tipoContratto.length == 0){
+                 if(!requestData.entity || requestData.entity.length == 0){
                 // oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
-                // oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
-                // oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
-                // oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
-                // oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                // oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                 oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
+                 oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
+                 oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
+                 oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                 oFiltersModel.getData().Entity =this._elaborateEntities(response.data.BUKRS, response.data.BUTXT)
                 
-                // }
+                 }
                 
                 // if(!requestData.contratto || requestData.contratto.length == 0){
                 //     oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
@@ -900,27 +907,27 @@ sap.ui.define([
                     if(!requestData.year){
                         oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
                         oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
-                        // oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                        // oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                         oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                         oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
                         
                         }
 
                 if(!requestData.period){
                     oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
-                    // oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                    // oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                    oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                    oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
                     
                     }
 
-                // if(!requestData.costCenter || requestData.costCenter.length == 0){
-                //     oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                //     oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
+                if(!requestData.costCenter || requestData.costCenter.length == 0){
+                  oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
+                  oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
+                    }
+
+                 if(!requestData.contratto || requestData.contratto.length == 0){
+                     oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
                     
-                //     }
-                // if(!requestData.Id_storico){
-                //     oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
-                    
-                //     }
+                     }
                    
                 console.log(oFiltersModel.getData().Entity)
 
@@ -1121,7 +1128,7 @@ sap.ui.define([
             // });
         },
 
-        onSearch: function () {
+        onSearch: async function () {
 
             // let oSelectedFiltersModel = this.getView().getModel('selectedFiltersModel');
             // let dataFilled = Object.values(oSelectedFiltersModel.getData()).every(filter => filter != null);
@@ -1152,8 +1159,13 @@ sap.ui.define([
 
             // TOBE re-enabled later with actual data comes
             this.getTableData();
+
+        },
+
+        tableCreator: function(data) {
+            let oData = data.getData()
             
-            const oData = this.getTableMockData(); // Getting the array of the mock data
+            //const oData = this.getTableMockData(); // Getting the array of the mock data
             
             // To print  checks if the filters are being filled
             const areFiltersFilled = this.getView().getModel("selectedFiltersModel").getData().allSelected
@@ -1170,32 +1182,28 @@ sap.ui.define([
             }
         },
 
+
         makeGeneratedTableMockData: function(oData) {
             var oTable = this.byId("table");
-            const objData = this._prepareData(oData[0].Data);
-            
+            const objData = this._prepareData(oData);
+        
             // Clear existing columns
             oTable.removeAllColumns();
-            
-            // Define columns
-            const columns = [
-                { key: "Section", label: "Section", width: "150px", freeze: true },
-                { key: "Description", label: "Description", width: "350px", freeze: true },
-                { key: "Total", label: "Total", width: "150px" },
-                { key: "Building", label: "Building", width: "150px" },
-                { key: "Cars_in_pool", label: "Cars_in_pool", width: "150px" },
-                { key: "Cars_in_benefit", label: "Cars_in_benefit", width: "150px" }
-            ];
         
-            // Add columns
+            // Dynamically define columns based on keys in the first object of objData
+            const firstRow = objData[0] || {};
+            const columns = Object.keys(firstRow).map(key => {
+                return { key: key, label: key.replace(/_/g, " "), width: "150px" };
+            });
+        
+            // Add columns dynamically
             columns.forEach(column => {
                 oTable.addColumn(new sap.ui.table.Column({
                     label: new sap.m.Label({ text: column.label }),
                     template: new sap.m.Text({ text: "{" + column.key + "}" }),
                     width: column.width,
                     sorted: false,
-                    filtered: false,
-                    freezed: column.freeze
+                    filtered: false
                 }));
             });
         
@@ -1216,68 +1224,170 @@ sap.ui.define([
             
             this.getView().getModel("selectedFiltersModel").setProperty("/matchData", true);
             this._colorTotalRows();
-
+        
             console.log("Table found:", !!oTable, "Table ID:", oTable?.getId());
         },
         
-        _prepareData: function (oData) {
+
+        // makeGeneratedTableMockData: function(oData) {
+        //     var oTable = this.byId("table");
+        //     const objData = this._prepareData(oData[0].Data);
+            
+        //     // Clear existing columns
+        //     oTable.removeAllColumns();
+            
+        //     // Define columns
+        //     const columns = [
+        //         { key: "Section", label: "Section", width: "150px", freeze: true },
+        //         { key: "Description", label: "Description", width: "350px", freeze: true },
+        //         { key: "Total", label: "Total", width: "150px" },
+        //         { key: "Building", label: "Building", width: "150px" },
+        //         { key: "Cars_in_pool", label: "Cars_in_pool", width: "150px" },
+        //         { key: "Cars_in_benefit", label: "Cars_in_benefit", width: "150px" }
+        //     ];
+        
+        //     // Add columns
+        //     columns.forEach(column => {
+        //         oTable.addColumn(new sap.ui.table.Column({
+        //             label: new sap.m.Label({ text: column.label }),
+        //             template: new sap.m.Text({ text: "{" + column.key + "}" }),
+        //             width: column.width,
+        //             sorted: false,
+        //             filtered: false,
+        //             freezed: column.freeze
+        //         }));
+        //     });
+        
+        //     // Create and set model
+        //     const oTableModel = new JSONModel({
+        //         rows: objData
+        //     });
+            
+        //     // Set size limit to handle all rows
+        //     oTableModel.setSizeLimit(objData.length + 100);
+            
+        //     oTable.setModel(oTableModel);
+        //     oTable.bindRows("/rows");
+            
+        //     // Adjust visible row count based on data
+        //     const visibleRowCount = Math.min(objData.length, 20); // Maximum 20 rows visible
+        //     oTable.setVisibleRowCount(visibleRowCount);
+            
+        //     this.getView().getModel("selectedFiltersModel").setProperty("/matchData", true);
+        //     this._colorTotalRows();
+
+        //     console.log("Table found:", !!oTable, "Table ID:", oTable?.getId());
+        // },
+
+
+        _prepareData: function(oData) {
             var aRows = [];
             var lastSection = "";
         
-            var sectionsMap = {
-                "Opening": ["Right of Use", "Accumulated Depreciation", "Net Right of Use", ""],
-                "Movements": [
-                    "Amount at transition date", "Increase for new contract", 
-                    "Revaluation (increase for remeasurement)",
-                    "Decrease - Right of Use", "Decrease - Accumulated Depreciation",
-                    "Increase for Mergers - Right of Use", 
-                    "Increase for Mergers - Accumulated Depreciation",
-                    "Decrease for Mergers - Right of Use", 
-                    "Decrease for Mergers - Accumulated Depreciation",
-                    "Reverse for Change CDC - Right of Use", 
-                    "Recognition for Change CDC - Right of Use",
-                    "Reverse for Change CDC - Accumulated Depreciation",
-                    "Recognition for Change CDC - Accumulated Depreciation", 
-                    "Depreciation"
-                ],
-                "Totale": ["Totale", ""],
-                "Closing": ["Right of Use", "Accumulated Depreciation", "Net Right of Use"]
-            };
+            oData.forEach(function(item) {
+                // Estraggo le proprietà rilevanti dal singolo oggetto
+                var section = item.Journal_Type || ""; // usa il valore di Journal_Type come "Section"
+                var description = item.Account || "";  // usa il valore di Account come "Description"
+                
+                // Formatto i numeri
+                const formatNumber = (value) => {
+                    if (value === undefined || value === null) return "-";
+                    if (typeof value === 'number') {
+                        return value.toLocaleString('en-US', {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2
+                        });
+                    }
+                    return value;
+                };
         
-            // Process sections
-            Object.keys(sectionsMap).forEach(function (section) {
-                sectionsMap[section].forEach(function (description) {
-                    // Safely access nested properties
-                    var sectionData = oData[section] || {};
-                    var descriptionData = sectionData[description] || {};
-        
-                    // Format number function
-                    const formatNumber = (value) => {
-                        if (value === undefined || value === null) return "-";
-                        if (typeof value === 'number') {
-                            return value.toLocaleString('en-US', {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2
-                            });
-                        }
-                        return value;
-                    };
-        
-                    aRows.push({
-                        "Section": section === lastSection ? "" : section,
-                        "Description": description,
-                        "Total": formatNumber(descriptionData.Total),
-                        "Building": formatNumber(descriptionData.Building),
-                        "Cars_in_pool": formatNumber(descriptionData["Cars_in_pool"]),
-                        "Cars_in_benefit": formatNumber(descriptionData["Cars_in_benefit"])
-                    });
-                    
-                    lastSection = section;
-                });
+// Costruisco un oggetto per ogni riga con i dati formattati
+aRows.push({
+    "Section": section === lastSection ? "" : section,  // Vuoto se uguale alla sezione precedente
+    "Description": description,
+    "Total": formatNumber(item.Total),
+    "Building": formatNumber(item.Building),
+    "Cars_in_pool": formatNumber(item.Cars_in_pool),
+    "Cars_in_benefit": formatNumber(item.Cars_in_benefit),
+    "Guest_quarters_in_pool": formatNumber(item.Guest_quarters_in_pool),
+    "Guest_quarters_in_benefit": formatNumber(item.Guest_quarters_in_benefit),
+    "Garage_in_pool": formatNumber(item.Garage_in_pool),
+    "Garage_in_benefit": formatNumber(item.Garage_in_benefit),
+    "Productive_machinery": formatNumber(item.Productive_machinery),
+    "Plants": formatNumber(item.Plants),
+    "Other_productive_equipment": formatNumber(item.Other_productive_equipment),
+    "Other_motor_vehicles": formatNumber(item.Other_motor_vehicles),
+    "In_house_handling_equipment": formatNumber(item.In_house_handling_equipment),
+    "Hardware": formatNumber(item.Hardware),
+    "Other_assets": formatNumber(item.Other_assets),
+    "Land": formatNumber(item.Land)
+});
+
+                
+                lastSection = section;  // Aggiorno la sezione precedente
             });
         
             return aRows;
-        },
+        },        
+        
+        // _prepareData: function (oData) {
+        //     var aRows = [];
+        //     var lastSection = "";
+        
+        //     var sectionsMap = {
+        //         "Opening": ["Right of Use", "Accumulated Depreciation", "Net Right of Use", ""],
+        //         "Movements": [
+        //             "Amount at transition date", "Increase for new contract", 
+        //             "Revaluation (increase for remeasurement)",
+        //             "Decrease - Right of Use", "Decrease - Accumulated Depreciation",
+        //             "Increase for Mergers - Right of Use", 
+        //             "Increase for Mergers - Accumulated Depreciation",
+        //             "Decrease for Mergers - Right of Use", 
+        //             "Decrease for Mergers - Accumulated Depreciation",
+        //             "Reverse for Change CDC - Right of Use", 
+        //             "Recognition for Change CDC - Right of Use",
+        //             "Reverse for Change CDC - Accumulated Depreciation",
+        //             "Recognition for Change CDC - Accumulated Depreciation", 
+        //             "Depreciation"
+        //         ],
+        //         "Totale": ["Totale", ""],
+        //         "Closing": ["Right of Use", "Accumulated Depreciation", "Net Right of Use"]
+        //     };
+        
+        //     // Process sections
+        //     Object.keys(sectionsMap).forEach(function (section) {
+        //         sectionsMap[section].forEach(function (description) {
+        //             // Safely access nested properties
+        //             var sectionData = oData[section] || {};
+        //             var descriptionData = sectionData[description] || {};
+        
+        //             // Format number function
+        //             const formatNumber = (value) => {
+        //                 if (value === undefined || value === null) return "-";
+        //                 if (typeof value === 'number') {
+        //                     return value.toLocaleString('en-US', {
+        //                         minimumFractionDigits: 2,
+        //                         maximumFractionDigits: 2
+        //                     });
+        //                 }
+        //                 return value;
+        //             };
+        
+        //             aRows.push({
+        //                 "Section": section === lastSection ? "" : section,
+        //                 "Description": description,
+        //                 "Total": formatNumber(descriptionData.Total),
+        //                 "Building": formatNumber(descriptionData.Building),
+        //                 "Cars_in_pool": formatNumber(descriptionData["Cars_in_pool"]),
+        //                 "Cars_in_benefit": formatNumber(descriptionData["Cars_in_benefit"])
+        //             });
+                    
+        //             lastSection = section;
+        //         });
+        //     });
+        
+        //     return aRows;
+        // },
 
         _createColumns: function (aData) {
             var oTable = this.byId("table");

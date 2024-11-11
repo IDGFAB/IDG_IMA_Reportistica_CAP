@@ -78,6 +78,71 @@ sap.ui.define([
                 }));
         },
 
+        convertModelStringToNumericValues() {
+            function padStart(num, targetLength) {
+                let numStr = num.toString();
+                while (numStr.length < targetLength) {
+                  numStr = '0' + numStr;
+                }
+                return numStr;
+            }
+            
+            var oModel = this.getView().getModel("DataIMA22");
+            var aData = oModel.getData();
+            
+            const numericFields = [
+                "RIGHT_OF_USE",
+                "ACCUMULATED_DEPRECIATION",
+                "NET_RIGHT_OF_USE",
+                "CLOSING_LEASES_LIABILITIES",
+                "LEASE_LIABILITIES_SHORT_TERM",
+                "LEASE_LIABILITIES_LONG_TERM",
+                "YTD_INTEREST",
+                "LEASE_COST",
+                "DEPRECIATION",
+                "GAIN_FX_RATES",
+                "LOSS_FX_RATES"
+            ];
+        
+            aData = aData.map(item => {
+                // Helper function to format number with thousands separator and 2 decimals
+                const formatNumber = (num) => {
+                    return num.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                };
+            
+                numericFields.forEach(field => {
+                    if (item[field]) {
+                        const strValue = String(item[field]);
+                        
+                        const numValue = parseFloat(
+                            strValue.replace(/\./g, '').replace(/,/g, '.'));
+                        // Store the actual numeric value
+                        item[field] = numValue;
+                        
+                        // Format display value with thousands separator and 2 decimals
+                        item[field + '_DISPLAY'] = formatNumber(
+                            strValue.startsWith('0,') 
+                                ? parseFloat(strValue.replace(/,/g, '0.'))
+                                : parseFloat(strValue.replace(/\./g, '').replace(/,/g, '.'))
+                        );
+                    }
+                });
+                return item;
+            });
+            
+            oModel.setData(aData);
+            oModel.refresh();
+        },
+        
+        onTableSort: function(oEvent) {
+            const oColumn = oEvent.getParameter("column");
+            const sSortProperty = oColumn.getSortProperty();
+            const bDescending = oEvent.getParameter("sortOrder") === "Descending";
+            
+            // Simple sorter since values are already numeric
+            const oSorter = new Sorter(sSortProperty, bDescending);
+            this.byId("table").getBinding("rows").sort(oSorter);
+        },
 
         _sortEntitiesByDescription: function(entities) {
             return entities.sort((a, b) => a.description.localeCompare(b.description));
@@ -163,6 +228,7 @@ sap.ui.define([
                             let processedData = dataArray[0].value.map(this.convertExponentialValues);
                             dataFiltered.setData(processedData);
                             dataFiltered.refresh();
+                            this.convertModelStringToNumericValues(); // Converting into numeric values
                         }
                     } else {
                         dataFiltered.setData(response.data)
@@ -574,9 +640,11 @@ sap.ui.define([
 
                 if(!requestData.costCenter || requestData.costCenter.length == 0){
                     oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                    oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
                     oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR) 
+                    if(!requestData.tipoContratto){
+                    oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
                     }
+                }
 
                 if(!requestData.tipoContratto || requestData.tipoContratto.length == 0){
                     oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
@@ -584,16 +652,14 @@ sap.ui.define([
                     
                     }
                 if(!requestData.contratto || requestData.contratto.length == 0){
-                    oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
+                    //oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
                     oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR) 
                     }
                    
-                console.log(oFiltersModel.getData().Entity)
 
 
                 
 
-                console.log("Tipo Contratto",oFiltersModel.getData().TipoContratto)
                 
                 // {
                 //         Entity: this._elaborateEntities(response.data.BUKRS, response.data.BUTXT),

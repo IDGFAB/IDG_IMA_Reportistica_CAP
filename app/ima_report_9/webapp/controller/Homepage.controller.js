@@ -626,7 +626,9 @@ sap.ui.define([
                     oSelectedFilters.Anno &&
                     //oSelectedFilters.ID_STORICO &&
                  //   (oSelectedFilters.TipoContratto && oSelectedFilters.TipoContratto.length > 0) &&
-                    (oSelectedFilters.Entity && oSelectedFilters.Entity.length > 0) ? true : false;
+                    (oSelectedFilters.Entity && oSelectedFilters.Entity.length > 0) &&
+                    (oSelectedFilters.Contratto && oSelectedFilters.Contratto.length > 0) &&
+                    (oSelectedFilters.CostCenter && oSelectedFilters.CostCenter.length > 0) ? true : false 
 
             // Update allSelected property
             oSelectedFiltersModel.setProperty("/allSelected", allSelected);
