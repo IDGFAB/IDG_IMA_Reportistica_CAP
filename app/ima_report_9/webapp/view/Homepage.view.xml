@@ -1,0 +1,177 @@
+<mvc:View controllerName="imareport9.controller.Homepage"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+    xmlns:table="sap.ui.table"
+    xmlns:u="sap.ui.unified"
+    xmlns:f="sap.f"
+    xmlns:fb="sap.ui.comp.filterbar"
+    xmlns:core="sap.ui.core"
+    xmlns:layout="sap.ui.layout">
+    <f:DynamicPage id="page">
+        <f:title>
+            <f:DynamicPageTitle id="pageTitleWrapper">
+                <f:heading>
+                    <Title id="pageTitle" text="Reportistica 9" />
+                </f:heading>
+            </f:DynamicPageTitle>
+        </f:title>
+
+        <!-- Filter Bar -->
+        <f:header>
+            <f:DynamicPageHeader pinnable="false" blocked="false">
+                <layout:HorizontalLayout id="hLayout" allowWrapping="true">
+                    <layout:VerticalLayout id="vLayout" class="sapUiMediumMarginEnd">
+                        <ObjectAttribute title="Company" text="" />
+                       <!-- <ObjectAttribute title="Contract Type" text="" />-->
+                       <ObjectAttribute title="Contract" text="" />
+                    </layout:VerticalLayout>
+                    <layout:VerticalLayout id="vLayout2">
+                        <ObjectAttribute title="Period" text="" />
+                        <ObjectAttribute title="Year" text="" />
+                        <ObjectAttribute title="Cost Center" text="" />
+                        <ObjectAttribute title="ID Storico" text="" />
+                    </layout:VerticalLayout>
+                </layout:HorizontalLayout>
+                <f:content>
+
+                    <fb:FilterBar id="filterbar" persistencyKey="myPersKey" useToolbar="false" search=".onSearch" afterVariantLoad=".onAfterVariantLoad" searchEnabled="{selectedFiltersModel>/allSelected}">
+                        <fb:filterGroupItems>
+
+                            <!-- ID Storico Filter -->
+                            <fb:FilterGroupItem name="ID_STORICO" label="ID Storico" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <Select id="IdStoricoSelect" name="ID_STORICO" forceSelection="false" change=".onSelectionChange" items="{ path: 'oFiltersModel>/Id_storico' }" selectedKey="{selectedFiltersModel>/ID_STORICO}" required="true">
+                                        <core:Item key="{oFiltersModel>}" text="{oFiltersModel>}" />
+                                    </Select>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+
+                            <!-- Entity Filter -->
+                            <fb:FilterGroupItem  name="Entity" label="Company" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <MultiComboBox id="EntityBox" name="Entity" showSelectAll="true" enabled="{= ${selectedFiltersModel>/ID_STORICO} &amp;&amp; ${selectedFiltersModel>/ID_STORICO}.length > 0 ? true : false }" selectionFinish=".onSelectionChange" items="{ path: 'oFiltersModel>/Entity', sorter: { path: 'description' }
+                                            }" selectedKeys="{selectedFiltersModel>/entity}" required="true" showClearIcon="true">
+                                        <core:Item key="{oFiltersModel>ID}" text="{oFiltersModel>description}" />
+                                    </MultiComboBox>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <!-- TipoContratto Filter
+                            <fb:FilterGroupItem  name="TipoContratto"  label="Contract type" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <MultiComboBox id="TipoContrattoBox" name="TipoContratto" enabled="{= ${selectedFiltersModel>/entity} &amp;&amp; ${selectedFiltersModel>/entity}.length > 0 ? true : false }" showSelectAll="true" selectionChange=".onSelectionChange"  
+                                        items="{ 
+                                            path: 'oFiltersModel>/TipoContratto'
+                                        }" 
+                                        selectedKeys="{selectedFiltersModel>/tipoContratto}" required="true" showClearIcon="true">
+                                        <core:Item key="{oFiltersModel>}" text="{oFiltersModel>}" />
+                                    </MultiComboBox>
+                                </fb:control>
+                            </fb:FilterGroupItem>-->
+                            <!-- Anno Filter -->
+                            <fb:FilterGroupItem name="Anno" label="Year" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <Select id="AnnoSelect" name="Anno"  enabled="{=  ${selectedFiltersModel>/entity} &amp;&amp; ${selectedFiltersModel>/entity}.length > 0 ? true : false }" change=".onSelectionChange" forceSelection="false" items="{ path: 'oFiltersModel>/Anno' }" selectedKey="{selectedFiltersModel>/year}" required="true">
+                                        <core:Item key="{oFiltersModel>}" text="{oFiltersModel>}" />
+                                    </Select>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <!-- Periodo Filter -->
+                            <fb:FilterGroupItem name="Periodo" label="Period" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <Select id="PeriodoSelect" name="Periodo"  enabled="{= ${selectedFiltersModel>/year} &amp;&amp; ${selectedFiltersModel>/year}.length > 0 &amp;&amp; ${selectedFiltersModel>/entity} &amp;&amp; ${selectedFiltersModel>/entity}.length > 0 ? true : false }" change=".onSelectionChange" selectedKey="{selectedFiltersModel>/period}" forceSelection="false" items="{ path: 'oFiltersModel>/Periodo' }" required="true">
+                                        <core:Item key="{oFiltersModel>ID}" text="{oFiltersModel>description}" />
+                                    </Select>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <!-- CostCenter Filter -->
+                            <fb:FilterGroupItem name="CostCenter"  label="Cost Center" groupName="Group1" visibleInFilterBar="true" >
+                                <fb:control>
+                                    <MultiComboBox id="CostCenterBox" required="true" name="CostCenter" enabled="{= ${selectedFiltersModel>/period} &amp;&amp; ${selectedFiltersModel>/period}.length > 0 &amp;&amp; ${selectedFiltersModel>/entity} &amp;&amp; ${selectedFiltersModel>/entity}.length > 0  ? true : false }" showSelectAll="true" selectionFinish=".onSelectionChange" items="{ path: 'oFiltersModel>/CostCenter' }" selectedKeys="{selectedFiltersModel>/costCenter}" showClearIcon="true">
+                                        <core:Item key="{oFiltersModel>}" text="{oFiltersModel>}" />
+                                    </MultiComboBox>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                              <!-- Contratto Filter  -->
+                         <fb:FilterGroupItem name="Contratto" label="Contract" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <MultiComboBox id="ContrattoBox" required="true" name="Contratto" showSelectAll="true" selectionFinish=".onSelectionChange" items="{ path: 'oFiltersModel>/Contratto' }" selectedKeys="{selectedFiltersModel>/contratto}" showClearIcon="true" enabled="{= ${selectedFiltersModel>/period} &amp;&amp; ${selectedFiltersModel>/period}.length > 0 &amp;&amp; ${selectedFiltersModel>/entity} &amp;&amp; ${selectedFiltersModel>/entity}.length > 0  ? true : false }">
+                                        <core:Item key="{oFiltersModel>}" text="{oFiltersModel>}" />
+                                    </MultiComboBox>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+
+                        </fb:filterGroupItems> 
+                    </fb:FilterBar>
+                    <VBox alignItems="End" wrap="Wrap" justifyContent="End" alignContent="Stretch" class="sapUiMediumMarginTop flex-row gap1">
+                        <Button icon="sap-icon://excel-attachment" id="excelBtn" text="Download Excel" press=".onDownloadExcelPress" enabled="{selectedFiltersModel>/matchData}" />
+                        <Button icon="sap-icon://pdf-attachment" id="pdfBtn" text="Download PDF" press=".onDownloadPdfPress" enabled="{selectedFiltersModel>/matchData}" />
+                        <Button id="clearFiltersBtn" text="Clear Filters" press=".onClearFilters" visible="false" />
+                    </VBox>
+                    <Panel id="legendPanel" width="100%" backgroundDesign="Solid" headerText="Informazioni" expandable="true" expanded="false" class="sapUiSmallMarginTop customLegendPanel">
+                        <headerToolbar>
+                            <Toolbar>
+                                <Title text="Informazioni" />
+                                <ToolbarSpacer />
+                                <Button icon="sap-icon://decline" type="Ghost" press=".onCloseLegend" />
+                            </Toolbar>
+                        </headerToolbar>
+                        <content>
+                            <List>
+                                <CustomListItem>
+                                    <HBox>
+                                        <core:Icon src="sap-icon://circle-task" class="legendGreen icon"></core:Icon>
+                                        <Label class="icon" text="Cliccare sul titolo delle colonne per bloccarle." wrapping="true"/>
+                                    </HBox>
+                                </CustomListItem>
+                                <CustomListItem>
+                                    <HBox>
+                                        <core:Icon src="sap-icon://circle-task" class="legendAmber icon"></core:Icon>
+                                        <Label class="icon" text="Selezionare i filtri ed avviare la ricerca per mostrare la tabella." wrapping="true"/>
+                                    </HBox>
+                                </CustomListItem>
+                                <CustomListItem>
+                                    <HBox>
+                                        <core:Icon src="sap-icon://circle-task" class="legendAmber icon"></core:Icon>
+                                        <Label class="icon" text="I bottoni di download sono disponibili dopo la ricerca." wrapping="true"/>
+                                    </HBox>
+                                </CustomListItem>
+                            </List>
+                        </content>
+                    </Panel>
+                </f:content>
+            </f:DynamicPageHeader>
+        </f:header>
+
+        <!-- Table Content -->
+        <f:content>
+            <!-- ScrollContainer to allow horizontal scrolling -->
+            <ScrollContainer horizontal="true" width="100%">
+                <!-- Table Definition -->
+                <table:Table
+                id="table"
+                selectionMode="None"
+                enableColumnReordering="true"
+                enableColumnFreeze="true"
+                fixedColumnCount="2"
+                width="100%"
+                visibleRowCountMode="Interactive"
+                minAutoRowCount="5"
+                >
+                    <!-- Header Toolbar -->
+
+                    <!-- Use RowSettings to apply custom styles to rows -->
+                    <table:rowSettingsTemplate>
+                        <table:RowSettings
+                            highlight="{path: 'Account', formatter: '.formatter.setRowHighlight'}"
+                        />
+                    </table:rowSettingsTemplate>
+
+                    <!-- Columns will be dynamically added by the controller -->
+                </table:Table>
+
+
+            </ScrollContainer>
+        </f:content>
+
+    </f:DynamicPage>
+</mvc:View>

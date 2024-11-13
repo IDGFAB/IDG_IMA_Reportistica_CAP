@@ -10,7 +10,7 @@
         <f:title>
             <f:DynamicPageTitle id="pageTitleWrapper">
                 <f:heading>
-                    <Title id="pageTitle" text="Reportistica 23" />
+                    <Title id="pageTitle" text="23 - Summary" />
                 </f:heading>
             </f:DynamicPageTitle>
         </f:title>
@@ -20,14 +20,12 @@
             <f:DynamicPageHeader pinnable="false" blocked="false">
                 <layout:HorizontalLayout id="hLayout" allowWrapping="true">
                     <layout:VerticalLayout id="vLayout" class="sapUiMediumMarginEnd">
-                        <ObjectAttribute title="Entity" text="" />
-                        <ObjectAttribute title="Contract Type" text="" />
+                        <ObjectAttribute title="Company" text="" />
                         <ObjectAttribute title="Contract" text="" />
                     </layout:VerticalLayout>
                     <layout:VerticalLayout id="vLayout2">
                         <ObjectAttribute title="Period" text="" />
                         <ObjectAttribute title="Year" text="" />
-                        <ObjectAttribute title="Cost Center" text="" />
                         <ObjectAttribute title="ID Storico" text="" />
                     </layout:VerticalLayout>
                 </layout:HorizontalLayout>
@@ -35,24 +33,24 @@
 
                     <fb:FilterBar id="filterbar" persistencyKey="myPersKey" useToolbar="false" search=".onSearch" afterVariantLoad=".onAfterVariantLoad" searchEnabled="{selectedFiltersModel>/allSelected}">
                         <fb:filterGroupItems>
-                            <!-- Entity Filter -->
-                            <fb:FilterGroupItem  name="Entity" label="Entity" groupName="Group1" visibleInFilterBar="true">
+                            <!-- ID Storico Filter -->
+                            <fb:FilterGroupItem name="ID_STORICO" label="ID Storico" groupName="Group1" visibleInFilterBar="true">
                                 <fb:control>
-                                    <MultiComboBox id="EntityBox" name="Entity" showSelectAll="true" selectionChange=".onSelectionChange" items="{ path: 'oFiltersModel>/Entity', sorter: { path: 'description' }
+                                    <Select id="IdStoricoSelect" name="ID_STORICO" forceSelection="false" change=".onSelectionChange" items="{ path: 'oFiltersModel>/Id_storico' }" selectedKey="{selectedFiltersModel>/ID_STORICO}" required="true">
+                                        <core:Item key="{oFiltersModel>}" text="{oFiltersModel>}" />
+                                    </Select>
+                                </fb:control>
+                            </fb:FilterGroupItem>
+                            <!-- Entity Filter -->
+                            <fb:FilterGroupItem  name="Entity" label="Company" groupName="Group1" visibleInFilterBar="true">
+                                <fb:control>
+                                    <MultiComboBox id="EntityBox" name="Entity" showSelectAll="true" selectionFinish=".onSelectionChange"  enabled="{= ${selectedFiltersModel>/ID_STORICO} &amp;&amp; ${selectedFiltersModel>/ID_STORICO}.length > 0 ? true : false }" items="{ path: 'oFiltersModel>/Entity', sorter: { path: 'description' }
                                             }" selectedKeys="{selectedFiltersModel>/entity}" required="true" showClearIcon="true">
                                         <core:Item key="{oFiltersModel>ID}" text="{oFiltersModel>description}" />
                                     </MultiComboBox>
                                 </fb:control>
                             </fb:FilterGroupItem>
-                        
-                            <!-- Contratto Filter -->
-                            <fb:FilterGroupItem name="Contratto" label="Contract" groupName="Group1" visibleInFilterBar="true">
-                                <fb:control>
-                                    <MultiComboBox id="ContrattoBox" name="Contratto" showSelectAll="true" selectionChange=".onSelectionChange" items="{ path: 'oFiltersModel>/Contratto' }" selectedKeys="{selectedFiltersModel>/contratto}" showClearIcon="true" enabled="{= ${selectedFiltersModel>/entity} &amp;&amp; ${selectedFiltersModel>/entity}.length > 0 ? true : false }">
-                                        <core:Item key="{oFiltersModel>}" text="{oFiltersModel>}" />
-                                    </MultiComboBox>
-                                </fb:control>
-                            </fb:FilterGroupItem>
+                    
                             <!-- Anno Filter -->
                             <fb:FilterGroupItem name="Anno" label="Year" groupName="Group1" visibleInFilterBar="true">
                                 <fb:control>
@@ -69,14 +67,15 @@
                                     </Select>
                                 </fb:control>
                             </fb:FilterGroupItem>
-                            <!-- ID Storico Filter -->
-                            <fb:FilterGroupItem name="ID_STORICO" label="ID Storico" groupName="Group1" visibleInFilterBar="true">
+                            <!-- Contratto Filter -->
+                            <fb:FilterGroupItem name="Contratto" label="Contract" groupName="Group1" visibleInFilterBar="true">
                                 <fb:control>
-                                    <Select id="IdStoricoSelect" name="ID_STORICO" enabled="{= ${selectedFiltersModel>/period} &amp;&amp; ${selectedFiltersModel>/period}.length > 0  &amp;&amp; ${selectedFiltersModel>/entity} &amp;&amp; ${selectedFiltersModel>/entity}.length > 0 ? true : false }" forceSelection="false" change=".onSelectionChange" items="{ path: 'oFiltersModel>/Id_storico' }" selectedKey="{selectedFiltersModel>/ID_STORICO}" required="true">
+                                    <MultiComboBox id="ContrattoBox" name="Contratto" showSelectAll="true" selectionFinish=".onSelectionChange" items="{ path: 'oFiltersModel>/Contratto' }" selectedKeys="{selectedFiltersModel>/contratto}" showClearIcon="true" enabled="{= ${selectedFiltersModel>/period} &amp;&amp; ${selectedFiltersModel>/period}.length > 0 ? true : false }">
                                         <core:Item key="{oFiltersModel>}" text="{oFiltersModel>}" />
-                                    </Select>
+                                    </MultiComboBox>
                                 </fb:control>
                             </fb:FilterGroupItem>
+
                         </fb:filterGroupItems>
                     </fb:FilterBar>
                     <VBox alignItems="End" wrap="Wrap" justifyContent="End" alignContent="Stretch" class="sapUiMediumMarginTop flex-row gap1">
@@ -126,58 +125,121 @@
                 <!-- Table Definition -->
                 <table:Table id="table" selectionMode="None" visibleRowCountMode="Interactive" minAutoRowCount="8" enableBusyIndicator="true" enableColumnFreeze="true" width="100%" rows="{DataIMA23>/}">
                     <table:columns>
-                        <table:Column width="17rem">
-                            <Label text="JOURNAL_TYPE" />
+                        <table:Column width="17rem" sortProperty="JOURNAL_TYPE" >
+                            <table:multiLabels>
+                                <Label textAlign="Center" />
+                                <Label text="Journal Type">
+                                    <customData>
+                                        <core:CustomData value="JOURNAL_TYPE" />
+                                    </customData>
+                                </Label>
+                            </table:multiLabels>
                             <table:template>
                                 <Text text="{DataIMA23>JOURNAL_TYPE}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="17rem">
-                            <Label text="ACCOUNT" />
+                        <table:Column width="17rem" sortProperty="ACCOUNT" >
+                            <table:multiLabels>
+                                <Label textAlign="Center" />
+                                <Label  text="Account">
+                                    <customData>
+                                        <core:CustomData value="ACCOUNT" />
+                                    </customData>
+                                </Label>
+                            </table:multiLabels>
                             <table:template>
                                 <Text text="{DataIMA23>ACCOUNT}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="11rem">
-                            <Label text="COST_CENTER" />
-                            <table:template>
-                                <Text text="{DataIMA23>IDENTOBJNR}" />
-                            </table:template>
-                        </table:Column>
-                        <table:Column width="14rem">
-                            <Label text="LEASE_N" />
-                            <table:template>
-                                <Text text="{DataIMA23>RECNTXTOLD}" />
-                            </table:template>
-                        </table:Column>
-                        <table:Column width="14rem">
-                            <Label text="ASSET_CATEGORY" />
+                        <table:Column width="14rem" sortProperty="XMBEZ" >
+                            <table:multiLabels>
+                                <Label textAlign="Center" />
+                                <Label text="Asset Category">
+                                    <customData>
+                                        <core:CustomData value="XMBEZ" />
+                                    </customData>
+                                </Label>
+                            </table:multiLabels>
                             <table:template>
                                 <Text text="{DataIMA23>XMBEZ}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="10rem">
-                            <Label text="DEBIT" />
+                        <table:Column width="14rem" sortProperty="RECNTXTOLD" >
+                            <table:multiLabels>
+                                <Label textAlign="Center" />
+                                <Label text="Lease N">
+                                    <customData>
+                                        <core:CustomData value="RECNTXTOLD" />
+                                    </customData>
+                                </Label>
+                            </table:multiLabels>
                             <table:template>
-                                <Text text="{DataIMA23>DEBIT}" />
+                                <Text text="{DataIMA23>RECNTXTOLD}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="10rem">
-                            <Label text="CREDIT" />
+                        <table:Column width="11rem" sortProperty="IDENTOBJNR" >
+                            <table:multiLabels>
+                                <Label textAlign="Center" />
+                                <Label text="Cost Center">
+                                    <customData>
+                                        <core:CustomData value="IDENTOBJNR" />
+                                    </customData>
+                                </Label>
+                            </table:multiLabels>
                             <table:template>
-                                <Text text="{DataIMA23>DEBITO_BTERM}" />
+                                <Text text="{DataIMA23>IDENTOBJNR}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="10rem">
-                            <Label text="DEBIT" />
+                        <table:Column width="10rem" headerSpan="2" sortProperty="DEBIT" >
+                            <table:multiLabels>
+                                <Label textAlign="Center" text="Entity Currency: EUR" />
+                                <Label textAlign="Center" text="Debit" >
+                                    <customData>
+                                        <core:CustomData value="DEBIT" />
+                                    </customData>
+                                </Label>
+                            </table:multiLabels>
                             <table:template>
-                                <Text text="{DataIMA23>DEBIT_CURR}" />
+                                <Text text="{DataIMA23>DEBIT_DISPLAY}" />
                             </table:template>
                         </table:Column>
-                        <table:Column width="11rem">
-                            <Label text="CREDIT" />
+                        <table:Column width="10rem" sortProperty="CREDIT" >
+                            <table:multiLabels>
+                                <Label textAlign="Center" text="Entity Currency: EUR" />
+                                <Label textAlign="Center" text="Credit">
+                                    <customData>
+                                        <core:CustomData value="CREDIT" />
+                                    </customData>
+                                </Label>
+                            </table:multiLabels>
                             <table:template>
-                                <Text text="{DataIMA23>CREDIT_CURR}" />
+                                <Text text="{DataIMA23>CREDIT_DISPLAY}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="10rem" headerSpan="2" sortProperty="DEBIT_CURR" >
+                            <table:multiLabels>
+                                <Label textAlign="Center" text="Contract Currency" width="100%"/>
+                                <Label textAlign="Center" text="Debit">
+                                    <customData>
+                                        <core:CustomData value="DEBIT_CURR" />
+                                    </customData>
+                                </Label>
+                            </table:multiLabels>
+                            <table:template>
+                                <Text text="{DataIMA23>DEBIT_CURR_DISPLAY}" />
+                            </table:template>
+                        </table:Column>
+                        <table:Column width="11rem" sortProperty="CREDIT_CURR" >
+                            <table:multiLabels>
+                                <Label textAlign="Center" text="Contract Currency" />
+                                <Label textAlign="Center" text="Credit">
+                                    <customData>
+                                        <core:CustomData value="CREDIT_CURR" />
+                                    </customData>
+                                </Label>
+                            </table:multiLabels>
+                            <table:template>
+                                <Text text="{DataIMA23>CREDIT_CURR_DISPLAY}" />
                             </table:template>
                         </table:Column>
                     </table:columns>

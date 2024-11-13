@@ -17,11 +17,14 @@ target/
 *_mta_build_tmp
 *.mtar
 mta_archives/
+*.zip
 
 # Other
 .DS_Store
 *.orig
 *.log
+resources/*
+*.zip
 
 *.iml
 *.flattened-pom.xml

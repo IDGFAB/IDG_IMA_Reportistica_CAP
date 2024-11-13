@@ -45,7 +45,51 @@
                     "privileges_with_grant_option": [
                         "SELECT"
                     ]
+                },
+                {
+                    "type": "VIEW",
+                    "name": "VIEW_ALL_UNION_ID23",
+                    "privileges_with_grant_option": [
+                        "SELECT"
+                    ]
+                },
+                {
+                    "type": "VIEW",
+                    "name": "View_CAP_REPORT_23_EQ",
+                    "privileges_with_grant_option": [
+                        "SELECT"
+                    ]
+                },
+                {
+                    "type": "VIEW",
+                    "name": "View_CAP_REPORT23_LT",
+                    "privileges_with_grant_option": [
+                        "SELECT"
+                    ]
+                },
+                {
+                    "type": "VIEW",
+                    "name": "View_ZRE_SUMDEP",
+                    "privileges_with_grant_option": [
+                        "SELECT"
+                    ]
+                },
+                {
+                    "type": "VIEW",
+                    "name": "View_VICEPROCESS",
+                    "privileges_with_grant_option": [
+                        "SELECT"
+                    ]
+                },
+                {
+                    "type": "VIEW",
+                    "name": "View_VICDCOND",
+                    "privileges_with_grant_option": [
+                        "SELECT"
+                    ]
                 }
+                
+
             ]
         }
     }

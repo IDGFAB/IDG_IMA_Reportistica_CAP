@@ -24,6 +24,12 @@
     margin-right: 5px;
 }
 
+/* SAPUI5 CUSTOM */
+.sapUiTableHeaderDataCell>.sapUiTableCellInner>div:first-child {
+    justify-content: center !important;
+}
+/* END !! SAPUI5 CUSTOM */
+
 /* .legendGreen {
     color: green;
 }
