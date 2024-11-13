@@ -53,18 +53,6 @@
                                     </MultiComboBox>
                                 </fb:control>
                             </fb:FilterGroupItem>
-                            <!-- TipoContratto Filter -->
-                            <!-- <fb:FilterGroupItem  name="TipoContratto"  label="Contract type" groupName="Group1" visibleInFilterBar="true">
-                                <fb:control>
-                                    <MultiComboBox id="TipoContrattoBox" name="TipoContratto" enabled="{= ${selectedFiltersModel>/entity} &amp;&amp; ${selectedFiltersModel>/entity}.length > 0 ? true : false }" showSelectAll="true" selectionChange=".onSelectionChange"  
-                                        items="{ 
-                                            path: 'oFiltersModel>/TipoContratto'
-                                        }" 
-                                        selectedKeys="{selectedFiltersModel>/tipoContratto}" required="true" showClearIcon="true">
-                                        <core:Item key="{oFiltersModel>}" text="{oFiltersModel>}" />
-                                    </MultiComboBox>
-                                </fb:control>
-                            </fb:FilterGroupItem> -->
                             <!-- Anno Filter -->
                             <fb:FilterGroupItem name="Anno" label="Year" groupName="Group1" visibleInFilterBar="true">
                                 <fb:control>
@@ -139,6 +127,8 @@
                 </f:content>
             </f:DynamicPageHeader>
         </f:header>
+
+<!-- ###################################################### TABELLA(non corretta)  ##########################################-->
 
         <!-- Table Content -->
         <f:content>

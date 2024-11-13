@@ -13,19 +13,13 @@ sap.ui.define([
             // Initialize filters and data
             this.getView().setModel(new JSONModel(), 'selectedFiltersModel')
 
-            this._initializeFilters();
-            // this.getDataMock(); // Load mock data for table
-
             this.osUrl = this.getOwnerComponent().getModel().sServiceUrl;
 
             this._createFiltersModel()
 
             this._getDataFilters()
 
-            // this.getTableData()
-
             this.getView().setModel(new JSONModel(), 'DataIMA19')
-            // this._bindToolbarText();
             let oSelectedFiltersModel = this.getView().getModel('selectedFiltersModel');
 
             oSelectedFiltersModel.setProperty("/matchData", false);
@@ -91,7 +85,6 @@ sap.ui.define([
 
             axios.post(servicePath)
                 .then((response) => {
-                    console.log(response.data);  // Handle the response array
                     let oFiltersModel = this.getView().getModel('oFiltersModel')
                     oFiltersModel.setData(
                         {
@@ -104,7 +97,6 @@ sap.ui.define([
                             Id_storico: this._sortStringArray(response.data.ID_STORICO)
                         }
                     )
-                    console.log('Filters data: ', oFiltersModel.getData());
                     return
 
                 })
@@ -130,10 +122,8 @@ sap.ui.define([
 
 
 
-            console.log(Object.values(oSelectedFilters.entity));
             const requestData = {
                 entity: Object.values(oSelectedFilters.entity),
-                // tipoContratto: Object.values(oSelectedFilters.tipoContratto),
                 contratto: oSelectedFilters.contratto ? Object.values(oSelectedFilters.contratto) : null, // Campo opzionale
                 year: oSelectedFilters.year,
                 period: oSelectedFilters.period,
@@ -146,7 +136,6 @@ sap.ui.define([
                 .then((response) => {
                     this.getView().byId("table").setBusy(false)
                     oSelectedFiltersModel.setProperty("/matchData", true);
-                    console.log(response.data);  // Handle the response array
                     let dataFiltered = this.getView().getModel('DataIMA19');
                     if(typeof response.data === 'object'){
                         let dataArray = []
@@ -217,8 +206,6 @@ sap.ui.define([
 
             const selectedControl = oEvent.getSource();
             const controlName = selectedControl.getName();
-            console.log("selected control", selectedControl)
-            console.log("control name", controlName)
 
             // Update the specific filter in the model
             if (selectedControl.getMetadata().getName() === "sap.m.MultiComboBox") {
@@ -242,21 +229,9 @@ sap.ui.define([
             // Update allSelected property
             oSelectedFiltersModel.setProperty("/allSelected", allSelected);
 
-
-
             this.clearFilter(oEvent)
-
-
-
             this.selectFiltering();
 
-            // this._bindToolbarText(); // Update toolbar text
-
-            // if (allSelected) {
-            //     this.setEnabledDownload(true);
-            // } else {
-            //     this.setEnabledDownload(false);
-            // }
         },
 
        clearFilter: function(oEvent) {
@@ -268,7 +243,6 @@ sap.ui.define([
             const controlName = selectedControl.getName();
 
             let aPreviousSelectedKeys = filtriSelezionati[controlName] || [];
-            console.log("vecchie chiavi", aPreviousSelectedKeys)
 
             switch (controlName) {
                 case "ID_STORICO":
@@ -337,38 +311,6 @@ sap.ui.define([
                     }
                      
                     break;
-        
-                // case "Contratto":                    
-                //     if(this.contractKeys == undefined){
-                //         let aSelectedKeys = selectedControl.getSelectedKeys();
-                //         this.contractKeys = aSelectedKeys.length
-                //     } else {
-                //         const els = [
-                //             this.getView().byId("AnnoSelect"),
-                //             this.getView().byId("PeriodoSelect"),
-                //             this.getView().byId("CostCenterBox"),
-                //             this.getView().byId("IdStoricoSelect")
-                //         ]
-
-                //         els.forEach(el => {
-                //             if (el.getMetadata().getName() === "sap.m.MultiComboBox") {
-                //                 // Handle MultiComboBox
-                //                 el.setSelectedKeys(null)
-                //             } else if (el.getMetadata().getName() === "sap.m.Select") {
-                //                 // Handle Select
-                //                 el.setSelectedKey(null)
-                //             } else if (el.getMetadata().getName() === "sap.m.ComboBox") {
-                //                 // Handle ComboBox
-                //                 el.setSelectedKey(null)
-                //             }
-
-                //             // Checking each label's concatenation to empty it
-                //             this.assignReportResume(oEvent, el.getLabels()[0].getText().toLowerCase(), el);
-                //             this.makeTitleObjAttrBold();
-                //         })
-                //     }
-                        
-                //     break;
         
                 case "Anno":
                     if(this.annoKey == undefined){
@@ -475,11 +417,9 @@ sap.ui.define([
 
             let oSelectedFilters = this.getView().getModel('selectedFiltersModel').getData();
 
-            // console.log(Object.values(oSelectedFilters.entity));
             const requestData = {
                 Id_storico: oSelectedFilters.ID_STORICO,
                 entity: oSelectedFilters.entity ? Object.values(oSelectedFilters.entity) : null,
-                // tipoContratto: oSelectedFilters.tipoContratto ? Object.values(oSelectedFilters.tipoContratto) : null,
                 year: oSelectedFilters.year,
                 period: oSelectedFilters.period,
                 costCenter: oSelectedFilters.costCenter ? Object.values(oSelectedFilters.costCenter) : null, // Campo opzionale
@@ -488,11 +428,9 @@ sap.ui.define([
 
             axios.post(servicePath, requestData)
             .then((response) => {
-                console.log("dati filtrati test", response.data);  // Handle the response array
                 let oFiltersModel = this.getView().getModel('oFiltersModel')
               
                 if(!requestData.entity || requestData.entity.length == 0){
-                // oFiltersModel.getData().TipoContratto = this._sortStringArray(response.data.RECNTYPE)
                 oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
                 oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
                 oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
@@ -503,11 +441,6 @@ sap.ui.define([
                 
                 if(!requestData.contratto || requestData.contratto.length == 0){
                     oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
-                    // oFiltersModel.getData().Anno = this._sortStringArray(response.data.YEARDUEDATE)
-                    // oFiltersModel.getData().Periodo = this._elaboratedMonths(response.data.PERIODDUEDATE)
-                    // oFiltersModel.getData().CostCenter = this._sortStringArray(response.data.CDC)
-                    // oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
-                    
                     }
 
                     if(!requestData.year){
@@ -530,21 +463,8 @@ sap.ui.define([
                     oFiltersModel.getData().Contratto = this._sortStringArray(response.data.RECNNR)
                     
                     }
-                // if(!requestData.Id_storico){
-                //     oFiltersModel.getData().Id_storico = this._sortStringArray(response.data.ID_STORICO)
-                    
-                //     }
-                   
-                console.log(oFiltersModel.getData().Entity)
-
-
-                
-
-                console.log("Tipo Contratto",oFiltersModel.getData().TipoContratto)
             
                 oFiltersModel.refresh()
-                //oSelectedFilters.refresh()
-                console.log('Filters data: ', oFiltersModel.getData());
                 return
 
             })
@@ -564,11 +484,8 @@ sap.ui.define([
         setEnabledDownload: function (bool) {
             const excelBtnEl = this.getView().byId("excelBtn");
             const pdfBtnEl = this.getView().byId("pdfBtn");
-
-
             excelBtnEl.setEnabled(bool)
             pdfBtnEl.setEnabled(bool)
-
         },
 
         disableFilterStart: function (oEvent) {
@@ -609,8 +526,6 @@ sap.ui.define([
             let concatedItemsText = "";
 
             if (selectedSelectObj.getMetadata().getName() === "sap.m.MultiComboBox") {
-                // Handle MultiComboBox
-                // Set the text for the selected item and the concatenated element
                 if (concatenatedElementObj !== undefined && concatenatedElementObj.getMetadata().getName() === "sap.m.MultiComboBox") {
                     concatedItemsText = concatenatedElementObj.getSelectedKeys()
                     .map(item => item.getText())
@@ -682,76 +597,17 @@ sap.ui.define([
             oPanel.setVisible(false);  // Collapse the panel (similar to closing it)
         },
 
-        _initializeFilters: function () {
-            console.log("Filters data: ", this.getView().getModel('oFiltersModel'));
-
-
-        },
-
         _matchData: function () {
             let dataFilter = this.getView().getModel('selectedFiltersModel').getData();
-            // let dataFromJSON = this.getView().getModel('tableModel').getData();
 
-            // console.log(dataFilter, dataFromJSON);
             this.getView().setModel(new JSONModel(), "DataIMA19");
             var arrayFiltrato = []
 
-            // dataFromJSON.allTableData
-            //     .filter(el => {
-            //         if (el.IDENTASSET === dataFilter.entity &&
-            //             el.YEARDUEDATE === dataFilter.year &&
-            //             el.PERIODDUEDATE === dataFilter.period) {
-            //             arrayFiltrato.push(el)
-            //         }
-            //     });
             this.getView().getModel("DataIMA19").setData(arrayFiltrato)
             this.getView().getModel("DataIMA19").refresh()
-            console.log(this.getView().getModel("DataIMA19"))
-
-            // const keyMapping = {e
-            //     entity: "Entity",
-            //     period: "Period",
-            //     scenario: "Scenario",
-            //     year: "Year"
-            // };
-
-            // // Compare data using the keyMapping
-            // return Object.keys(dataFilter).filter(el => el !== 'allSelected').every(key => {
-            //     const jsonKey = keyMapping[key];
-            //     if (!dataFilter[key]) return true; // Skip null filters
-            //     return dataFromJSON[jsonKey] === dataFilter[key];
-            // });
         },
 
         onSearch: function () {
-
-            // let oSelectedFiltersModel = this.getView().getModel('selectedFiltersModel');
-            // let dataFilled = Object.values(oSelectedFiltersModel.getData()).every(filter => filter != null);
-
-
-            // oSelectedFiltersModel.setProperty("/matchData", false);
-            // if (dataFilled) {
-            //     const result = this._matchData();
-            //     if (!result) {
-            //         oSelectedFiltersModel.setProperty("/matchData", false);
-            //         var oTable = this.byId("table");
-
-            //         var oEmptyModel = new JSONModel({ rows: [] });
-            //         oTable.setModel(oEmptyModel);
-            //         oTable.unbindRows();
-            //         sap.m.MessageToast.show("No report found");
-
-            //         return;
-            //     } else {
-            //         oSelectedFiltersModel.setProperty("/matchData", true);
-            //     }
-
-            //     const dataFromJSON = this.getView().getModel('DataIMA19');
-            //     this._loadData(dataFromJSON); // Load filtered data into table
-
-            // }
-
-
             this.getTableData()
         },
 
@@ -772,7 +628,6 @@ sap.ui.define([
             var aRows = [];
             var lastCategory = "";  // Per tenere traccia dell'ultima categoria usata
 
-            // Loop attraverso tutte le categorie di leases
             for (const category in leasesData) {
                 if (Array.isArray(leasesData[category])) {
                     // Gestisci categorie non-Summary (es: Buildings, Cars in pool)
@@ -807,7 +662,6 @@ sap.ui.define([
                     }
                 }
             }
-
             return aRows;
         },
 
@@ -886,60 +740,58 @@ sap.ui.define([
         },
 
         onDownloadExcelPress: function () {
-            var oTable = this.byId("table");  // Reference to the table control
-            var oModel = oTable.getModel();  // Access the model of the table
-            var aData = oTable.getBinding('rows').oList;  // Get the data from the model
-            var aCols = this._createColumnConfig();  // Create dynamic column configuration
+            var oTable = this.byId("table"); 
+            var oModel = oTable.getModel();  
+            var aData = oTable.getBinding('rows').oList;  
+            var aCols = this._createColumnConfig();  
 
-            // Excel Export settings
             var oSettings = {
                 workbook: {
-                    columns: aCols,  // Dynamic columns based on data
+                    columns: aCols, 
                     context: {
-                        sheetName: 'Exported Data'  // Name of the Excel sheet
+                        sheetName: 'Exported Data'  
                     },
-                    // Define custom styles for the Excel export
+                    
                     styles: [
                         {
-                            id: "header",  // Style ID for headers
-                            fontSize: 12,  // Font size
-                            fontColor: "#ffffff",  // Font color (white)
-                            backgroundColor: "#808080",  // Background color (grey)
-                            bold: true,  // Bold font
-                            hAlign: "Center",  // Center alignment
+                            id: "header",  
+                            fontSize: 12,  
+                            fontColor: "#ffffff",  
+                            backgroundColor: "#808080", 
+                            bold: true,  
+                            hAlign: "Center",  
                             border: {
-                                top: { style: "thin", color: "#000000" },  // Top border
-                                bottom: { style: "thin", color: "#000000" },  // Bottom border
-                                left: { style: "thin", color: "#000000" },  // Left border
-                                right: { style: "thin", color: "#000000" }  // Right border
+                                top: { style: "thin", color: "#000000" }, 
+                                bottom: { style: "thin", color: "#000000" }, 
+                                left: { style: "thin", color: "#000000" },  
+                                right: { style: "thin", color: "#000000" }  
                             }
                         },
                         {
-                            id: "content",  // Style ID for content cells
-                            fontSize: 10,  // Font size
-                            hAlign: "Left",  // Left alignment
+                            id: "content", 
+                            fontSize: 10, 
+                            hAlign: "Left", 
                             border: {
-                                top: { style: "thin", color: "#000000" },  // Top border
-                                bottom: { style: "thin", color: "#000000" },  // Bottom border
-                                left: { style: "thin", color: "#000000" },  // Left border
-                                right: { style: "thin", color: "#000000" }  // Right border
+                                top: { style: "thin", color: "#000000" }, 
+                                bottom: { style: "thin", color: "#000000" }, 
+                                left: { style: "thin", color: "#000000" }, 
+                                right: { style: "thin", color: "#000000" } 
                             }
                         }
                     ]
                 },
-                dataSource: aData,  // Data source for the export
-                fileName: 'ExportedData.xlsx',  // File name for the exported file
-                worker: false  // Disable worker threads for simplicity
+                dataSource: aData,  
+                fileName: 'ExportedData.xlsx', 
+                worker: false 
             };
 
-            // Create a new instance of the Spreadsheet export utility
             var oSheet = new Spreadsheet(oSettings);
-            oSheet.build()  // Build the Excel file
+            oSheet.build()  
                 .then(function () {
-                    sap.m.MessageToast.show('Excel export successful!');  // Show success message
+                    sap.m.MessageToast.show('Excel export successful!'); 
                 })
                 .finally(function () {
-                    oSheet.destroy();  // Clean up the export utility
+                    oSheet.destroy();  
                 });
         },
 
